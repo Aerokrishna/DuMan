@@ -1,11 +1,12 @@
-#define MD1_DIR 3 //top_left
-#define MD1_PWM 2 
+#define L_hip 5
+#define L_shoulder 6
+#define L_elbow 4
+#define L_wrist 2
+#define L_wrist_y 3
 
-
-#define enc_left_A 5
-#define enc_left_B 4
-
-// #define enc_right_A 26
-// #define enc_right_B 27 
-
+#define R_hip 11
+#define R_shoulder 10
+#define R_elbow 9
+#define R_wrist 7
+#define R_wrist_y 8
 

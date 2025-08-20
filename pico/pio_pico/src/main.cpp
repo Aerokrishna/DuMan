@@ -4,15 +4,26 @@
 #include <stdexcept>
 #include "include_all.cpp"
 #include "serial_parser.hpp"
-
-
 void setup(){
     Serial.begin(115200);
-    while (!Serial); // wait for serial monitor to open
+    // while (!Serial);
+
+    for (int i = 0; i<NUM_JOINTS; i++){
+        servos[i].attach(servoPins[i], 500, 2500);
+        // servos[i].write(current_angle[i])
+    }
+    // myservo.attach(4, 500, 2500);
 }
+
 void loop() {
-    // static InterfaceID interface = -1;
-    // Example: serialize struct
+    for (int i = 0; i<NUM_JOINTS; i++){
+        servos[i].write(currentAngles[i]);
+    }
+    
+    // setServoAngles(targetAngles);
+}   
+
+void get_data(){
     std::vector<uint8_t> payload = receive_data();
     uint8_t id = payload[0];
 
@@ -27,5 +38,4 @@ void loop() {
         }
         
     }
-    // delay(1);
 }

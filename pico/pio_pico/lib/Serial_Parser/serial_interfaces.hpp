@@ -22,11 +22,17 @@ struct CmdVel{
 
 struct Angles{
     uint8_t id;
-    float hip;
-    float shoulder;
-    float elbow;
-    float wrist_yaw;
-    float wrist;
+    int16_t hip_l;
+    int16_t shoulder_l;
+    int16_t elbow_l;
+    int16_t wrist_l;
+    int16_t wrist_yaw_l;
+
+    int16_t hip;
+    int16_t shoulder;
+    int16_t elbow;
+    int16_t wrist;
+    int16_t wrist_yaw;
 
 };
 

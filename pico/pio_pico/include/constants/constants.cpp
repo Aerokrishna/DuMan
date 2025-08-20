@@ -12,5 +12,10 @@ int currentAngles[NUM_JOINTS] = {
   home_R_hip, home_R_shoulder, home_R_elbow, home_R_wrist, home_R_wrist_y
 };
 
+int targetAngles[NUM_JOINTS] = {
+  home_L_hip, home_L_shoulder, home_L_elbow, home_L_wrist, home_L_wrist_y,
+  home_R_hip, home_R_shoulder, home_R_elbow, home_R_wrist, home_R_wrist_y
+};
+
 bool new_goal = false;
 Servo servos[NUM_JOINTS];

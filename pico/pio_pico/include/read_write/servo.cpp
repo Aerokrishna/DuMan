@@ -7,6 +7,7 @@ bool setServoAngles(int targetAngles[NUM_JOINTS]) {
     unsigned long current_millis = millis();
 
     if (current_millis - prev_millis > 20){
+        prev_millis = current_millis; 
         for (int i = 0; i < NUM_JOINTS; i++) {
 
             if (currentAngles[i] < targetAngles[i]) {

@@ -1,0 +1,314 @@
+<robot name="onshape">
+<link name="base">
+<visual>
+<origin xyz="0.001402378431521355889 -0.040152130182832479477 0.0047179359060526022268" rpy="-1.57079632679489678 -0 0" />
+<geometry>
+<mesh filename="package://duman_description/models/base.stl"/>
+</geometry>
+<material name="base_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="0.001402378431521355889 -0.040152130182832479477 0.0047179359060526022268" rpy="-1.57079632679489678 -0 0" />
+<geometry>
+<mesh filename="package://duman_description/models/base.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="0.001402387154487819837 -0.039055113999284497839 0.026824037016155939661" rpy="0 0 0"/>
+<mass value="1.9998887505119995467" />
+<inertia ixx="0.0028505289311519942282" ixy="-7.116077478307083929e-10"  ixz="1.4844253339976727985e-10" iyy="0.0027242990722169493391" iyz="7.9478202315762654052e-05" izz="0.0043475671173903033054" />
+</inertial>
+</link>
+
+<link name="waist">
+<visual>
+<origin xyz="0 0 6.9388939039072283776e-18" rpy="3.141592653589793116 -9.5170973626377845172e-34 -7.7783123764239271502e-33" />
+<geometry>
+<mesh filename="package://duman_description/models/waist.stl"/>
+</geometry>
+<material name="waist_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="0 0 6.9388939039072283776e-18" rpy="3.141592653589793116 -9.5170973626377845172e-34 -7.7783123764239271502e-33" />
+<geometry>
+<mesh filename="package://duman_description/models/waist.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="0.0074945384719732385109 -0.0014294797341590967897 -0.019382837320359828925" rpy="0 0 0"/>
+<mass value="0.092059501321271233754" />
+<inertia ixx="8.4940822070763333154e-05" ixy="3.1823006080747657881e-07"  ixz="8.0371472269756664308e-06" iyy="6.28516293944667595e-05" iyz="-8.4124008803628408945e-06" izz="7.5166939695310772932e-05" />
+</inertial>
+</link>
+
+<link name="arm_01">
+<visual>
+<origin xyz="0 0 -0.021000000000000001305" rpy="-1.570796326794896558 -0 0" />
+<geometry>
+<mesh filename="package://duman_description/models/arm_01.stl"/>
+</geometry>
+<material name="arm_01_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="0 0 -0.021000000000000001305" rpy="-1.570796326794896558 -0 0" />
+<geometry>
+<mesh filename="package://duman_description/models/arm_01.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="1.4118928119592636529e-07 0.059999824248745545208 -0.0077715955787856722328" rpy="0 0 0"/>
+<mass value="0.080081747849855458576" />
+<inertia ixx="0.00012970764013443367049" ixy="6.2337379079985595992e-10"  ixz="1.8765984521855420639e-10" iyy="1.1536398267604721336e-05" iyz="3.6199027491044549358e-12" izz="0.00013579564494234391174" />
+</inertial>
+</link>
+
+<link name="arm_02">
+<visual>
+<origin xyz="0.034750000000000016986 0 0" rpy="1.570796326794896558 -5.8276537979193836182e-33 8.3816471179931208447e-31" />
+<geometry>
+<mesh filename="package://duman_description/models/arm_02.stl"/>
+</geometry>
+<material name="arm_02_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="0.034750000000000016986 0 0" rpy="1.570796326794896558 -5.8276537979193836182e-33 8.3816471179931208447e-31" />
+<geometry>
+<mesh filename="package://duman_description/models/arm_02.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="0.041712028774720542879 3.1608016163132355561e-05 -0.0057199411333240688868" rpy="0 0 0"/>
+<mass value="0.058871724077163213595" />
+<inertia ixx="1.0903197339626600928e-05" ixy="-8.6693131370338083757e-08"  ixz="-5.0399911663230007241e-07" iyy="6.4250083309512761058e-05" iyz="-2.9589785247048074638e-10" izz="6.832931926439171405e-05" />
+</inertial>
+</link>
+
+<link name="arm_03">
+<visual>
+<origin xyz="0.004999999999999997502 0 0" rpy="3.141592653589793116 -1.1532389821101088889e-32 -2.6404056403860553927e-32" />
+<geometry>
+<mesh filename="package://duman_description/models/arm_03.stl"/>
+</geometry>
+<material name="arm_03_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="0.004999999999999997502 0 0" rpy="3.141592653589793116 -1.1532389821101088889e-32 -2.6404056403860553927e-32" />
+<geometry>
+<mesh filename="package://duman_description/models/arm_03.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="0.0050459674246820544405 -0.0052709836521303756601 -0.017807944241869835822" rpy="0 0 0"/>
+<mass value="0.020587869336073170989" />
+<inertia ixx="4.8747901077285755043e-06" ixy="-4.9857010404760316267e-09"  ixz="-1.4442552409285210189e-08" iyy="6.2597253867434255134e-06" iyz="-7.2145292659714469307e-07" izz="3.2611923197073779561e-06" />
+</inertial>
+</link>
+
+<link name="gripper_base">
+<visual>
+<origin xyz="-0.040500000000000008216 0.0089999999999999941158 0.016000000000000000333" rpy="-1.570796326794896558 -1.570796326794896558 0" />
+<geometry>
+<mesh filename="package://duman_description/models/gripper_base.stl"/>
+</geometry>
+<material name="gripper_base_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="-0.040500000000000008216 0.0089999999999999941158 0.016000000000000000333" rpy="-1.570796326794896558 -1.570796326794896558 0" />
+<geometry>
+<mesh filename="package://duman_description/models/gripper_base.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="-0.024927882918116345268 0.0064403493394040133013 0.0041575539601085009789" rpy="0 0 0"/>
+<mass value="0.020050762012827790665" />
+<inertia ixx="4.1262174131169446954e-06" ixy="1.6759752673379916494e-06"  ixz="2.2324216722379258954e-06" iyy="1.1260208646654853469e-05" iyz="-5.0616272175732675626e-07" izz="9.0721203498918214539e-06" />
+</inertial>
+</link>
+
+<link name="part_1_gear_2">
+<visual>
+<origin xyz="0 0 -0.0019999999999999983069" rpy="-1.570796326794896558 -9.1979407139349908072e-32 -2.4613384689265595164e-30" />
+<geometry>
+<mesh filename="package://duman_description/models/part_1_gear_2.stl"/>
+</geometry>
+<material name="part_1_gear_2_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="0 0 -0.0019999999999999983069" rpy="-1.570796326794896558 -9.1979407139349908072e-32 -2.4613384689265595164e-30" />
+<geometry>
+<mesh filename="package://duman_description/models/part_1_gear_2.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="0.0055512025623058831522 0.00058171571194625922626 -0.0019999999999999983069" rpy="0 0 0"/>
+<mass value="0.0032272602916286396643" />
+<inertia ixx="1.1251893487001180171e-07" ixy="1.042153912886415573e-08"  ixz="5.7266214798550208274e-39" iyy="4.6086035795310490803e-07" iyz="-2.8469444191377108132e-37" izz="5.6477326537877373765e-07" />
+</inertial>
+</link>
+
+<link name="gripper">
+<visual>
+<origin xyz="0 1.3877787807814456755e-17 0" rpy="-3.141592653589793116 -3.2279214209219390194e-30 2.7332797770738606552e-30" />
+<geometry>
+<mesh filename="package://duman_description/models/gripper.stl"/>
+</geometry>
+<material name="gripper_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="0 1.3877787807814456755e-17 0" rpy="-3.141592653589793116 -3.2279214209219390194e-30 2.7332797770738606552e-30" />
+<geometry>
+<mesh filename="package://duman_description/models/gripper.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="0.025526730145779431141 -0.0033673571434033786574 -0.0022499977309997721067" rpy="0 0 0"/>
+<mass value="0.0031933072162409399143" />
+<inertia ixx="7.6192801294376313938e-08" ixy="1.9410217434007387742e-07"  ixz="1.253897990526733417e-13" iyy="9.477187734353013106e-07" iyz="-1.620276003269503519e-13" izz="1.0131339947859868091e-06" />
+</inertial>
+</link>
+
+<joint name="grip4" type="continuous">
+<origin xyz="0.030750000000000027311 0 -0.0040000000000000070222" rpy="1.7163949759338740122e-15 -3.3079810654911678827e-14 1.3981871216373376781e-15" />
+<parent link="part_1_gear_2" />
+<child link="gripper" />
+<axis xyz="0 0 1"/>
+<limit effort="1" velocity="20" />
+<joint_properties friction="0.0"/>
+</joint>
+
+<joint name="grip1" type="continuous">
+<origin xyz="-0.038000000000000033751 0.014000000000000002026 0.017900000000000013123" rpy="-1.570796326794896558 -1.3981871216373712047e-15 3.1415926535897913396" />
+<parent link="gripper_base" />
+<child link="part_1_gear_2" />
+<axis xyz="0 0 1"/>
+<limit effort="1" velocity="20" />
+<joint_properties friction="0.0"/>
+</joint>
+
+<link name="part_2_gear_2">
+<visual>
+<origin xyz="0 0 -0.0019999999999999983069" rpy="1.570796326794896558 -2.481566866632471163e-33 -8.9940928402883914338e-30" />
+<geometry>
+<mesh filename="package://duman_description/models/part_2_gear_2.stl"/>
+</geometry>
+<material name="part_2_gear_2_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="0 0 -0.0019999999999999983069" rpy="1.570796326794896558 -2.481566866632471163e-33 -8.9940928402883914338e-30" />
+<geometry>
+<mesh filename="package://duman_description/models/part_2_gear_2.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="0.0053917110914827020424 -0.00056500245144856992875 -0.0019999999999999983069" rpy="0 0 0"/>
+<mass value="0.003322725438389599259" />
+<inertia ixx="1.1279348734758980605e-07" ixy="-1.0122118132197549572e-08"  ixz="-3.1966065379980466463e-39" iyy="4.6503598307660309264e-07" iyz="8.4684023355935895053e-38" izz="5.6896886925515397687e-07" />
+</inertial>
+</link>
+
+<link name="gripper_2">
+<visual>
+<origin xyz="0 0 -0.0044999999999999970579" rpy="2.7094627295595737167e-31 -8.3317152930019544658e-31 3.0306433604879953617e-30" />
+<geometry>
+<mesh filename="package://duman_description/models/gripper.stl"/>
+</geometry>
+<material name="gripper_material">
+<color rgba="0.62745098039215685404 0.62745098039215685404 0.62745098039215685404 1.0"/>
+</material>
+</visual>
+<collision>
+<origin xyz="0 0 -0.0044999999999999970579" rpy="2.7094627295595737167e-31 -8.3317152930019544658e-31 3.0306433604879953617e-30" />
+<geometry>
+<mesh filename="package://duman_description/models/gripper.stl"/>
+</geometry>
+</collision>
+<inertial>
+<origin xyz="0.025526730145779431141 0.0033673571434033934026 -0.0022500022690002249512" rpy="0 0 0"/>
+<mass value="0.0031933072162409399143" />
+<inertia ixx="7.6192801294376313938e-08" ixy="-1.9410217434007393036e-07"  ixz="-1.253897990526733417e-13" iyy="9.4771877343530173412e-07" iyz="-1.6202760032695037714e-13" izz="1.0131339947859868091e-06" />
+</inertial>
+</link>
+
+<joint name="grip3" type="continuous">
+<origin xyz="0.030749999999999916289 0 -0.0040000000000000000833" rpy="-5.1491849278015366425e-15 1.1026603551637208921e-14 1.3981871216373475389e-15" />
+<parent link="part_2_gear_2" />
+<child link="gripper_2" />
+<axis xyz="0 0 1"/>
+<limit effort="1" velocity="20" />
+<joint_properties friction="0.0"/>
+</joint>
+
+<joint name="grip2" type="continuous">
+<origin xyz="-0.038000000000000033751 0.014000000000000008965 -0.0089999999999999941158" rpy="-1.570796326794896558 -8.9940928402883914338e-30 3.141592653589793116" />
+<parent link="gripper_base" />
+<child link="part_2_gear_2" />
+<axis xyz="0 0 1"/>
+<limit effort="1" velocity="20" />
+<joint_properties friction="0.0"/>
+</joint>
+
+<joint name="wrist" type="continuous">
+<origin xyz="0.0049999999999999905631 -0.014000000000000054068 -0.028000000000000108136" rpy="-1.5707963267948950037 -1.570796326794896336 0" />
+<parent link="arm_03" />
+<child link="gripper_base" />
+<axis xyz="0 0 1"/>
+<limit effort="1" velocity="20" />
+<joint_properties friction="0.0"/>
+</joint>
+
+<joint name="wrist_yaw" type="continuous">
+<origin xyz="0.089750000000000010325 -0.0052999999999999714007 -0.005500000000000004885" rpy="-3.141592653589793116 1.5707963267948956698 0" />
+<parent link="arm_02" />
+<child link="arm_03" />
+<axis xyz="0 0 1"/>
+<limit effort="1" velocity="20" />
+<joint_properties friction="0.0"/>
+</joint>
+
+<joint name="elbow" type="continuous">
+<origin xyz="-2.7755575615628913511e-17 0.11999999999999999556 6.9388939039072283776e-18" rpy="-3.141592653589793116 1.1301280603407945073e-16 1.570796326794896336" />
+<parent link="arm_01" />
+<child link="arm_02" />
+<axis xyz="0 0 1"/>
+<limit effort="1" velocity="20" />
+<joint_properties friction="0.0"/>
+</joint>
+
+<joint name="shoulder" type="continuous">
+<origin xyz="0.0040000000000000009506 -0.013910000000000002224 -0.040280000000000003302" rpy="3.141592653589793116 -1.570796326794866804 0" />
+<parent link="waist" />
+<child link="arm_01" />
+<axis xyz="0 0 1"/>
+<limit effort="1" velocity="20" />
+<joint_properties friction="0.0"/>
+</joint>
+
+<joint name="hip" type="continuous">
+<origin xyz="0.0014023784315213543711 -0.040152130182832479477 0.060717935906052615536" rpy="3.141592653589793116 2.419538725682435286e-17 1.3877787807813837993e-16" />
+<parent link="base" />
+<child link="waist" />
+<axis xyz="0 0 1"/>
+<limit effort="1" velocity="20" />
+<joint_properties friction="0.0"/>
+</joint>
+
+
+</robot>

@@ -10,7 +10,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
-    urdf_file_name = 'duman.urdf.xacro'
+    urdf_file_name = 'duman.urdf'
     duman_description_path = get_package_share_directory('duman_description')
     rviz_config_path = os.path.join(duman_description_path, 'rviz', 'duman.rviz')
 

@@ -45,6 +45,11 @@ def generate_launch_description():
             executable='joint_state_publisher_gui',
             name='joint_state_publisher_gui'
         ),
+        # Node(
+        #     package='joint_state_publisher',
+        #     executable='joint_state_publisher',
+        #     name='joint_state_publisher'
+        # ),
         Node(
             package='rviz2',
             executable='rviz2',

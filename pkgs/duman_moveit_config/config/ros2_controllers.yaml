@@ -1,0 +1,27 @@
+# This config file is used by ros2_control
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    duman_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+duman_arm_controller:
+  ros__parameters:
+    joints:
+      - hip
+      - shoulder
+      - elbow
+      - wrist_yaw
+      - wrist
+      - end_effector_joint
+    command_interfaces:
+      - position
+      - velocity
+    state_interfaces:
+      - position
+      - velocity

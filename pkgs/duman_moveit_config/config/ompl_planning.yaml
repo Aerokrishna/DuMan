@@ -1,0 +1,28 @@
+# in duman_moveit/config/ompl_planning.yaml
+ompl:
+  planning_plugin: ompl_interface/OMPLPlanner
+  default_planning_pipeline: ompl
+  request_adapters: >-
+    default_planner_request_adapters/AddTimeParameterization
+    default_planner_request_adapters/FixWorkspaceBounds
+    default_planner_request_adapters/FixStartStateBounds
+    default_planner_request_adapters/FixStartStateCollision
+    default_planner_request_adapters/FixStartStatePathConstraints
+  start_state_max_bounds_error: 0.1
+
+  planner_configs:
+    # RRTstar:
+    #   type: geometric::RRTstar
+    # PRMstar:
+    #   type: geometric::PRMstar
+    # PersistentLazyPRMstar:
+    #   type: geometric::LazyPRMstar
+    #   multi_query_planning_enabled: 1
+    #   store_planner_data: 1
+    #   load_planner_data: 0
+    #   planner_data_path: /tmp/roadmap.graph
+    SemiPersistentLazyPRMstar:
+      type: geometric::LazyPRMstar
+      multi_query_planning_enabled: 1
+      store_planner_data: 0
+      load_planner_data: 0

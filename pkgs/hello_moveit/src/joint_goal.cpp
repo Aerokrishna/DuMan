@@ -1,56 +1,53 @@
-
-#include <memory>
-
 #include <rclcpp/rclcpp.hpp>
 #include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit_msgs/msg/orientation_constraint.hpp>
+#include <moveit_msgs/msg/constraints.hpp>
 
-int main(int argc, char * argv[])
+int main(int argc, char** argv)
 {
-  // Initialize ROS and create the Node
   rclcpp::init(argc, argv);
-  auto const node = std::make_shared<rclcpp::Node>(
-    "hello_moveit",
-    rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true) // needed for moveit
-  );
+  auto node = rclcpp::Node::make_shared("move_group_joint_goal_demo");
 
-  // Create a ROS logger
-  auto const logger = rclcpp::get_logger("hello_moveit");
+  // 1️⃣ Create MoveGroupInterface for your robot arm
+  static const std::string PLANNING_GROUP = "duman_arm";
+  moveit::planning_interface::MoveGroupInterface move_group(node, PLANNING_GROUP);
 
-  // Create the MoveIt MoveGroup Interface
-  using moveit::planning_interface::MoveGroupInterface;
-  auto move_group_interface = MoveGroupInterface(node, "duman_arm");
+  // Optional: enable replanning if initial plan fails
+  move_group.allowReplanning(true);
 
-  // Get the joint model group
-  // Wait until the CurrentStateMonitor gets a valid robot state
-    rclcpp::sleep_for(std::chrono::seconds(2));  // give joint_state_publisher time
-    move_group_interface.setStartStateToCurrentState();
+  // 2️⃣ Set a joint goal
+  std::vector<double> joint_goal = { -1.0, 1.7, 0.7, -1.5, 0.0, 0.3}; // your 5-DOF joint values
+  move_group.setJointValueTarget(joint_goal);
 
-    auto joint_model_group =
-    move_group_interface.getCurrentState()->getJointModelGroup("duman_arm");
+  // // 3️⃣ Add a custom constraint (orientation constraint)
+  // moveit_msgs::msg::OrientationConstraint ocm;
+  // ocm.link_name = "gripper_base";               // end-effector link
+  // ocm.header.frame_id = "base";            // reference frame
+  // ocm.orientation.w = 1.0;                 // desired orientation
+  // ocm.absolute_x_axis_tolerance = 0.1;     // radians
+  // ocm.absolute_y_axis_tolerance = 0.1;
+  // ocm.absolute_z_axis_tolerance = 0.1;
+  // ocm.weight = 1.0;
 
-    // Create a vector of joint positions
-    std::vector<double> joint_group_positions = {
-    1.57,   // joint1
-    0.0, // joint2
-    0.0,   // joint3
-    0.0,   // joint4
-    0.0    // joint5
-    };
+  // moveit_msgs::msg::Constraints path_constraints;
+  // path_constraints.orientation_constraints.push_back(ocm);
+  // move_group.setPathConstraints(path_constraints);
 
-    // Set as the target
-    move_group_interface.setJointValueTarget(joint_group_positions);
+  // 4️⃣ Plan
+  moveit::planning_interface::MoveGroupInterface::Plan plan;
+  bool success = (move_group.plan(plan) == moveit::core::MoveItErrorCode::SUCCESS);
 
-    // Plan & execute
-    moveit::planning_interface::MoveGroupInterface::Plan plan;
-    bool success = (move_group_interface.plan(plan) == moveit::core::MoveItErrorCode::SUCCESS);
+  if (success)
+  {
+    RCLCPP_INFO(node->get_logger(), "brr brr Planning successful. Executing...");
+    // 5️⃣ Execute the plan
+    move_group.execute(plan);
+  }
+  else
+  {
+    RCLCPP_ERROR(node->get_logger(), "Planning failed!");
+  }
 
-    if(success)
-    move_group_interface.execute(plan);
-    else
-    RCLCPP_ERROR(logger, "Joint goal planning failed!");
-
-
-  // Shutdown ROS
   rclcpp::shutdown();
   return 0;
 }

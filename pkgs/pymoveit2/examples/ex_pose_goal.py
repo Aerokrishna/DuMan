@@ -21,7 +21,7 @@ def main():
     node = Node("ex_pose_goal")
 
     # Declare parameters for position and orientation
-    node.declare_parameter("position", [0.1, 0.0, 0.1])
+    node.declare_parameter("position", [0.15, 0.0, 0.0])
     q = quaternion_from_euler(0, -1.57, -1.57)
     quat = list(q)  # Quaternion in xyzw format
 

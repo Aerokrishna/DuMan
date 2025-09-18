@@ -10,19 +10,19 @@ void updateEncoder(uint gpio, uint32_t events){
     //   }
     
   
-    if (gpio == enc_left_A){ 
-      if (digitalRead(enc_left_B)==1){
-        enc_val_left++;
+    if (gpio == enc_A){ 
+      if (digitalRead(enc_B)==1){
+        enc_val++;
   
       }
       else {
-          enc_val_left--;}
+          enc_val--;}
       }
       
-      current_angle = (enc_val_left/1080.0f) * 360;
+      current_angle = (enc_val/1080.0f) * 360;
 
-      if (enc_val_left == 1080 || enc_val_left == -1080){
-        enc_val_left = 0;
+      if (enc_val == 1080 || enc_val == -1080){
+        enc_val = 0;
       }
 
     // Serial.println("Hi");

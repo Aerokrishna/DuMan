@@ -5,7 +5,7 @@ PIDFeedback pid_feedback;
 MotionProfile profile(0.0f, 0, 0); // Time in seconds
 PID motor_pid(0, 0, 0, 0); // Time in seconds
 
-float elapsed_time = 0;
+float elapsed_time = 0.0;
 bool new_data = false;
 
 // int enc_val_right = 0;

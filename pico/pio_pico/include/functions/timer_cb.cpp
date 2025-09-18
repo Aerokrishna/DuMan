@@ -5,6 +5,7 @@ void timer_cb(){
         profile.reset_profile(current_angle, cmd_pidvals.target_angle, cmd_pidvals.time_);
         motor_pid.update_gains(cmd_pidvals.Kp, cmd_pidvals.Ki, cmd_pidvals.Kd);
         new_data = false;
+        elapsed_time = 0.0;
 
     }
 
@@ -40,7 +41,7 @@ void timer_cb(){
     pid_feedback.id = PID_FEEDBACK;
     pid_feedback.setpoint = setpoint;
     pid_feedback.current = current_angle;
-    pid_feedback.motor_pwm = control;
+    pid_feedback.motor_pwm = int(control);
     pid_feedback.elapsed_time = elapsed_time;
 
     send_data(pack_data<PIDFeedback>(pid_feedback));

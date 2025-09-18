@@ -19,7 +19,7 @@ struct PIDFeedback {
     uint8_t id;
     float setpoint;
     float current;
-    float motor_pwm;
+    int16_t motor_pwm;
     float elapsed_time;
 
 };  

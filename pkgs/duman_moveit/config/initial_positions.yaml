@@ -1,0 +1,15 @@
+# Default initial positions for duman_arm's ros2_control fake system
+
+initial_positions:
+  left_elbow: 0
+  left_hip: 0
+  left_shoulder: 0
+  left_wrist1: 0
+  left_wrist2: 0
+  left_wrist3: 0
+  right_elbow: 0
+  right_hip: 0
+  right_shoulder: 0
+  right_wrist1: 0
+  right_wrist2: 0
+  right_wrist3: 0

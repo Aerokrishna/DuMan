@@ -15,9 +15,9 @@ def load_yaml(package_name, file_path):
     
 def generate_launch_description():
     moveit_config = (
-        MoveItConfigsBuilder("onshape", package_name="duman_moveit_config")
-        .robot_description(file_path="config/onshape.urdf.xacro")
-        .robot_description_semantic(file_path="config/onshape.srdf")
+        MoveItConfigsBuilder("duman_arm", package_name="duman_moveit")
+        .robot_description(file_path="config/duman_arm.urdf.xacro")
+        .robot_description_semantic(file_path="config/duman_arm.srdf")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
         # .joint_limits(file_path="config/joint_limits.yaml")
         .planning_pipelines(pipelines=["ompl"], default_planning_pipeline="ompl")
@@ -42,8 +42,8 @@ def generate_launch_description():
             "start_state_max_bounds_error": 0.1,
         }
     }
-    moveit_pkg = get_package_share_directory("duman_moveit_config")
-    ompl_planning_yaml = load_yaml("duman_moveit_config","config/ompl_planning.yaml")
+    moveit_pkg = get_package_share_directory("duman_moveit")
+    ompl_planning_yaml = load_yaml("duman_moveit","config/ompl_planning.yaml")
     ompl_planning_pipeline_config["move_group"].update(ompl_planning_yaml)
 
     planning_scene_monitor_parameters = {
@@ -71,23 +71,23 @@ def generate_launch_description():
         ],
     )
 
-    # Servo node for realtime control
-    servo_yaml = load_yaml("duman_moveit_config", "config/servo.yaml")
-    servo_params = {"moveit_servo": servo_yaml}
-    servo_node = Node(
-        package="moveit_servo",
-        executable="servo_node_main",
-        parameters=[
-            servo_params,
-            moveit_config.robot_description,
-            moveit_config.robot_description_semantic,
-            {"use_sim_time": False},
-        ],
-        output="screen",
-    )
+    # # Servo node for realtime control
+    # servo_yaml = load_yaml("duman_moveit", "config/servo.yaml")
+    # servo_params = {"moveit_servo": servo_yaml}
+    # servo_node = Node(
+    #     package="moveit_servo",
+    #     executable="servo_node_main",
+    #     parameters=[
+    #         servo_params,
+    #         moveit_config.robot_description,
+    #         moveit_config.robot_description_semantic,
+    #         {"use_sim_time": False},
+    #     ],
+    #     output="screen",
+    # )
     # RViz
     rviz_config_file = (
-        get_package_share_directory("duman_moveit_config") + "/config/moveit.rviz"
+        get_package_share_directory("duman_moveit") + "/config/moveit.rviz"
     )
     rviz_node = Node(
         package="rviz2",
@@ -122,7 +122,7 @@ def generate_launch_description():
 
     # ros2_control using FakeSystem as hardware
     ros2_controllers_path = os.path.join(
-        get_package_share_directory("duman_moveit_config"),
+        get_package_share_directory("duman_moveit"),
         "config",
         "ros2_controllers.yaml",
     )
@@ -139,7 +139,8 @@ def generate_launch_description():
     # Load controllers
     load_controllers = []
     for controller in [
-        "duman_arm_controller",
+        "duman_left_controller",
+        "duman_right_controller",
         "joint_state_broadcaster",
     ]:
         load_controllers += [

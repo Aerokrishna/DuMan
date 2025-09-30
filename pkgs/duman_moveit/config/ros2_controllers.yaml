@@ -1,0 +1,46 @@
+# This config file is used by ros2_control
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    duman_left_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+    duman_right_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+duman_left_controller:
+  ros__parameters:
+    joints:
+      - left_hip
+      - left_shoulder
+      - left_elbow
+      - left_wrist1
+      - left_wrist2
+      - left_wrist3
+    command_interfaces:
+      - position
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+duman_right_controller:
+  ros__parameters:
+    joints:
+      - right_hip
+      - right_shoulder
+      - right_elbow
+      - right_wrist1
+      - right_wrist2
+      - right_wrist3
+    command_interfaces:
+      - position
+      - velocity
+    state_interfaces:
+      - position
+      - velocity

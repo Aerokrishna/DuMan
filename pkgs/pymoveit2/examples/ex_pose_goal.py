@@ -13,15 +13,13 @@ from pymoveit2 import MoveIt2
 from pymoveit2.robots import duman
 from tf_transformations import euler_from_quaternion, quaternion_from_euler, quaternion_multiply
 
-
 def main():
     rclpy.init()
-
     # Create node for this example
     node = Node("ex_pose_goal")
 
     # Declare parameters for position and orientation
-    node.declare_parameter("position", [0.15, 0.0, 0.0])
+    node.declare_parameter("position", [0.0, 0.15, 0.0])
     q = quaternion_from_euler(0, -1.57, -1.57)
     quat = list(q)  # Quaternion in xyzw format
 
@@ -59,11 +57,13 @@ def main():
     moveit2.set_position_goal(position=position, frame_id=duman.base_link_name(), target_link=duman.end_effector_name())
     moveit2.set_orientation_goal(quat_xyzw=quat_xyzw, frame_id=duman.base_link_name(), target_link=duman.end_effector_name())
 
-    moveit2.compute_ik(position=position, quat_xyzw=quat, start_joint_state=[0.0,0.0,0.0,0.0,0.0])
+    print(moveit2.compute_ik(position=position, quat_xyzw=quat, start_joint_state=[0.0,0.0,0.0,0.0,0.0]))
     # moveit2.compute_fk(joint_state=[1.0,1.0,2.0,1.0,0.0], fk_link_names=duman.joint_names())
     # moveit2._plan_cartesian_path(frame_id="base")
+    plan = moveit2.plan()
     
-    moveit2.execute(moveit2.plan())
+    print(plan)
+    moveit2.execute(plan)
     # moveit2.wait_until_executed()
 
     rclpy.shutdown()

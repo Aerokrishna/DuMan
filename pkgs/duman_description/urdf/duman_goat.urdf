@@ -1,0 +1,1350 @@
+<?xml version="1.0" ?>
+<!-- Generated using onshape-to-robot -->
+<!-- Onshape document_id: 6d727452bacd0fe753a21534 -->
+<robot name="duman_arm">
+  <link name="base"/>
+
+  <!-- Link skeleton -->
+  <link name="skeleton">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part tube_50cm___copy -->
+    <visual>
+      <origin xyz="0.0111583 0.463624 0.465599" rpy="0.00710198 0.0110701 -1.56323"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm___copy.stl"/>
+      </geometry>
+      <material name="tube_50cm___copy_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0111583 0.463624 0.465599" rpy="0.00710198 0.0110701 -1.56323"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm___copy.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part tube_50cm -->
+    <visual>
+      <origin xyz="0.00392572 -0.0214228 0.235133" rpy="0.0110704 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm.stl"/>
+      </geometry>
+      <material name="tube_50cm_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.00392572 -0.0214228 0.235133" rpy="0.0110704 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part tube_50cm___copy_2 -->
+    <visual>
+      <origin xyz="0.0127373 0.466127 0.240618" rpy="0.570387 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm___copy.stl"/>
+      </geometry>
+      <material name="tube_50cm___copy_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0127373 0.466127 0.240618" rpy="0.570387 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm___copy.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part tube_50cm___copy_3 -->
+    <visual>
+      <origin xyz="0.223735 0.465354 0.454609" rpy="-1.55973 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm___copy.stl"/>
+      </geometry>
+      <material name="tube_50cm___copy_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.223735 0.465354 0.454609" rpy="-1.55973 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm___copy.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part tube_50cm_2 -->
+    <visual>
+      <origin xyz="0.00234667 -0.0239255 0.460114" rpy="0.0110704 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm.stl"/>
+      </geometry>
+      <material name="tube_50cm_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.00234667 -0.0239255 0.460114" rpy="0.0110704 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part tube_50cm_3 -->
+    <visual>
+      <origin xyz="0.227335 -0.0222411 0.461711" rpy="0.0110704 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm.stl"/>
+      </geometry>
+      <material name="tube_50cm_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.227335 -0.0222411 0.461711" rpy="0.0110704 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part tube_50cm___copy_4 -->
+    <visual>
+      <origin xyz="0.000150258 0.465894 0.253029" rpy="1.5779 0.0110701 -1.56323"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm___copy.stl"/>
+      </geometry>
+      <material name="tube_50cm___copy_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000150258 0.465894 0.253029" rpy="1.5779 0.0110701 -1.56323"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm___copy.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part tube_50cm_4 -->
+    <visual>
+      <origin xyz="0.228914 -0.0197384 0.236731" rpy="0.0110704 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm.stl"/>
+      </geometry>
+      <material name="tube_50cm_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.228914 -0.0197384 0.236731" rpy="0.0110704 -0.00710155 0.0074865"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/tube_50cm.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_encoder_bracket2 -->
+    <visual>
+      <origin xyz="0.252262 0.549485 0.432743" rpy="3.13449 -0.0110701 1.57836"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.252262 0.549485 0.432743" rpy="3.13449 -0.0110701 1.57836"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover -->
+    <visual>
+      <origin xyz="0.192265 0.549036 0.432317" rpy="3.13449 -0.0110701 1.57836"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover.stl"/>
+      </geometry>
+      <material name="actuator_cover_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.192265 0.549036 0.432317" rpy="3.13449 -0.0110701 1.57836"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_encoder_bracket_bottom -->
+    <visual>
+      <origin xyz="0.220764 0.483086 0.431784" rpy="-1.00041 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket_bottom.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket_bottom_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.220764 0.483086 0.431784" rpy="-1.00041 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket_bottom.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part megamotor -->
+    <visual>
+      <origin xyz="0.189364 0.535901 0.432151" rpy="2.57121 1.55764 1.00794"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/megamotor.stl"/>
+      </geometry>
+      <material name="megamotor_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.189364 0.535901 0.432151" rpy="2.57121 1.55764 1.00794"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/megamotor.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part antislipcoup -->
+    <visual>
+      <origin xyz="0.252361 0.536373 0.432598" rpy="0.570387 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup.stl"/>
+      </geometry>
+      <material name="antislipcoup_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.252361 0.536373 0.432598" rpy="0.570387 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_front -->
+    <visual>
+      <origin xyz="0.273261 0.549642 0.432892" rpy="-0.570387 1.55764 1.00794"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front.stl"/>
+      </geometry>
+      <material name="actuator_cover_front_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.273261 0.549642 0.432892" rpy="-0.570387 1.55764 1.00794"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_encoder_bracket2_2 -->
+    <visual>
+      <origin xyz="-0.0307233 0.547366 0.430733" rpy="-0.00710198 -0.0110701 1.57836"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket2_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0307233 0.547366 0.430733" rpy="-0.00710198 -0.0110701 1.57836"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_2 -->
+    <visual>
+      <origin xyz="0.0292735 0.547816 0.43116" rpy="-0.00710198 -0.0110701 1.57836"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover.stl"/>
+      </geometry>
+      <material name="actuator_cover_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0292735 0.547816 0.43116" rpy="-0.00710198 -0.0110701 1.57836"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_encoder_bracket_bottom_2 -->
+    <visual>
+      <origin xyz="0.00177554 0.481446 0.430228" rpy="-2.14118 1.55764 1.00794"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket_bottom.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket_bottom_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.00177554 0.481446 0.430228" rpy="-2.14118 1.55764 1.00794"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket_bottom.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part megamotor_2 -->
+    <visual>
+      <origin xyz="0.0323726 0.534726 0.431036" rpy="-2.57121 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/megamotor.stl"/>
+      </geometry>
+      <material name="megamotor_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0323726 0.534726 0.431036" rpy="-2.57121 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/megamotor.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part antislipcoup_2 -->
+    <visual>
+      <origin xyz="-0.0306241 0.534254 0.430588" rpy="-0.570387 1.55764 1.00794"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup.stl"/>
+      </geometry>
+      <material name="antislipcoup_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0306241 0.534254 0.430588" rpy="-0.570387 1.55764 1.00794"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_front_2 -->
+    <visual>
+      <origin xyz="-0.0517222 0.547209 0.430584" rpy="0.570387 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front.stl"/>
+      </geometry>
+      <material name="actuator_cover_front_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0517222 0.547209 0.430584" rpy="0.570387 -1.55764 -2.13366"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link actuator -->
+  <link name="actuator">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part motor_encoder_bracket2_3 -->
+    <visual>
+      <origin xyz="1.05013e-06 -0.0307374 -0.0711655" rpy="-3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket2_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 -0.0307374 -0.0711655" rpy="-3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_3 -->
+    <visual>
+      <origin xyz="1.05013e-06 0.0292626 -0.0711655" rpy="3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover.stl"/>
+      </geometry>
+      <material name="actuator_cover_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 0.0292626 -0.0711655" rpy="3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_encoder_bracket_bottom_3 -->
+    <visual>
+      <origin xyz="1.05013e-06 0.00126256 -0.005" rpy="1.5708 1.64589e-18 -1.66637e-18"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket_bottom.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket_bottom_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 0.00126256 -0.005" rpy="1.5708 1.64589e-18 -1.66637e-18"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket_bottom.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part megamotor_3 -->
+    <visual>
+      <origin xyz="1.05013e-06 0.0322626 -0.0580524" rpy="-1.16283e-15 -2.48687e-17 -3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/megamotor.stl"/>
+      </geometry>
+      <material name="megamotor_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 0.0322626 -0.0580524" rpy="-1.16283e-15 -2.48687e-17 -3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/megamotor.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part antislipcoup_3 -->
+    <visual>
+      <origin xyz="1.05013e-06 -0.0307374 -0.0580524" rpy="-3.14159 8.46974e-16 2.26151e-17"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup.stl"/>
+      </geometry>
+      <material name="antislipcoup_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 -0.0307374 -0.0580524" rpy="-3.14159 8.46974e-16 2.26151e-17"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_front_3 -->
+    <visual>
+      <origin xyz="1.05013e-06 -0.0517374 -0.0711655" rpy="3.14159 -6.93386e-16 -3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front.stl"/>
+      </geometry>
+      <material name="actuator_cover_front_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 -0.0517374 -0.0711655" rpy="3.14159 -6.93386e-16 -3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link elbow_attacher -->
+  <link name="elbow_attacher">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part link -->
+    <visual>
+      <origin xyz="0.215 -0.03 -0.005" rpy="-2.96229e-17 1.06705e-17 1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/link.stl"/>
+      </geometry>
+      <material name="link_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.215 -0.03 -0.005" rpy="-2.96229e-17 1.06705e-17 1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/link.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part elbow_attacher -->
+    <visual>
+      <origin xyz="0.271177 -1.38778e-17 -0.040137" rpy="1.5708 -1.26764e-16 -3.40438e-16"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/elbow_attacher.stl"/>
+      </geometry>
+      <material name="elbow_attacher_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.271177 -1.38778e-17 -0.040137" rpy="1.5708 -1.26764e-16 -3.40438e-16"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/elbow_attacher.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part elbow_attacher_2 -->
+    <visual>
+      <origin xyz="0 4.16334e-17 -0.005" rpy="1.5708 -8.80746e-18 -6.1554e-18"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/elbow_attacher.stl"/>
+      </geometry>
+      <material name="elbow_attacher_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 4.16334e-17 -0.005" rpy="1.5708 -8.80746e-18 -6.1554e-18"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/elbow_attacher.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part antislipcoup_elbow -->
+    <visual>
+      <origin xyz="0.271177 0 -0.005857" rpy="-1.5708 2.01705e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup_elbow.stl"/>
+      </geometry>
+      <material name="antislipcoup_elbow_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.271177 0 -0.005857" rpy="-1.5708 2.01705e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup_elbow.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part small_motor -->
+    <visual>
+      <origin xyz="0.271177 1.38778e-17 0.116893" rpy="-1.5708 -1.26744e-16 -3.40511e-16"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/small_motor.stl"/>
+      </geometry>
+      <material name="small_motor_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.271177 1.38778e-17 0.116893" rpy="-1.5708 -1.26744e-16 -3.40511e-16"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/small_motor.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_front_elbow -->
+    <visual>
+      <origin xyz="0.286127 0.0015 -0.026886" rpy="1.5711 0.000307972 0.775558"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front_elbow.stl"/>
+      </geometry>
+      <material name="actuator_cover_front_elbow_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.286127 0.0015 -0.026886" rpy="1.5711 0.000307972 0.775558"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front_elbow.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_enc_bottom_elbow -->
+    <visual>
+      <origin xyz="0.215 5.55112e-17 -0.005" rpy="5.39071e-17 -8.06861e-18 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_enc_bottom_elbow.stl"/>
+      </geometry>
+      <material name="motor_enc_bottom_elbow_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.215 5.55112e-17 -0.005" rpy="5.39071e-17 -8.06861e-18 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_enc_bottom_elbow.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_encoder_bracket2_elb -->
+    <visual>
+      <origin xyz="0.286165 1.38778e-17 -0.005857" rpy="-1.5708 -5.56247e-17 -2.61597e-16"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2_elb.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket2_elb_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.286165 1.38778e-17 -0.005857" rpy="-1.5708 -5.56247e-17 -2.61597e-16"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2_elb.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_elbow -->
+    <visual>
+      <origin xyz="0.286162 0.0015 0.054114" rpy="-1.5711 0.000304986 -0.785398"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_elbow.stl"/>
+      </geometry>
+      <material name="actuator_cover_elbow_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.286162 0.0015 0.054114" rpy="-1.5711 0.000304986 -0.785398"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_elbow.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link link_elbow -->
+  <link name="link_elbow">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part link_elbow -->
+    <visual>
+      <origin xyz="0.125 0.03 -0.03" rpy="3.14159 3.5314e-19 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/link_elbow.stl"/>
+      </geometry>
+      <material name="link_elbow_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.125 0.03 -0.03" rpy="3.14159 3.5314e-19 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/link_elbow.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part mg995_step_1 -->
+    <visual>
+      <origin xyz="0.127 0.00025 -0.015" rpy="3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+      <material name="mg995_step_1_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.127 0.00025 -0.015" rpy="3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part wrap1_1 -->
+    <visual>
+      <origin xyz="0.170404 0.001 -0.00509603" rpy="-1.57123 -5.01083e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+      <material name="wrap1_1_material">
+        <color rgba="0.901961 0.917647 0.929412 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.170404 0.001 -0.00509603" rpy="-1.57123 -5.01083e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part wrist_attacher -->
+    <visual>
+      <origin xyz="0.161 0.03 -0.045" rpy="3.14159 -4.78394e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher.stl"/>
+      </geometry>
+      <material name="wrist_attacher_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.161 0.03 -0.045" rpy="3.14159 -4.78394e-16 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link wrist_attacher2_assem -->
+  <link name="wrist_attacher2_assem">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part wrap1_1_2 -->
+    <visual>
+      <origin xyz="-0.0394664 -0.00915928 -0.0219368" rpy="1.57037 1.114e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+      <material name="wrap1_1_2_material">
+        <color rgba="0.901961 0.917647 0.929412 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0394664 -0.00915928 -0.0219368" rpy="1.57037 1.114e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part wrist_attacher2 -->
+    <visual>
+      <origin xyz="-1.11022e-16 0 -0.002" rpy="1.5708 -4.24972e-19 6.74978e-19"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher2.stl"/>
+      </geometry>
+      <material name="wrist_attacher2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-1.11022e-16 0 -0.002" rpy="1.5708 -4.24972e-19 6.74978e-19"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part mg995_step_1_2 -->
+    <visual>
+      <origin xyz="0.004 -1.38778e-16 -0.0215" rpy="1.5708 1.09145e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+      <material name="mg995_step_1_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.004 -1.38778e-16 -0.0215" rpy="1.5708 1.09145e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="ee_right"/>
+  <link name="ee_left"/>
+
+  <!-- Link wrist_attacher3_assem -->
+  <link name="wrist_attacher3_assem">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part wrist_attacher3 -->
+    <visual>
+      <origin xyz="0.08 0 0.0386" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher3.stl"/>
+      </geometry>
+      <material name="wrist_attacher3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.08 0 0.0386" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher3.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part mg995_step_1_3 -->
+    <visual>
+      <origin xyz="0.051 0 0.0406" rpy="3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+      <material name="mg995_step_1_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.051 0 0.0406" rpy="3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link wrap1_1 -->
+  <link name="wrap1_1">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part wrap1_1_3 -->
+    <visual>
+      <origin xyz="1.11022e-16 0 0.00105" rpy="3.14159 6.78065e-19 1.13658e-18"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+      <material name="wrap1_1_3_material">
+        <color rgba="0.901961 0.917647 0.929412 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.11022e-16 0 0.00105" rpy="3.14159 6.78065e-19 1.13658e-18"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from wrist_attacher3_assem to wrap1_1 -->
+  <joint name="skeleton_to_base" type="fixed">
+    <parent link="base"/>
+    <child link="skeleton"/>
+    <origin xyz="-0.12 0.475 0" rpy="1.57 0 0"/>
+  </joint>
+
+  <joint name="wrist_to_ee_right" type="fixed">
+    <parent link="wrap1_1"/>
+    <child link="ee_right"/>
+    <origin xyz="0 0 0.03" rpy="0 0 0"/>
+  </joint>
+  
+  <joint name="wrist_to_ee_left" type="fixed">
+    <parent link="wrap1_1_2"/>
+    <child link="ee_left"/>
+    <origin xyz="0 0 0.03" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="right_wrist3" type="revolute">
+    <origin xyz="0.0955 -2.77556e-17 0.0506" rpy="1.24133e-16 1.5708 0"/>
+    <parent link="wrist_attacher3_assem"/>
+    <child link="wrap1_1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from wrist_attacher2_assem to wrist_attacher3_assem -->
+  <joint name="right_wrist2" type="revolute">
+    <origin xyz="-0.0431 -0.00990928 -0.0214093" rpy="1.18241e-16 1.5708 0"/>
+    <parent link="wrist_attacher2_assem"/>
+    <child link="wrist_attacher3_assem"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from link_elbow to wrist_attacher2_assem -->
+  <joint name="right_wrist1" type="revolute">
+    <origin xyz="0.1741 0.000159276 -0.00509072" rpy="-3.11745e-15 -1.5708 0"/>
+    <parent link="link_elbow"/>
+    <child link="wrist_attacher2_assem"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from elbow_attacher to link_elbow -->
+  <joint name="right_elbow" type="revolute">
+    <origin xyz="0.271177 -1.38778e-17 -0.040137" rpy="2.01271e-15 -1.26764e-16 -3.40438e-16"/>
+    <parent link="elbow_attacher"/>
+    <child link="link_elbow"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from actuator to elbow_attacher -->
+  <joint name="right_shoulder" type="revolute">
+    <origin xyz="1.05013e-06 -0.0575174 -0.0580524" rpy="-1.5708 8.46974e-16 2.26151e-17"/>
+    <parent link="actuator"/>
+    <child link="elbow_attacher"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from skeleton to actuator -->
+  <joint name="right_hip" type="revolute">
+    <origin xyz="-0.0574027 0.534054 0.430398" rpy="-1.56369 0.0110701 -1.56323"/>
+    <parent link="skeleton"/>
+    <child link="actuator"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Link actuator_2 -->
+  <link name="actuator_2">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part motor_encoder_bracket2_4 -->
+    <visual>
+      <origin xyz="1.05013e-06 -0.0307374 -0.0711655" rpy="-3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket2_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 -0.0307374 -0.0711655" rpy="-3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_4 -->
+    <visual>
+      <origin xyz="1.05013e-06 0.0292626 -0.0711655" rpy="-3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover.stl"/>
+      </geometry>
+      <material name="actuator_cover_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 0.0292626 -0.0711655" rpy="-3.14159 1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_encoder_bracket_bottom_4 -->
+    <visual>
+      <origin xyz="1.05013e-06 0.00126256 -0.005" rpy="1.5708 -9.23617e-20 -3.47887e-21"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket_bottom.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket_bottom_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 0.00126256 -0.005" rpy="1.5708 -9.23617e-20 -3.47887e-21"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket_bottom.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part megamotor_4 -->
+    <visual>
+      <origin xyz="1.05013e-06 0.0322626 -0.0580524" rpy="9.98908e-16 9.86841e-16 3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/megamotor.stl"/>
+      </geometry>
+      <material name="megamotor_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 0.0322626 -0.0580524" rpy="9.98908e-16 9.86841e-16 3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/megamotor.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part antislipcoup_4 -->
+    <visual>
+      <origin xyz="1.05013e-06 -0.0307374 -0.0580524" rpy="3.14159 -1.36524e-15 -1.06156e-15"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup.stl"/>
+      </geometry>
+      <material name="antislipcoup_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 -0.0307374 -0.0580524" rpy="3.14159 -1.36524e-15 -1.06156e-15"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_front_4 -->
+    <visual>
+      <origin xyz="1.05013e-06 -0.0517374 -0.0711655" rpy="-3.14159 1.22175e-15 3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front.stl"/>
+      </geometry>
+      <material name="actuator_cover_front_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.05013e-06 -0.0517374 -0.0711655" rpy="-3.14159 1.22175e-15 3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link elbow_attacher_2 -->
+  <link name="elbow_attacher_2">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part link_2 -->
+    <visual>
+      <origin xyz="-0.215 0.03 -0.005" rpy="-1.09806e-17 6.74975e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/link.stl"/>
+      </geometry>
+      <material name="link_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.215 0.03 -0.005" rpy="-1.09806e-17 6.74975e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/link.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part elbow_attacher_3 -->
+    <visual>
+      <origin xyz="-1.11022e-16 0 0" rpy="-1.5708 -9.24052e-18 3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/elbow_attacher.stl"/>
+      </geometry>
+      <material name="elbow_attacher_3_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-1.11022e-16 0 0" rpy="-1.5708 -9.24052e-18 3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/elbow_attacher.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part elbow_attacher_4 -->
+    <visual>
+      <origin xyz="-0.271178 0.0015 -0.0400426" rpy="1.5708 4.22143e-15 -2.99867"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/elbow_attacher.stl"/>
+      </geometry>
+      <material name="elbow_attacher_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.271178 0.0015 -0.0400426" rpy="1.5708 4.22143e-15 -2.99867"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/elbow_attacher.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part antislipcoup_elbow_2 -->
+    <visual>
+      <origin xyz="-0.271178 0.0015 -0.00576256" rpy="-1.5708 2.50799e-15 1.71372"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup_elbow.stl"/>
+      </geometry>
+      <material name="antislipcoup_elbow_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.271178 0.0015 -0.00576256" rpy="-1.5708 2.50799e-15 1.71372"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/antislipcoup_elbow.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part small_motor_2 -->
+    <visual>
+      <origin xyz="-0.271178 0.0015 0.116987" rpy="-1.5708 3.17817e-15 -2.65628"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/small_motor.stl"/>
+      </geometry>
+      <material name="small_motor_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.271178 0.0015 0.116987" rpy="-1.5708 3.17817e-15 -2.65628"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/small_motor.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_front_elbow_2 -->
+    <visual>
+      <origin xyz="-0.286167 0.0015 -0.0267626" rpy="1.5708 1.96158e-15 -2.36603"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front_elbow.stl"/>
+      </geometry>
+      <material name="actuator_cover_front_elbow_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.286167 0.0015 -0.0267626" rpy="1.5708 1.96158e-15 -2.36603"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_front_elbow.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_enc_bottom_elbow_2 -->
+    <visual>
+      <origin xyz="-0.215 -2.22045e-16 -0.005" rpy="9.23332e-18 -6.75062e-15 1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_enc_bottom_elbow.stl"/>
+      </geometry>
+      <material name="motor_enc_bottom_elbow_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.215 -2.22045e-16 -0.005" rpy="9.23332e-18 -6.75062e-15 1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_enc_bottom_elbow.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part motor_encoder_bracket2_elb_2 -->
+    <visual>
+      <origin xyz="-0.286167 0.0015 -0.00576256" rpy="-1.5708 4.58121e-15 -3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2_elb.stl"/>
+      </geometry>
+      <material name="motor_encoder_bracket2_elb_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.286167 0.0015 -0.00576256" rpy="-1.5708 4.58121e-15 -3.14159"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/motor_encoder_bracket2_elb.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part actuator_cover_elbow_2 -->
+    <visual>
+      <origin xyz="-0.286167 0.0015 0.0542374" rpy="-1.5708 4.56537e-15 2.35619"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_elbow.stl"/>
+      </geometry>
+      <material name="actuator_cover_elbow_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.286167 0.0015 0.0542374" rpy="-1.5708 4.56537e-15 2.35619"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/actuator_cover_elbow.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link link_elbow_2 -->
+  <link name="link_elbow_2">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part link_elbow_2 -->
+    <visual>
+      <origin xyz="0.127999 0.0118891 -0.03" rpy="-3.14159 6.78947e-16 -1.71372"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/link_elbow.stl"/>
+      </geometry>
+      <material name="link_elbow_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.127999 0.0118891 -0.03" rpy="-3.14159 6.78947e-16 -1.71372"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/link_elbow.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part mg995_step_1_4 -->
+    <visual>
+      <origin xyz="0.125776 -0.017595 -0.015" rpy="2.99867 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+      <material name="mg995_step_1_4_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.125776 -0.017595 -0.015" rpy="2.99867 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part wrap1_1_4 -->
+    <visual>
+      <origin xyz="0.168783 -0.023784 -0.005" rpy="-1.5708 -4.61535e-16 -1.71372"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+      <material name="wrap1_1_4_material">
+        <color rgba="0.901961 0.917647 0.929412 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.168783 -0.023784 -0.005" rpy="-1.5708 -4.61535e-16 -1.71372"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part wrist_attacher_2 -->
+    <visual>
+      <origin xyz="0.163774 0.00775109 -0.045" rpy="-3.14159 3.4331e-16 -1.71372"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher.stl"/>
+      </geometry>
+      <material name="wrist_attacher_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.163774 0.00775109 -0.045" rpy="-3.14159 3.4331e-16 -1.71372"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link wrist_attacher2_assem_left -->
+  <link name="wrist_attacher2_assem_left">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part wrist_attacher2_2 -->
+    <visual>
+      <origin xyz="0 0 -0.002" rpy="1.5708 -1.49427e-18 -5.81306e-19"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher2.stl"/>
+      </geometry>
+      <material name="wrist_attacher2_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.002" rpy="1.5708 -1.49427e-18 -5.81306e-19"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher2.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part mg995_step_1_5 -->
+    <visual>
+      <origin xyz="0.004 4.44089e-16 -0.0215" rpy="-1.5708 1.09687e-15 1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+      <material name="mg995_step_1_5_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.004 4.44089e-16 -0.0215" rpy="-1.5708 1.09687e-15 1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part wrap1_1_5 -->
+    <visual>
+      <origin xyz="-0.0393593 0.0100907 -0.022" rpy="1.5708 -1.07122e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+      <material name="wrap1_1_5_material">
+        <color rgba="0.901961 0.917647 0.929412 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.0393593 0.0100907 -0.022" rpy="1.5708 -1.07122e-15 -1.5708"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link wrist_attacher3_assem_2 -->
+  <link name="wrist_attacher3_assem_2">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part wrist_attacher3_2 -->
+    <visual>
+      <origin xyz="0.08 0 0.0386" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher3.stl"/>
+      </geometry>
+      <material name="wrist_attacher3_2_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.08 0 0.0386" rpy="-1.5708 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrist_attacher3.stl"/>
+      </geometry>
+    </collision>
+    <!-- Part mg995_step_1_6 -->
+    <visual>
+      <origin xyz="0.051 1.11022e-16 0.0366" rpy="3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+      <material name="mg995_step_1_6_material">
+        <color rgba="0.796078 0.823529 0.937255 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.051 1.11022e-16 0.0366" rpy="3.14159 -1.5708 0"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/mg995_step_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Link wrap1_1_2 -->
+  <link name="wrap1_1_2">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1e-09"/>
+      <inertia ixx="1e-09" ixy="0" ixz="0" iyy="1e-09" iyz="0" izz="1e-09"/>
+    </inertial>
+    <!-- Part wrap1_1_6 -->
+    <visual>
+      <origin xyz="1.11022e-16 -1.11022e-16 0.00105" rpy="-3.14159 -1.93928e-19 8.50993e-19"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+      <material name="wrap1_1_6_material">
+        <color rgba="0.901961 0.917647 0.929412 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="1.11022e-16 -1.11022e-16 0.00105" rpy="-3.14159 -1.93928e-19 8.50993e-19"/>
+      <geometry>
+        <mesh filename="package://duman_description/models/wrap1_1.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <!-- Joint from wrist_attacher3_assem_2 to wrap1_1_2 -->
+  <joint name="left_wrist3" type="revolute">
+    <origin xyz="0.0955 -9.07239e-05 0.0465093" rpy="-1.39824e-18 1.5708 0"/>
+    <parent link="wrist_attacher3_assem_2"/>
+    <child link="wrap1_1_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from wrist_attacher2_assem_left to wrist_attacher3_assem_2 -->
+  <joint name="left_wrist2" type="revolute">
+    <origin xyz="-0.0431 0.00990928 -0.0215907" rpy="-1.57507e-16 1.5708 0"/>
+    <parent link="wrist_attacher2_assem_left"/>
+    <child link="wrist_attacher3_assem_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from link_elbow_2 to wrist_attacher2_assem_left -->
+  <joint name="left_wrist1" type="revolute">
+    <origin xyz="0.172383 -0.0243937 -0.00509072" rpy="-0.142926 -1.5708 0"/>
+    <parent link="link_elbow_2"/>
+    <child link="wrist_attacher2_assem_left"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from elbow_attacher_2 to link_elbow_2 -->
+  <joint name="left_elbow" type="revolute">
+    <origin xyz="-0.271178 0.0015 -0.0400426" rpy="2.52273e-15 4.22143e-15 -2.99867"/>
+    <parent link="elbow_attacher_2"/>
+    <child link="link_elbow_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from actuator_2 to elbow_attacher_2 -->
+  <joint name="left_shoulder" type="revolute">
+    <origin xyz="1.05013e-06 -0.0575174 -0.0580524" rpy="-1.5708 -1.36524e-15 -1.06156e-15"/>
+    <parent link="actuator_2"/>
+    <child link="elbow_attacher_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+  <!-- Joint from skeleton to actuator_2 -->
+  <joint name="left_hip" type="revolute">
+    <origin xyz="0.279139 0.536574 0.432788" rpy="-1.5779 -0.0110701 1.57836"/>
+    <parent link="skeleton"/>
+    <child link="actuator_2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+  </joint>
+
+
+</robot>

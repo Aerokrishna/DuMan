@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="duman_arm">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="duman_right">
+        <joint name="right_hip"/>
+        <joint name="right_shoulder"/>
+        <joint name="right_elbow"/>
+        <joint name="right_wrist1"/>
+        <joint name="right_wrist2"/>
+        <joint name="right_wrist3"/>
+    </group>
+    <group name="duman_left">
+        <joint name="left_hip"/>
+        <joint name="left_shoulder"/>
+        <joint name="left_elbow"/>
+        <joint name="left_wrist1"/>
+        <joint name="left_wrist2"/>
+        <joint name="left_wrist3"/>
+    </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="start_right" group="duman_right">
+        <joint name="right_elbow" value="-1.5783"/>
+        <joint name="right_hip" value="-0.4"/>
+        <joint name="right_shoulder" value="0.45"/>
+        <joint name="right_wrist1" value="0"/>
+        <joint name="right_wrist2" value="0"/>
+        <joint name="right_wrist3" value="0"/>
+    </group_state>
+    <group_state name="start_left" group="duman_left">
+        <joint name="left_elbow" value="1.57"/>
+        <joint name="left_hip" value="0.4"/>
+        <joint name="left_shoulder" value="-0.45"/>
+        <joint name="left_wrist1" value="0"/>
+        <joint name="left_wrist2" value="0"/>
+        <joint name="left_wrist3" value="0"/>
+    </group_state>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="ee_left" parent_link="wrap1_1_2" group="duman_left"/>
+    <end_effector name="ee_right" parent_link="wrap1_1" group="duman_right"/>
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="actuator" link2="actuator_2" reason="Never"/>
+    <disable_collisions link1="actuator" link2="elbow_attacher" reason="Adjacent"/>
+    <disable_collisions link1="actuator" link2="elbow_attacher_2" reason="Never"/>
+    <disable_collisions link1="actuator" link2="link_elbow" reason="Never"/>
+    <disable_collisions link1="actuator" link2="skeleton" reason="Adjacent"/>
+    <disable_collisions link1="actuator" link2="wrist_attacher2_assem" reason="Never"/>
+    <disable_collisions link1="actuator_2" link2="elbow_attacher" reason="Never"/>
+    <disable_collisions link1="actuator_2" link2="elbow_attacher_2" reason="Adjacent"/>
+    <disable_collisions link1="actuator_2" link2="link_elbow_2" reason="Never"/>
+    <disable_collisions link1="actuator_2" link2="skeleton" reason="Adjacent"/>
+    <disable_collisions link1="actuator_2" link2="wrist_attacher2_assem_left" reason="Never"/>
+    <disable_collisions link1="elbow_attacher" link2="link_elbow" reason="Adjacent"/>
+    <disable_collisions link1="elbow_attacher_2" link2="link_elbow_2" reason="Adjacent"/>
+    <disable_collisions link1="link_elbow" link2="wrist_attacher2_assem" reason="Adjacent"/>
+    <disable_collisions link1="link_elbow_2" link2="wrist_attacher2_assem_left" reason="Adjacent"/>
+    <disable_collisions link1="wrap1_1" link2="wrist_attacher2_assem" reason="Never"/>
+    <disable_collisions link1="wrap1_1" link2="wrist_attacher3_assem" reason="Adjacent"/>
+    <disable_collisions link1="wrap1_1_2" link2="wrist_attacher2_assem_left" reason="Never"/>
+    <disable_collisions link1="wrap1_1_2" link2="wrist_attacher3_assem_2" reason="Adjacent"/>
+    <disable_collisions link1="wrist_attacher2_assem" link2="wrist_attacher3_assem" reason="Adjacent"/>
+    <disable_collisions link1="wrist_attacher2_assem_left" link2="wrist_attacher3_assem_2" reason="Adjacent"/>
+</robot>

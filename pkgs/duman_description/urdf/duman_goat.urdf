@@ -831,7 +831,7 @@
     <parent link="elbow_attacher"/>
     <child link="link_elbow"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-2.36" upper="1.57"/>
   </joint>
   <!-- Joint from actuator to elbow_attacher -->
   <joint name="right_shoulder" type="revolute">
@@ -839,7 +839,7 @@
     <parent link="actuator"/>
     <child link="elbow_attacher"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-0.1" upper="1.57"/>
   </joint>
   <!-- Joint from skeleton to actuator -->
   <joint name="right_hip" type="revolute">
@@ -847,7 +847,7 @@
     <parent link="skeleton"/>
     <child link="actuator"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-1.57" upper="0.78"/>
   </joint>
   <!-- Link actuator_2 -->
   <link name="actuator_2">
@@ -1327,7 +1327,7 @@
     <parent link="elbow_attacher_2"/>
     <child link="link_elbow_2"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-1.57" upper="2.36"/>
   </joint>
   <!-- Joint from actuator_2 to elbow_attacher_2 -->
   <joint name="left_shoulder" type="revolute">
@@ -1335,7 +1335,7 @@
     <parent link="actuator_2"/>
     <child link="elbow_attacher_2"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-1.57" upper="0.1"/>
   </joint>
   <!-- Joint from skeleton to actuator_2 -->
   <joint name="left_hip" type="revolute">
@@ -1343,7 +1343,7 @@
     <parent link="skeleton"/>
     <child link="actuator_2"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-0.78" upper="1.57"/>
   </joint>
 
 

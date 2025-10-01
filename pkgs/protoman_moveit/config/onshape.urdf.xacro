@@ -3,7 +3,7 @@
     <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
 
     <!-- Import onshape urdf file -->
-    <xacro:include filename="$(find duman_description)/urdf/duman.urdf" />
+    <xacro:include filename="$(find duman_description)/urdf/protoman.urdf" />
 
     <!-- Import control_xacro -->
     <xacro:include filename="onshape.ros2_control.xacro" />

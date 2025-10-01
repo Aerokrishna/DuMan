@@ -1,0 +1,26 @@
+initialize : move each joint till it hits the limit switch
+
+// we assume it has been initialized
+home : send joint goals to duman_motion_control (controls cartesian poses and joint poses)
+namaste : send joint goals to do namaste
+rest : lowest torque pose
+
+action interface 
+pose_goal :
+left_cmd : bool
+right_cmd : bool
+right xyz rpy
+left xyz rpy
+
+joint_goal :
+same but 6 joints
+
+figure out moveit servoing to work with this dual arm manipulator
+
+plan : 
+have a proxity sensor in the gripper of each of the arm, 
+perform a simple passing operation where one arm points at you to collect the item
+and then when you hand it, the other arm reaches the pass position, this guy gives the other arm the object
+by moving linearly inside the other arms gripper with servo until the other arm detects the object, once that happens this guy grips
+so the other ungrips and then the other arm takes the object and places it elsewhere
+lets follow dumb robot and intelligent manager

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(pymoveit2)
+project(duman_control)
 
 # Find dependencies
 find_package(ament_cmake REQUIRED)
@@ -10,6 +10,8 @@ ament_python_install_package(pymoveit2)
 
 # Install examples
 set(EXAMPLES_DIR examples)
+set(CONTROL control)
+
 install(PROGRAMS
     ${EXAMPLES_DIR}/ex_collision_object.py
     ${EXAMPLES_DIR}/ex_joint_goal.py
@@ -17,9 +19,9 @@ install(PROGRAMS
     ${EXAMPLES_DIR}/ex_servo.py
     ${EXAMPLES_DIR}/duman_pose_goal.py
     ${EXAMPLES_DIR}/duman_pose_goal_left.py
-
     ${EXAMPLES_DIR}/duman_joint_goal.py
 
+    ${CONTROL}/move_duman.py
 
     DESTINATION lib/${PROJECT_NAME}
 )

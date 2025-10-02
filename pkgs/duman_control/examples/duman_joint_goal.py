@@ -46,13 +46,11 @@ def main():
     executor_thread.start()
 
     # Get parameter
-    joint_positions = (
-        node.get_parameter("joint_positions").get_parameter_value().double_array_value
-    )
+    joint_positions = [-0.6,0.4,-1.00,0.0,0.0,0.0]
 
     # Move to joint configuration
-    node.get_logger().info(f"Moving to {{joint_positions: {list(joint_positions)}}}")
-    print(moveit2.compute_fk(joint_state=joint_positions))
+    node.get_logger().info(f"Moving to {{joint_positions: {joint_positions}}}")
+    print(moveit2.compute_fk(joint_state=[-0.6,0.4,-1.00,0.0,0.0,0.0]))
 
     moveit2.move_to_configuration(joint_positions)
     moveit2.wait_until_executed()

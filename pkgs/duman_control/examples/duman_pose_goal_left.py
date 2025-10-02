@@ -65,7 +65,7 @@ def main():
     
     # print(plan)
     moveit2.execute(plan)
-    # moveit2.wait_until_executed()
+    moveit2.wait_until_executed()
 
     rclpy.shutdown()
     exit(0)

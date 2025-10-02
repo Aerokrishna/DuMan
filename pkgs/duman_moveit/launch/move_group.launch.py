@@ -72,19 +72,19 @@ def generate_launch_description():
     )
 
     # # Servo node for realtime control
-    # servo_yaml = load_yaml("duman_moveit", "config/servo.yaml")
-    # servo_params = {"moveit_servo": servo_yaml}
-    # servo_node = Node(
-    #     package="moveit_servo",
-    #     executable="servo_node_main",
-    #     parameters=[
-    #         servo_params,
-    #         moveit_config.robot_description,
-    #         moveit_config.robot_description_semantic,
-    #         {"use_sim_time": False},
-    #     ],
-    #     output="screen",
-    # )
+    servo_yaml = load_yaml("duman_moveit", "config/servo.yaml")
+    servo_params = {"moveit_servo": servo_yaml}
+    servo_node = Node(
+        package="moveit_servo",
+        executable="servo_node_main",
+        parameters=[
+            servo_params,
+            moveit_config.robot_description,
+            moveit_config.robot_description_semantic,
+            {"use_sim_time": False},
+        ],
+        output="screen",
+    )
     # RViz
     rviz_config_file = (
         get_package_share_directory("duman_moveit") + "/config/moveit.rviz"
@@ -163,3 +163,6 @@ def generate_launch_description():
         ]
         + load_controllers
     )
+
+# ros2 service call /servo_node/start_servo std_srvs/srv/Trigger {}
+# 

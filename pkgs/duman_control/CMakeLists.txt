@@ -22,6 +22,8 @@ install(PROGRAMS
     ${EXAMPLES_DIR}/duman_joint_goal.py
 
     ${CONTROL}/move_duman.py
+    ${CONTROL}/test_client.py
+
 
     DESTINATION lib/${PROJECT_NAME}
 )

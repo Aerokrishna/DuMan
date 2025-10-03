@@ -58,7 +58,7 @@ def main():
     moveit2.set_position_goal(position=position, frame_id=duman_left.base_link_name(), target_link=duman_left.end_effector_name())
     moveit2.set_orientation_goal(quat_xyzw=quat_xyzw, frame_id=duman_left.base_link_name(), target_link=duman_left.end_effector_name())
 
-    print(moveit2.compute_ik(position=position, quat_xyzw=quat, start_joint_state=[0.0,0.0,0.0,0.0,0.0,0.0]))
+    print(moveit2.compute_ik(position=position, quat_xyzw=quat))
     # moveit2.compute_fk(joint_state=[1.0,1.0,2.0,1.0,0.0], fk_link_names=duman.joint_names())
     # moveit2._plan_cartesian_path(frame_id="base")
     plan = moveit2.plan()

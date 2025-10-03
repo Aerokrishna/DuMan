@@ -1,34 +1,20 @@
 # Goal
-int8 move_group_type # 0 right, 1 left, 2 both
+bool arm # 0 right, 1 left, 2 both
 bool goal_type # 0-joint 1-pose
 
-float32 left_x
-float32 left_y
-float32 left_z
-float32 left_orx
-float32 left_ory
-float32 left_orz
+float32 x
+float32 y
+float32 z
+float32 orx
+float32 ory
+float32 orz
 
-float32 right_x
-float32 right_y
-float32 right_z
-float32 right_orx
-float32 right_ory
-float32 right_orz
-
-float32 left_hip
-float32 left_shoulder
-float32 left_elbow
-float32 left_wrist1
-float32 left_wrist2
-float32 left_wrist3
-
-float32 left_hip
-float32 left_shoulder
-float32 left_elbow
-float32 left_wrist1
-float32 left_wrist2
-float32 left_wrist3
+float32 hip
+float32 shoulder
+float32 elbow
+float32 wrist1
+float32 wrist2
+float32 wrist3
 
 ---
 # Result

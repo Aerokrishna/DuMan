@@ -4,14 +4,14 @@ from rclpy.node import Node
 from rclpy.action import ActionClient
 from rclpy.action.client import ClientGoalHandle, GoalStatus
 from duman_interfaces.action import DumanGoal
-
+import time
 
 class DumanGoalClient(Node):
     def __init__(self):
         super().__init__("count_until_server")
 
         # create action client
-        self.duman_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal")
+        self.duman_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_left")
 
 
         self.get_logger().info("waiting for server....")
@@ -47,7 +47,7 @@ class DumanGoalClient(Node):
 
             self.get_logger().info("POSE Goal sending")
 
-        self.duman_goal_client_.send_goal_async(goal, feedback_callback=self.goal_feedback_callback).add_done_callback(self.goal_response_callback) 
+        self.duman_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
         
     '''
     Runs async whenever goal request is ACCEPTED/ REJECTED
@@ -64,19 +64,6 @@ class DumanGoalClient(Node):
         else:
             self.get_logger().warn("GOAL REJECTED")
 
-    '''
-    Runs async whenever FEEDBACK is received
-    '''
-    def goal_feedback_callback(self, feedback_msg : DumanGoal):
-
-        # number = feedback_msg.feedback.current_number
-        # if number == 4:
-        #     self.cancel_goal()
-        self.get_logger().info("GOT FEEDBACK ")
-    
-    '''
-    Runs async whenever RESULT is received
-    '''
     def goal_result_callback(self,future):
         status = future.result().status
         result = future.result().result # is the reached number interface made in actions
@@ -88,7 +75,7 @@ class DumanGoalClient(Node):
         elif status == GoalStatus.STATUS_CANCELED:
             self.get_logger().error("CANCELLED")
 
-        self.get_logger().info("Result : ")  #+ str(result.reached_number)
+        self.get_logger().info(f"Result : {result.message} {result.success}")  #+ str(result.reached_number)
     
     def cancel_goal(self):
         self.get_logger().info("Sending cancel request")
@@ -97,9 +84,13 @@ class DumanGoalClient(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = DumanGoalClient()
-    node.send_goal(arm=False, goal_type=False, target=[-0.6, 0.9, 0.0, 0.0, 0.0, 0.0]) # call the send goal function
+    node.send_goal(arm=False, goal_type=False, target=[-0.6, -0.9, 0.0, 0.0, 0.0, 0.0]) # call the send goal function
+    # node.send_goal(arm=False, goal_type=True, target=[3.0, -0.23, 0.36, -1.57, 0.0, -1.57]) # call the send goal function
+
     node.get_logger().info("TOSHIBAHAHA")
-    node.send_goal(arm=True, goal_type=False, target=[0.6, 0.0, 0.0, 0.0, 0.0, 0.0]) # call the send goal function
+    # time.sleep(2)
+    # node.send_goal(arm=False, goal_type=False, target=[-0.6, 0.9, 0.0, 0.0, 0.0, 0.0]) # call the send goal function
+
 
     rclpy.spin(node) # then spin the node to wait for result
     rclpy.shutdown()

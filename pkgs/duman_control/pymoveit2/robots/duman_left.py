@@ -1,7 +1,11 @@
 from typing import List
+import numpy as np
 
 MOVE_GROUP_ARM: str = "duman_left"
 MOVE_GROUP_GRIPPER: str = "ee_left"
+
+joint_min = np.array([-0.78, -1.57, -1.57, -3.14, -3.14, -3.14])
+joint_max = np.array([1.57, 0.1, 2.36, 3.14, 3.14, 3.14])
 
 def joint_names() -> List[str]:
 
@@ -18,3 +22,6 @@ def base_link_name() -> str:
 
 def end_effector_name() -> str:
     return "ee_left"
+
+def joint_goal_valid(joint : np.ndarray) -> bool:
+    return np.all((joint >= joint_min) & (joint <= joint_max))

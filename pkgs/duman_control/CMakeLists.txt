@@ -21,7 +21,9 @@ install(PROGRAMS
     ${EXAMPLES_DIR}/duman_pose_goal_left.py
     ${EXAMPLES_DIR}/duman_joint_goal.py
 
-    ${CONTROL}/move_duman.py
+    ${CONTROL}/move_duman_left.py
+    ${CONTROL}/move_duman_right.py
+
     ${CONTROL}/test_client.py
 
 

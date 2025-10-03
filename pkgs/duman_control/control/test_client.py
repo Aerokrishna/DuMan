@@ -11,12 +11,17 @@ class DumanGoalClient(Node):
         super().__init__("count_until_server")
 
         # create action client
-        self.duman_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_left")
+        self.duman_left_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_left")
+        self.duman_right_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_right")
 
 
         self.get_logger().info("waiting for server....")
-        self.duman_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
+        self.duman_right_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
+        self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
         self.get_logger().info("server found!")
+
+        self.ready_right = [-0.3, 0.5, -1.57, 0.0, -0.5, 0.0]
+        self.ready_left = [0.3, -0.5, 1.57, 0.0, 0.5, 0.0]
 
     def send_goal(self, arm, goal_type, target):
 
@@ -47,11 +52,12 @@ class DumanGoalClient(Node):
 
             self.get_logger().info("POSE Goal sending")
 
-        self.duman_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
+        if arm==1:
+            self.duman_left_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
         
-    '''
-    Runs async whenever goal request is ACCEPTED/ REJECTED
-    ''' 
+        else:
+            self.duman_right_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
+
     def goal_response_callback(self, future):
         # callback to see if goal was accpeted
         self.goal_handle_: ClientGoalHandle = future.result()
@@ -84,16 +90,21 @@ class DumanGoalClient(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = DumanGoalClient()
-    node.send_goal(arm=False, goal_type=False, target=[-0.6, -0.9, 0.0, 0.0, 0.0, 0.0]) # call the send goal function
-    # node.send_goal(arm=False, goal_type=True, target=[3.0, -0.23, 0.36, -1.57, 0.0, -1.57]) # call the send goal function
+    node.send_goal(arm=True, goal_type=True, target=[0.1, -0.28, 0.36, 0.0, -1.57, 0.0]) # call the send goal function
+    node.send_goal(arm=False, goal_type=True, target=[-0.3, -0.28, 0.26, 0.0, 3.17, 0.0]) # call the send goal function
+
+    # node.send_goal(arm=True, goal_type=False, target=node.ready_left) # call the send goal function
+    # node.send_goal(arm=False, goal_type=False, target=node.ready_right) # call the send goal function
+
+
 
     node.get_logger().info("TOSHIBAHAHA")
     # time.sleep(2)
     # node.send_goal(arm=False, goal_type=False, target=[-0.6, 0.9, 0.0, 0.0, 0.0, 0.0]) # call the send goal function
-
 
     rclpy.spin(node) # then spin the node to wait for result
     rclpy.shutdown()
 
 if __name__=="__main__":
     main()
+

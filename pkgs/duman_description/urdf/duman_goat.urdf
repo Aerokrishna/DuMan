@@ -807,7 +807,7 @@
     <parent link="wrist_attacher3_assem"/>
     <child link="wrap1_1"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-1.57" upper="1.57"/>
   </joint>
   <!-- Joint from wrist_attacher2_assem to wrist_attacher3_assem -->
   <joint name="right_wrist2" type="revolute">
@@ -815,7 +815,7 @@
     <parent link="wrist_attacher2_assem"/>
     <child link="wrist_attacher3_assem"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-1.57" upper="1.57"/>
   </joint>
   <!-- Joint from link_elbow to wrist_attacher2_assem -->
   <joint name="right_wrist1" type="revolute">
@@ -823,7 +823,7 @@
     <parent link="link_elbow"/>
     <child link="wrist_attacher2_assem"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-1.57" upper="1.57"/>
   </joint>
   <!-- Joint from elbow_attacher to link_elbow -->
   <joint name="right_elbow" type="revolute">
@@ -1303,7 +1303,7 @@
     <parent link="wrist_attacher3_assem_2"/>
     <child link="wrap1_1_2"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-1.57" upper="1.57"/>
   </joint>
   <!-- Joint from wrist_attacher2_assem_left to wrist_attacher3_assem_2 -->
   <joint name="left_wrist2" type="revolute">
@@ -1311,7 +1311,7 @@
     <parent link="wrist_attacher2_assem_left"/>
     <child link="wrist_attacher3_assem_2"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-1.57" upper="1.57"/>
   </joint>
   <!-- Joint from link_elbow_2 to wrist_attacher2_assem_left -->
   <joint name="left_wrist1" type="revolute">
@@ -1319,7 +1319,7 @@
     <parent link="link_elbow_2"/>
     <child link="wrist_attacher2_assem_left"/>
     <axis xyz="0 0 1"/>
-    <limit effort="10" velocity="10" lower="-3.141592653589793" upper="3.141592653589793"/>
+    <limit effort="4" velocity="4" lower="-1.57" upper="1.57"/>
   </joint>
   <!-- Joint from elbow_attacher_2 to link_elbow_2 -->
   <joint name="left_elbow" type="revolute">

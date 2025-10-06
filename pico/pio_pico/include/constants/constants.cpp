@@ -1,10 +1,6 @@
 int current_angle = 0;
 int enc_val = 0;
-PIDTest cmd_pidvals;
-PIDFeedback pid_feedback;
-MotionProfile profile(0.0f, 0, 0); // Time in seconds
 PID motor_pid(0, 0, 0, 0); // Time in seconds
-Servo bldc;
 
 float elapsed_time = 0.0;
 bool new_data = false;

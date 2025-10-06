@@ -19,7 +19,7 @@ def generate_launch_description():
         .robot_description(file_path="config/duman_arm.urdf.xacro")
         .robot_description_semantic(file_path="config/duman_arm.srdf")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
-        # .joint_limits(file_path="config/joint_limits.yaml")
+        .joint_limits(file_path="config/joint_limits.yaml")
         .planning_pipelines(pipelines=["ompl"], default_planning_pipeline="ompl")
         .to_moveit_configs()
     )

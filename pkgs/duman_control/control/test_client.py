@@ -17,7 +17,7 @@ class DumanGoalClient(Node):
 
         self.get_logger().info("waiting for server....")
         self.duman_right_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
-        self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
+        # self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
         self.get_logger().info("server found!")
 
         self.ready_right = [-0.3, 0.5, -1.57, 0.0, -0.5, 0.0]
@@ -90,7 +90,7 @@ class DumanGoalClient(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = DumanGoalClient()
-    node.send_goal(arm=True, goal_type=True, target=[0.1, -0.28, 0.36, 0.0, -1.57, 0.0]) # call the send goal function
+    # node.send_goal(arm=True, goal_type=True, target=[0.1, -0.28, 0.36, 0.0, -1.57, 0.0]) # call the send goal function
     node.send_goal(arm=False, goal_type=True, target=[-0.3, -0.28, 0.26, 0.0, 3.17, 0.0]) # call the send goal function
 
     # node.send_goal(arm=True, goal_type=False, target=node.ready_left) # call the send goal function

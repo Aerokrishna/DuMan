@@ -11,6 +11,8 @@ ament_python_install_package(pymoveit2)
 # Install examples
 set(EXAMPLES_DIR examples)
 set(CONTROL control)
+set(HARDWARE hardware)
+
 
 install(PROGRAMS
     ${EXAMPLES_DIR}/ex_collision_object.py
@@ -25,6 +27,8 @@ install(PROGRAMS
     ${CONTROL}/move_duman_right.py
 
     ${CONTROL}/test_client.py
+
+    ${HARDWARE}/duman_hardware.py
 
 
     DESTINATION lib/${PROJECT_NAME}

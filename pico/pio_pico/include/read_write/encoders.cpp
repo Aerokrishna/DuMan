@@ -1,29 +1,85 @@
-void updateEncoder(uint gpio, uint32_t events){
+void updateEncoderLeftHip(uint gpio, uint32_t events){
 
-    // if (gpio == enc_right_A){ 
-    //   if (digitalRead(enc_right_B)==1){
-    //     enc_val_right++;
-
-    //   }
-    //   else {
-    //       enc_val_right--;}
-    //   }
-    
-  
     if (gpio == enc_A){ 
       if (digitalRead(enc_B)==1){
-        enc_val++;
+        motor_joints[3].encoder_val++;
   
       }
       else {
-          enc_val--;}
+          motor_joints[3].encoder_val--;}
       }
       
-      current_angle = (enc_val/1080.0f) * 360;
+      motor_joints[3].current_angle = (motor_joints[3].encoder_val/1080.0f) * 360;
+  }
 
-      if (enc_val == 1080 || enc_val == -1080){
-        enc_val = 0;
+void updateEncoderLeftShoulder(uint gpio, uint32_t events){
+
+    if (gpio == enc_A){ 
+      if (digitalRead(enc_B)==1){
+        motor_joints[4].encoder_val++;
+  
       }
+      else {
+          motor_joints[4].encoder_val--;}
+      }
+      
+      motor_joints[4].current_angle = (motor_joints[4].encoder_val/1080.0f) * 360;
+  }
 
-    // Serial.println("Hi");
+void updateEncoderLeftElbow(uint gpio, uint32_t events){
+
+    if (gpio == enc_A){ 
+      if (digitalRead(enc_B)==1){
+        motor_joints[5].encoder_val++;
+  
+      }
+      else {
+          motor_joints[5].encoder_val--;}
+      }
+      
+      motor_joints[5].current_angle = (motor_joints[5].encoder_val/1080.0f) * 360;
+  }
+
+
+void updateEncoderRightHip(uint gpio, uint32_t events){
+
+    if (gpio == enc_A){ 
+      if (digitalRead(enc_B)==1){
+        motor_joints[0].encoder_val++;
+  
+      }
+      else {
+          motor_joints[0].encoder_val--;}
+      }
+      
+      motor_joints[0].current_angle = (motor_joints[0].encoder_val/1080.0f) * 360;
+  }
+
+
+void updateEncoderRightShoulder(uint gpio, uint32_t events){
+
+    if (gpio == enc_A){ 
+      if (digitalRead(enc_B)==1){
+        motor_joints[1].encoder_val++;
+  
+      }
+      else {
+          motor_joints[1].encoder_val--;}
+      }
+      
+      motor_joints[1].current_angle = (motor_joints[1].encoder_val/1080.0f) * 360;
+  }
+
+void updateEncoderRightElbow(uint gpio, uint32_t events){
+
+    if (gpio == enc_A){ 
+      if (digitalRead(enc_B)==1){
+        motor_joints[2].encoder_val++;
+  
+      }
+      else {
+          motor_joints[2].encoder_val--;}
+      }
+      
+      motor_joints[2].current_angle = (motor_joints[2].encoder_val/1080.0f) * 360;
   }

@@ -1,27 +1,28 @@
-int current_angle = 0;
-int enc_val = 0;
-PID motor_pid(0, 0, 0, 0); // Time in seconds
 
-float elapsed_time = 0.0;
-bool new_data = false;
+const int NUM_JOINTS = 12;
+int encoder_val[NUM_JOINTS];
+JointAngles joint_angles;
 
-// int enc_val_right = 0;
-// const int NUM_JOINTS = 10;
+struct MotorAngles {
+    float target_angle = 0.0;
+    int encoder_val = 0;
+    float current_angle = (encoder_val/1080.0f) * 360;
+    int dir_pin;
+    int pwm_pin;
+    PID motor_pid;
+    MotorAngles():motor_pid(0,0,0,0);
+};
 
-// int servoPins[NUM_JOINTS] = {
-//   L_hip, L_shoulder, L_elbow, L_wrist, L_wrist_y,
-//   R_hip, R_shoulder, R_elbow, R_wrist, R_wrist_y
-// };
+MotorAngles motor_joints[NUM_JOINTS/2];
 
-// int currentAngles[NUM_JOINTS] = {
-//   home_L_hip, home_L_shoulder, home_L_elbow, home_L_wrist, home_L_wrist_y,
-//   home_R_hip, home_R_shoulder, home_R_elbow, home_R_wrist, home_R_wrist_y
-// };
+// motor_angles[0]->motor_pid::PID(0,0,0,0);
 
-// int targetAngles[NUM_JOINTS] = {
-//   home_L_hip, home_L_shoulder, home_L_elbow, home_L_wrist, home_L_wrist_y,
-//   home_R_hip, home_R_shoulder, home_R_elbow, home_R_wrist, home_R_wrist_y
-// };
 
-// bool new_goal = false;
-// Servo servos[NUM_JOINTS];
+struct ServoAngles {
+    int target_angle = 0;
+    int servo_pin;
+    Servo servo;
+
+};
+
+ServoAngles servo_joints[(NUM_JOINTS/2)];

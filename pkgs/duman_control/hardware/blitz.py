@@ -4,7 +4,7 @@ import struct
 
 class Blitz:
 
-    def __init__(self, port = "/dev/ttyACM0", baud = 115200):
+    def __init__(self, port = "/dev/ttyUSB0", baud = 115200):
         self.ser = None
         try:
             self.ser = serial.Serial(port, baud, timeout=1)

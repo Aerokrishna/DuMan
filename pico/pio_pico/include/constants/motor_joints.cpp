@@ -27,8 +27,8 @@ struct MotorJoint {
 };
 
 MotorJoint motors[3] = {
-    MotorJoint(right_hip_dir, right_hip_pwm, 7, 8, 6, 0.01, 0.05, 100), // dir pin, pwm pin, kp, ki, kd, imax
-    MotorJoint(4, 5, 8, 7, 8, 0.01, 0.05, 100),
-    MotorJoint(6, 7, 8, 7, 8, 0.01, 0.05, 100)
+    MotorJoint(right_hip_dir, right_hip_pwm, right_hip_encA, right_hip_encB, 6, 0.01, 0.05, 100), // dir pin, pwm pin, kp, ki, kd, imax
+    MotorJoint(right_shoulder_dir, right_shoulder_pwm, right_shoulder_encA, right_shoulder_encB, 6, 0.01, 0.05, 100), // dir pin, pwm pin, kp, ki, kd, imax
+    MotorJoint(right_elbow_dir, right_elbow_pwm, right_elbow_encA, right_elbow_encB, 6, 0.01, 0.05, 100), // dir pin, pwm pin, kp, ki, kd, imax
 };
 

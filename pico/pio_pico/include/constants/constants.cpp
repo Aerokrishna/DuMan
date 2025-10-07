@@ -1,1 +1,2 @@
 JointAngles joint_angles;
+JointAngles joint_angles_feedback;

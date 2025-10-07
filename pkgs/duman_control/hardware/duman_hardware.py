@@ -7,7 +7,6 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
 import numpy as np
-import matplotlib.pyplot as plt
 import time
 from blitz import blitz_interfaces, Blitz
 
@@ -20,7 +19,10 @@ class DumanHardwareNode(Node):
         self.joint_angles = np.zeros(12)
         self.joint_velocity = np.zeros(12)
 
-        self.blitz = Blitz()
+        self.blitz = Blitz(port="/dev/ttyUSB0")
+
+        self.create_timer(0.001, self.joint_state_feedback)
+
     def joint_state_callback(self, msg: JointState):
         joint_angles = np.array([
             msg.position[9], msg.position[2], msg.position[7],
@@ -32,10 +34,17 @@ class DumanHardwareNode(Node):
         # Convert to degrees (integers)
         self.joint_angles = np.rad2deg(joint_angles)
         
-        blitz_interfaces["joint_angles"].data = self.joint_angles
-        self.blitz.blitz_write(id=blitz_interfaces["joint_angles"].id)
+        blitz_interfaces["joint_angles_right"].data = self.joint_angles[:6]
+        self.blitz.blitz_write(id=blitz_interfaces["joint_angles_right"].id)
 
         self.get_logger().info(f"WRITING JOINTs : {self.joint_angles}")
+
+    def joint_state_feedback(self):
+
+        self.blitz.blitz_read()
+        joint_fb = blitz_interfaces["joint_angles_right_feedback"].data
+        self.get_logger().info(f"CURRENT JOINTs : {joint_fb}")
+
 
 def main(args=None):
     rclpy.init(args=args)

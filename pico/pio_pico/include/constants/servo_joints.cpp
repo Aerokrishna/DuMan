@@ -15,8 +15,9 @@ struct ServoJoint {
 };
 
 ServoJoint servos[3] = {
-    ServoJoint(8),
-    ServoJoint(9),
-    ServoJoint(10)
+    ServoJoint(right_wrist1_pin),
+    ServoJoint(right_wrist2_pin),
+    ServoJoint(right_wrist3_pin),
+
 };
 

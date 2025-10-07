@@ -2,11 +2,11 @@
 
 void setup(){
 
-    for (int i = 0; i <= NUM_JOINTS/2; i++) {
-        pinMode(motor_joints[i].dir_pin, OUTPUT);
-        pinMode(motor_joints[i].pwm_pin, OUTPUT);
+    for (int i = 0; i < 3; i++) {
+        pinMode(motors[i].dir_pin, OUTPUT);
+        pinMode(motors[i].pwm_pin, OUTPUT);
 
-        servo_joints[i].servo.attach(servo_joints[i].servo_pin);
+        servos[i].servo.attach(servos[i].servo_pin);
     }
 
     // // serial begin
@@ -18,7 +18,7 @@ void setup(){
     // pinMode(enc_A, INPUT_PULLUP);
     // pinMode(enc_B, INPUT_PULLUP);
     
-    gpio_set_irq_enabled_with_callback(enc_A, GPIO_IRQ_EDGE_RISE, true, updateEncoder);
+    gpio_set_irq_enabled_with_callback(motors[0].enc_A, GPIO_IRQ_EDGE_RISE, true, updateEncoderRightHip);
 }
 
 void loop() {

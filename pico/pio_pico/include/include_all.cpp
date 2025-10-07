@@ -14,18 +14,13 @@
 // pinmap
 #include "pinmap/PinMap_base.h"
 // // constants
-// #include "constants/home_angles.h"
 #include "constants/constants.cpp"
-
-
-// // read write
-#include "read_write/encoders.cpp"
-#include "read_write/motor_angles.cpp"
-#include "read_write/servo_angles.cpp"
+#include "constants/motor_joints.cpp"
+#include "constants/servo_joints.cpp"
 
 #include "functions/store_data.cpp"
 #include "functions/joint_angles.cpp"
 #include "functions/timer_cb.cpp"
 
 
-// #include "read_write/servo.cpp"
+#include "read_write/encoders.cpp"

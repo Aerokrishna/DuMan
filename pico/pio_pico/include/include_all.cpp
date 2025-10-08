@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <vector>
 
-#include "ESP32Servo.h"
+#include "Servo.h"
 #include "serial_parser.hpp"
 #include "blitz_timer.cpp"
 #include <PID.h>

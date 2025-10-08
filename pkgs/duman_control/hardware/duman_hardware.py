@@ -19,9 +19,9 @@ class DumanHardwareNode(Node):
         self.joint_angles = np.zeros(12)
         self.joint_velocity = np.zeros(12)
 
-        self.blitz = Blitz(port="/dev/ttyUSB0")
+        self.blitz = Blitz()
 
-        self.create_timer(0.001, self.joint_state_feedback)
+        self.create_timer(0.005, self.joint_state_feedback)
 
     def joint_state_callback(self, msg: JointState):
         joint_angles = np.array([
@@ -34,16 +34,16 @@ class DumanHardwareNode(Node):
         # Convert to degrees (integers)
         self.joint_angles = np.rad2deg(joint_angles)
         
-        blitz_interfaces["joint_angles_right"].data = self.joint_angles[:6]
+        blitz_interfaces["joint_angles_right"].data = self.joint_angles[6:]
         self.blitz.blitz_write(id=blitz_interfaces["joint_angles_right"].id)
 
-        self.get_logger().info(f"WRITING JOINTs : {self.joint_angles}")
+        # self.get_logger().info(f"WRITING JOINTs : {self.joint_angles}")
 
     def joint_state_feedback(self):
 
         self.blitz.blitz_read()
         joint_fb = blitz_interfaces["joint_angles_right_feedback"].data
-        self.get_logger().info(f"CURRENT JOINTs : {joint_fb}")
+        self.get_logger().info(f"CURRENT JOINTs : {joint_fb} {self.joint_angles[6]}")
 
 
 def main(args=None):

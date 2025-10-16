@@ -1,8 +1,8 @@
 void timer_cb(){
 
-    joint_angles_feedback.right_shoulder = motors[0].current_angle;
-    joint_angles_feedback.right_elbow = motors[0].control;
-    joint_angles_feedback.right_wrist1 = motors[0].error;
+    joint_angles_feedback.right_hip = motors[0].control;
+    joint_angles_feedback.right_shoulder = motors[1].control;
+    joint_angles_feedback.right_elbow = motors[2].control;
 
     joint_angles_feedback.id = 2;
     

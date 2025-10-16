@@ -18,6 +18,27 @@ void store_data(std::vector<uint8_t> payload) {
             // servos[0].target_angle = joint_angles.right_wrist1;
             // servos[1].target_angle = joint_angles.right_wrist2;
             // servos[2].target_angle = joint_angles.right_wrist3;
+            joint_angles.id = 2;
+    
+        }
+
+        if (id == 3) {
+            
+            // function to parse the struct
+            joint_angles = parse_struct<JointAngles>(payload); // count.a, count.b, count.c, count.d, based on your interface
+            motors[0].control = joint_angles.right_hip;
+            motors[1].control = joint_angles.right_shoulder;
+            motors[2].control = joint_angles.right_elbow;
+            
+            // servos[0].target_angle = joint_angles.right_wrist1;
+            // servos[1].target_angle = joint_angles.right_wrist2;
+            // servos[2].target_angle = joint_angles.right_wrist3;
+
+            new_vel_data = millis(); // starts when new data received
+            vel_cmd = true;
+
+            // joint_angles.id = 2;
+            // send_data(pack_data<JointAngles>(joint_angles));
 
         }
     }

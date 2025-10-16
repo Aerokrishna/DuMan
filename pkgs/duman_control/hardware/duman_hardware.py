@@ -6,6 +6,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
+from duman_interfaces.msg import DumanJoints
 import numpy as np
 import time
 from blitz import blitz_interfaces, Blitz
@@ -14,6 +15,7 @@ class DumanHardwareNode(Node):
     def __init__(self):
         super().__init__("duman_hardware")
         self.create_subscription(JointState, "/joint_states", self.joint_state_callback, 10)
+        self.create_subscription(DumanJoints, "/joint_vel", self.joint_vel_callback, 10)
 
         # Initialize joint data
         self.joint_angles = np.zeros(12)
@@ -34,15 +36,24 @@ class DumanHardwareNode(Node):
         # Convert to degrees (integers)
         self.joint_angles = np.rad2deg(joint_angles)
         
-        blitz_interfaces["joint_angles_right"].data = self.joint_angles[6:]
-        self.blitz.blitz_write(id=blitz_interfaces["joint_angles_right"].id)
+        blitz_interfaces["joint_angles_left"].data = self.joint_angles[6:]
+        self.blitz.blitz_write(id=blitz_interfaces["joint_angles_left"].id)
 
         # self.get_logger().info(f"WRITING JOINTs : {self.joint_angles}")
+
+    def joint_vel_callback(self, msg: DumanJoints):
+        
+        joint_vel = np.array([msg.left_hip, msg.left_shoulder, msg.left_elbow, msg.left_wrist1, msg.left_wrist2, msg.left_wrist3])
+
+        blitz_interfaces["joint_vel_left"].data = joint_vel
+        self.blitz.blitz_write(id=blitz_interfaces["joint_vel_left"].id)
+
+        self.get_logger().info(f"WRITING Joint Velocities : {joint_vel}")
 
     def joint_state_feedback(self):
 
         self.blitz.blitz_read()
-        joint_fb = blitz_interfaces["joint_angles_right_feedback"].data
+        joint_fb = blitz_interfaces["joint_angles_left_feedback"].data
         self.get_logger().info(f"CURRENT JOINTs : {joint_fb} {self.joint_angles[6]}")
 
 

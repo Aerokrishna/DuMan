@@ -44,17 +44,22 @@ void loop() {
     // setMotorAngles();
 
     unsigned long current_time = millis();
+
     motors[0].controlMotor(current_time);
-
     motors[1].controlMotor(current_time);
+    motors[2].controlMotor(current_time);
 
 
+    if (vel_cmd == true && float(current_time - new_vel_data) > 1000.0f){
+        vel_cmd = false;
+
+        // // stay wherever you are
+        // motors[0].target_angle = motors[0].current_angle;
+        // motors[1].target_angle = motors[1].current_angle;
+        // motors[2].target_angle = motors[2].current_angle;
+
+    }
     
-    // for (int i = 0; i < 3; i++) {
-    //     unsigned long current_time = millis();
-    //     motors[i].controlMotor(current_time);
-    // }
-    // // spin the callbacks
     t1.spin();
 
 }      

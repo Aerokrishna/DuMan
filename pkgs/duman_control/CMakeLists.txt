@@ -29,6 +29,7 @@ install(PROGRAMS
     ${CONTROL}/test_client.py
 
     ${HARDWARE}/duman_hardware.py
+    ${CONTROL}/duman_teleop.py
 
 
     DESTINATION lib/${PROJECT_NAME}

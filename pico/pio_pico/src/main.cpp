@@ -26,9 +26,15 @@ void setup(){
     pinMode(motors[1].enc_A, INPUT_PULLUP);
     pinMode(motors[1].enc_B, INPUT_PULLUP);
 
+    pinMode(motors[2].dir_pin, OUTPUT);
+    pinMode(motors[2].pwm_pin, OUTPUT);
+
+    pinMode(motors[2].enc_A, INPUT_PULLUP);
+    pinMode(motors[2].enc_B, INPUT_PULLUP);
+
     gpio_set_irq_enabled_with_callback(motors[0].enc_A, GPIO_IRQ_EDGE_RISE, true, updateEncoder);
     gpio_set_irq_enabled_with_callback(motors[1].enc_A, GPIO_IRQ_EDGE_RISE, true, updateEncoder);
-    // gpio_set_irq_enabled_with_callback(motors[2].enc_A, GPIO_IRQ_EDGE_RISE, true, updateEncoder);
+    gpio_set_irq_enabled_with_callback(motors[2].enc_A, GPIO_IRQ_EDGE_RISE, true, updateEncoder);
 
 }
 
@@ -53,6 +59,7 @@ void loop() {
     if (vel_cmd == true && float(current_time - new_vel_data) > 1000.0f){
         vel_cmd = false;
 
+        
         // // stay wherever you are
         // motors[0].target_angle = motors[0].current_angle;
         // motors[1].target_angle = motors[1].current_angle;

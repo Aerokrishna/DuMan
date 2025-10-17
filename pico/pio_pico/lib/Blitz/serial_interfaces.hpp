@@ -10,12 +10,12 @@ enum PacketID : uint8_t {
 #pragma pack(push, 1)
 struct JointAngles {
     uint8_t id;
-    float right_hip;
-    float right_shoulder;
-    float right_elbow;
-    float right_wrist1;
-    float right_wrist2;
-    float right_wrist3;
+    float hip;
+    float shoulder;
+    float elbow;
+    float wrist1;
+    float wrist2;
+    float wrist3;
 };  
 #pragma pack(pop)
 

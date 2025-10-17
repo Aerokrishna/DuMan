@@ -30,11 +30,9 @@ struct MotorJoint {
 
             // debug_state("Joint Angle");
         }   
-
         else {
-            // debug_state("Joint Velocity");
+
         }
-        
         int pwm = constrain(control, -255, 255);
         // if (abs(pwm) < 10){pwm = 0;}
         
@@ -51,9 +49,9 @@ struct MotorJoint {
 };
 
 MotorJoint motors[3] = {
-    MotorJoint(right_hip_dir, right_hip_pwm, right_hip_encA, right_hip_encB, 6, 0.0, 0.0, 100), // dir pin, pwm pin, kp, ki, kd, imax
-    MotorJoint(right_shoulder_dir, right_shoulder_pwm, right_shoulder_encA, right_shoulder_encB, 10, 0.0, 0.0, 100), // dir pin, pwm pin, kp, ki, kd, imax
-    MotorJoint(right_elbow_dir, right_elbow_pwm, right_elbow_encA, right_elbow_encB, 6, 0.01, 0.05, 100) // dir pin, pwm pin, kp, ki, kd, imax
+    MotorJoint(right_hip_dir, right_hip_pwm, right_hip_encA, right_hip_encB, 8, 0.0, 0.0, 100), // dir pin, pwm pin, kp, ki, kd, imax
+    MotorJoint(right_shoulder_dir, right_shoulder_pwm, right_shoulder_encA, right_shoulder_encB, 8, 0.0, 0.0, 100), // dir pin, pwm pin, kp, ki, kd, imax
+    MotorJoint(right_elbow_dir, right_elbow_pwm, right_elbow_encA, right_elbow_encB, 3, 0.0, 0.0, 100) // dir pin, pwm pin, kp, ki, kd, imax
 };
 
 // MotorJoint motor(right_shoulder_dir, right_shoulder_pwm, right_shoulder_encA, right_shoulder_encB, 6.5, 0.0, 0.0, 100);

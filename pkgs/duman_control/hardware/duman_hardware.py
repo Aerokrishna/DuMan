@@ -48,7 +48,7 @@ class DumanHardwareNode(Node):
         blitz_interfaces["joint_vel_left"].data = joint_vel
         self.blitz.blitz_write(id=blitz_interfaces["joint_vel_left"].id)
 
-        self.get_logger().info(f"WRITING Joint Velocities : {joint_vel}")
+        # self.get_logger().info(f"WRITING Joint Velocities : {joint_vel}")
 
     def joint_state_feedback(self):
 

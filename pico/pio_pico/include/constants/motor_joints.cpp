@@ -36,12 +36,23 @@ struct MotorJoint {
         int pwm = constrain(control, -255, 255);
         // if (abs(pwm) < 10){pwm = 0;}
         
+        // when the arm is slightly moved it should not correct eratically
+        // must have a limit on the max velocity
+        // tune it better
+        // move the arm when it is at the pose to check if there are some problems when moved slightly
+
         if (control <= 0.0f) {
+            if (abs(control) > 30.0f){
+                control = -30.0;
+            }
             digitalWrite(dir_pin, 0);
             analogWrite(pwm_pin, abs(pwm));
         }
 
         else {
+            if (abs(control) > 30.0f){
+                control = 30.0;
+            }
             digitalWrite(dir_pin, 1);
             analogWrite(pwm_pin, abs(pwm));
         }
@@ -49,9 +60,9 @@ struct MotorJoint {
 };
 
 MotorJoint motors[3] = {
-    MotorJoint(right_hip_dir, right_hip_pwm, right_hip_encA, right_hip_encB, 8, 0.0, 0.0, 100), // dir pin, pwm pin, kp, ki, kd, imax
-    MotorJoint(right_shoulder_dir, right_shoulder_pwm, right_shoulder_encA, right_shoulder_encB, 8, 0.0, 0.0, 100), // dir pin, pwm pin, kp, ki, kd, imax
-    MotorJoint(right_elbow_dir, right_elbow_pwm, right_elbow_encA, right_elbow_encB, 3, 0.0, 0.0, 100) // dir pin, pwm pin, kp, ki, kd, imax
+    MotorJoint(hip_dir, hip_pwm, hip_encA, hip_encB, 8, 0.0, 0.0, 100), // dir pin, pwm pin, kp, ki, kd, imax
+    MotorJoint(shoulder_dir, shoulder_pwm, shoulder_encA, shoulder_encB, 8, 0.0, 0.0, 100), // dir pin, pwm pin, kp, ki, kd, imax
+    MotorJoint(elbow_dir, elbow_pwm, elbow_encA, elbow_encB, 3, 0.0, 0.0, 100) // dir pin, pwm pin, kp, ki, kd, imax
 };
 
 // MotorJoint motor(right_shoulder_dir, right_shoulder_pwm, right_shoulder_encA, right_shoulder_encB, 6.5, 0.0, 0.0, 100);

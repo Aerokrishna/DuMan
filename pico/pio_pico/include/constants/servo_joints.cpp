@@ -3,7 +3,7 @@ struct ServoJoint {
     int target_angle;
     Servo servo;
 
-    ServoJoint(int pin) : servo_pin(pin), target_angle(0) {}
+    ServoJoint(int pin, int initial_angle) : servo_pin(pin), target_angle(initial_angle) {}
 
     void attachServo() {
         servo.attach(servo_pin, 500, 2500);
@@ -14,10 +14,10 @@ struct ServoJoint {
     }
 };
 
-// ServoJoint servos[3] = {
-//     ServoJoint(right_wrist1_pin),
-//     ServoJoint(right_wrist2_pin),
-//     ServoJoint(right_wrist3_pin),
+ServoJoint servos[3] = {
+    ServoJoint(wrist1_pin, 90),
+    ServoJoint(wrist2_pin, 90),
+    ServoJoint(wrist3_pin, 90)
 
-// };
+};
 

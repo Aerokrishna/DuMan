@@ -34,6 +34,14 @@
         <joint name="right_wrist2" value="0"/>
         <joint name="right_wrist3" value="0"/>
     </group_state>
+    <group_state name="test_right" group="duman_right">
+        <joint name="right_elbow" value="-1.5783"/>
+        <joint name="right_hip" value="-0.4"/>
+        <joint name="right_shoulder" value="0.45"/>
+        <joint name="right_wrist1" value="1.57"/>
+        <joint name="right_wrist2" value="1.57"/>
+        <joint name="right_wrist3" value="0.7"/>
+    </group_state>
     <group_state name="start_left" group="duman_left">
         <joint name="left_elbow" value="1.57"/>
         <joint name="left_hip" value="0.4"/>

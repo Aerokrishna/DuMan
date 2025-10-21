@@ -7,7 +7,7 @@ void store_data(std::vector<uint8_t> payload) {
         uint8_t id = payload[0];
     
         // parse the struct based on the id
-        if (id == 1) {
+        if (id == JOINT_ANGLES) {
             
             // function to parse the struct
             joint_angles = parse_struct<JointAngles>(payload); // count.a, count.b, count.c, count.d, based on your interface
@@ -15,14 +15,15 @@ void store_data(std::vector<uint8_t> payload) {
             motors[1].target_angle = joint_angles.shoulder;
             motors[2].target_angle = joint_angles.elbow;
             
-            // servos[0].target_angle = joint_angles.wrist1;
-            // servos[1].target_angle = joint_angles.wrist2;
-            // servos[2].target_angle = joint_angles.wrist3;
+            servos[0].target_angle = joint_angles.wrist1;
+            servos[1].target_angle = joint_angles.wrist2;
+            servos[2].target_angle = joint_angles.wrist3;
+
             // joint_angles.id = 2;
     
         }
 
-        if (id == 3) {
+        if (id == JOINT_VEL) {
             
             // function to parse the struct
             joint_angles = parse_struct<JointAngles>(payload); // count.a, count.b, count.c, count.d, based on your interface

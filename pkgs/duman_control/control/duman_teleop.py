@@ -9,23 +9,24 @@ from rclpy.executors import MultiThreadedExecutor
 from duman_interfaces.msg import DumanJoints
 
 HELP_TEXT = """
-===============================
-  6-DOF Arm Joint Teleop (Toggle)
-===============================
+=============================================
+  6-DOF Arm Joint Teleop (Separate + / - Keys)
+=============================================
 Controls:
-  q : toggle Joint 1 (+ → - → stop)
-  w : toggle Joint 2 (+ → - → stop)
-  e : toggle Joint 3 (+ → - → stop)
-  r : toggle Joint 4 (+ → - → stop)
-  t : toggle Joint 5 (+ → - → stop)
-  y : toggle Joint 6 (+ → - → stop)
-  z : Stop all joints
-  x : Exit
-===============================
+  Joint 1: q (+) / a (-)
+  Joint 2: w (+) / s (-)
+  Joint 3: e (+) / d (-)
+  Joint 4: r (+) / f (-)
+  Joint 5: t (+) / g (-)
+  Joint 6: y (+) / h (-)
+
+  SPACE : Stop all joints
+  x     : Exit
+=============================================
 """
 
-# Function to read a single key (blocking)
 def get_key():
+    """Reads one key press without requiring Enter."""
     tty.setraw(sys.stdin.fileno())
     key = sys.stdin.read(1)
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
@@ -38,21 +39,25 @@ class JointVelTeleop(Node):
         self.publisher_ = self.create_publisher(DumanJoints, '/joint_vel', 10)
 
         # Parameters
-        self.vel_mag = 40.0
+        self.vel_mag = 30.0
         self.joint_vel = [0.0] * 6
-        self.states = [0] * 6  # 0=stopped, 1=+vel, 2=-vel
 
         self.joint_names = [
-            'hip', 'shoulder', 'elbow',
-            'wrist1', 'wrist2', 'wrist3'
+            'right_hip', 'right_shoulder', 'right_elbow',
+            'left_hip', 'left_shoulder', 'left_elbow'
         ]
 
+        # Key mapping for + and - direction
         self.key_mapping = {
-            'q': 0, 'w': 1, 'e': 2,
-            'r': 3, 't': 4, 'y': 5
+            'q': (0, +1), 'a': (0, -1),
+            'w': (1, +1), 's': (1, -1),
+            'e': (2, +1), 'd': (2, -1),
+            'r': (3, +1), 'f': (3, -1),
+            't': (4, +1), 'g': (4, -1),
+            'y': (5, +1), 'h': (5, -1),
         }
 
-        self.get_logger().info("Started teleop_joint_vel node (toggle mode).")
+        self.get_logger().info("Started teleop_joint_vel node (separate + / - keys).")
         print(HELP_TEXT)
 
         # Timer to continuously publish joint velocities
@@ -60,48 +65,38 @@ class JointVelTeleop(Node):
 
     def publish_joint_vel(self):
         msg = DumanJoints()
-        msg.left_hip = self.joint_vel[0]
-        msg.left_shoulder = self.joint_vel[1]
-        msg.left_elbow = self.joint_vel[2] * 0.5
-        msg.left_wrist1 = self.joint_vel[3]
-        msg.left_wrist2 = self.joint_vel[4]
-        msg.left_wrist3 = self.joint_vel[5]
+
+        msg.right_hip = self.joint_vel[0]
+        msg.right_shoulder = self.joint_vel[1]
+        msg.right_elbow = self.joint_vel[2] * 0.5  # scaled elbow speed
+        msg.left_hip = self.joint_vel[3]
+        msg.left_shoulder = self.joint_vel[4]
+        msg.left_elbow = self.joint_vel[5] * 0.5
 
         self.publisher_.publish(msg)
 
-    def toggle_joint(self, joint_idx):
-        # Cycle state: 0 -> + -> - -> 0
-        if self.states[joint_idx] == 0:
-            self.states[joint_idx] = 1
-            self.joint_vel[joint_idx] = self.vel_mag
-            state_text = "forward"
-        elif self.states[joint_idx] == 1:
-            self.states[joint_idx] = 2
-            self.joint_vel[joint_idx] = -self.vel_mag
-            state_text = "reverse"
-        else:
-            self.states[joint_idx] = 0
-            self.joint_vel[joint_idx] = 0.0
-            state_text = "stopped"
-
-        self.get_logger().info(f"{self.joint_names[joint_idx]} → {state_text}")
-
     def process_key(self, key):
+        # + or - joint control
         if key in self.key_mapping:
-            idx = self.key_mapping[key]
-            self.toggle_joint(idx)
-        elif key == 'z':
+            idx, direction = self.key_mapping[key]
+            self.joint_vel[idx] = direction * self.vel_mag
+            state = "forward" if direction > 0 else "reverse"
+            self.get_logger().info(f"{self.joint_names[idx]} moving {state}")
+
+        # Stop all joints
+        elif key == ' ':
             self.joint_vel = [0.0] * 6
-            self.states = [0] * 6
             self.get_logger().info("All joints stopped.")
-        elif key in ['x', '\x03']:  # 'x' or Ctrl+C
+
+        # Exit
+        elif key in ['x', '\x03']:
             self.get_logger().info("Exiting teleop...")
             rclpy.shutdown()
             sys.exit(0)
 
 
 def keyboard_thread(node):
-    """Runs in a separate thread to read keyboard input."""
+    """Runs keyboard reading in a separate thread."""
     try:
         while rclpy.ok():
             key = get_key()
@@ -117,10 +112,7 @@ def main(args=None):
     rclpy.init(args=args)
     node = JointVelTeleop()
 
-    # Create multi-threaded executor
     executor = MultiThreadedExecutor()
-
-    # Add node to executor
     executor.add_node(node)
 
     # Start keyboard thread

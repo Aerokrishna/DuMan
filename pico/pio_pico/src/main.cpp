@@ -36,6 +36,9 @@ void setup(){
     gpio_set_irq_enabled_with_callback(motors[1].enc_A, GPIO_IRQ_EDGE_RISE, true, updateEncoder);
     gpio_set_irq_enabled_with_callback(motors[2].enc_A, GPIO_IRQ_EDGE_RISE, true, updateEncoder);
 
+    servos[0].attachServo();
+    servos[1].attachServo();
+    servos[2].attachServo();
 }
 
 void loop() {
@@ -55,10 +58,12 @@ void loop() {
     motors[1].controlMotor(current_time);
     motors[2].controlMotor(current_time);
 
+    servos[0].setAngle();
+    servos[1].setAngle();
+    servos[2].setAngle();
 
     if (vel_cmd == true && float(current_time - new_vel_data) > 1000.0f){
         vel_cmd = false;
-
         
         // // stay wherever you are
         // motors[0].target_angle = motors[0].current_angle;

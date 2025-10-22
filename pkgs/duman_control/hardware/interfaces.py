@@ -38,4 +38,16 @@ blitz_interfaces = {
         from_mcu=True
     ),
 
+    "grip_state_left": BlitzInterfaces(
+        msg_id=7,
+        struct_fmt="B",
+        from_mcu=False
+    ),
+    
+    "grip_state_right": BlitzInterfaces(
+        msg_id=8,
+        struct_fmt="B",
+        from_mcu=False
+    ),
+
 }

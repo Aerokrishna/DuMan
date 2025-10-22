@@ -14,6 +14,11 @@ struct ServoJoint {
     }
 };
 
+void set_gripper(bool grip_state) {
+    if (grip_state==false){gripper_servo.write(open_angle);}
+    else {gripper_servo.write(grip_angle);}
+}
+
 ServoJoint servos[3] = {
     ServoJoint(wrist1_pin, 90),
     ServoJoint(wrist2_pin, 90),

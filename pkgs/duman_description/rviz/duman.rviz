@@ -68,17 +68,12 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        arm_01:
+        actuator:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        arm_02:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        arm_03:
+        actuator_2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -87,8 +82,65 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        ee_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ee_right:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        elbow_attacher:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
           Value: true
-        waist:
+        elbow_attacher_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_elbow:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        link_elbow_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        skeleton:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wrap1_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wrap1_1_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wrist_attacher2_assem:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wrist_attacher2_assem_left:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wrist_attacher3_assem:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wrist_attacher3_assem_2:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -106,15 +158,37 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        arm_01:
+        actuator:
           Value: true
-        arm_02:
-          Value: true
-        arm_03:
+        actuator_2:
           Value: true
         base:
           Value: true
-        waist:
+        ee_left:
+          Value: true
+        ee_right:
+          Value: true
+        elbow_attacher:
+          Value: true
+        elbow_attacher_2:
+          Value: true
+        link_elbow:
+          Value: true
+        link_elbow_2:
+          Value: true
+        skeleton:
+          Value: true
+        wrap1_1:
+          Value: true
+        wrap1_1_2:
+          Value: true
+        wrist_attacher2_assem:
+          Value: true
+        wrist_attacher2_assem_left:
+          Value: true
+        wrist_attacher3_assem:
+          Value: true
+        wrist_attacher3_assem_2:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -123,11 +197,23 @@ Visualization Manager:
       Show Names: false
       Tree:
         base:
-          waist:
-            arm_01:
-              arm_02:
-                arm_03:
-                  {}
+          skeleton:
+            actuator:
+              elbow_attacher:
+                link_elbow:
+                  wrist_attacher2_assem:
+                    wrist_attacher3_assem:
+                      wrap1_1:
+                        ee_right:
+                          {}
+            actuator_2:
+              elbow_attacher_2:
+                link_elbow_2:
+                  wrist_attacher2_assem_left:
+                    wrist_attacher3_assem_2:
+                      wrap1_1_2:
+                        ee_left:
+                          {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -176,7 +262,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.0794678926467896
+      Distance: 2.672722816467285
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -191,10 +277,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.49479734897613525
+      Pitch: 0.6097972989082336
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.623587131500244
+      Yaw: 4.42858362197876
     Saved: ~
 Window Geometry:
   Displays:

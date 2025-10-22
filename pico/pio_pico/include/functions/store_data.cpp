@@ -42,5 +42,12 @@ void store_data(std::vector<uint8_t> payload) {
             // send_data(pack_data<JointAngles>(joint_angles));
 
         }
+
+        if (id == GRIP_STATE) {
+    
+            // function to parse the struct
+            grip_state = parse_struct<GripState>(payload); 
+            
+        }
     }
 }

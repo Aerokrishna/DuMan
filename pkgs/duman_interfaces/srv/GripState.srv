@@ -1,0 +1,5 @@
+bool arm # 0 right, 1 left, 2 both
+bool grip_state # 0 open 1 close
+---
+bool success
+string message

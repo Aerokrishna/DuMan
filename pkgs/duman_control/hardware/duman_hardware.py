@@ -10,6 +10,7 @@ from duman_interfaces.msg import DumanJoints
 import numpy as np
 import time
 from blitz import blitz_interfaces, Blitz
+from duman_interfaces.srv import GripState
 
 class DumanHardwareNode(Node):
     def __init__(self):
@@ -17,6 +18,7 @@ class DumanHardwareNode(Node):
         self.create_subscription(JointState, "/joint_states", self.joint_state_callback, 10)
         self.create_subscription(DumanJoints, "/joint_vel", self.joint_vel_callback, 10)
 
+        self.create_service(GripState, "/duman/grip_state_right", self.grip_control)
         # Initialize joint data
         self.joint_angles = np.zeros(12)
         self.joint_velocity = np.zeros(12)
@@ -24,7 +26,34 @@ class DumanHardwareNode(Node):
         # self.blitz_left = Blitz()
         self.blitz_right = Blitz()
 
+        self.right_grip_state = False
+        self.left_grip_state = True
+
         self.create_timer(0.005, self.joint_state_feedback)
+
+    def grip_control(self, request : GripState.Request, response : GripState.Response):
+  
+
+        if request.arm:
+            self.left_grip_state = request.grip_state
+            self.get_logger().info(f"GRIPER LEFT ARM REQUESTED")
+
+            for i in range(5):
+                blitz_interfaces["grip_state_left"].data = [int(self.left_grip_state)]
+                self.blitz_right.blitz_write(id=blitz_interfaces["grip_state_left"].id)
+
+        else:
+            self.left_grip_state = request.grip_state
+            self.get_logger().info(f"GRIPER RIGHT ARM REQUESTED")
+            
+            for i in range(5):
+                blitz_interfaces["grip_state_right"].data = [int(self.left_grip_state)]
+                self.blitz_right.blitz_write(id=blitz_interfaces["grip_state_right"].id)
+        
+        response.message = "successfully controlled gripper"
+        response.success = True
+
+        return response
 
     def joint_state_callback(self, msg: JointState):
         joint_angles = np.array([

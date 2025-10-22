@@ -5,6 +5,7 @@ from rclpy.action import ActionClient
 from rclpy.action.client import ClientGoalHandle, GoalStatus
 from duman_interfaces.action import DumanGoal
 import time
+from duman_interfaces.srv import GripState
 
 '''
 each state has its own function
@@ -47,17 +48,21 @@ class DumanGoalClient(Node):
         self.duman_left_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_left")
         self.duman_right_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_right")
 
+        self.duman_right_grip_client = self.create_client(GripState, "/duman/grip_state_right")
 
         self.get_logger().info("waiting for server....")
-        # self.duman_right_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
-        self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
+        self.duman_right_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
+        # self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
         self.get_logger().info("server found!")
 
-        self.ready_right = [-0.3, 0.5, -1.57, 0.0, -0.5, 0.0]
-        self.ready_left = [0.3, -0.5, 1.57, 0.0, 0.5, 0.0]
+        self.ready_right = [-0.3, 0.5, -1.57, 0.0, 0.0, 1.57]
+        self.ready_left = [0.3, -0.5, 1.57, 0.5, 0.7, 1.57]
 
         self.zero_right = [0.0, 0.0, 0.0, 0.8, -0.8, 0.8]
         self.zero_left = [0.0, 0.0, 0.0, 0.8, -0.8, 0.8]
+
+        self.pick = [-0.7, 0.35, -0.63, 1.57, -1.0, 1.57]
+        self.pass_ = [-0.5, 0.5, -2.0, 0.0, -0.60, 0.0]
 
     def send_goal(self, arm, goal_type, target):
 
@@ -94,6 +99,24 @@ class DumanGoalClient(Node):
         else:
             self.duman_right_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
 
+    def send_grip_cmd(self, arm, grip_state):
+        # Create a request for the ArucoSW service, to get the pick and drop coordinates.
+        self.get_logger().info("REQESTING PAYLOAD DROP POSE !")
+
+        req = GripState.Request()
+        req.grip_state = grip_state
+        req.arm = arm
+        # Call the service asynchronously
+        future = self.duman_right_grip_client.call_async(req)
+        future.add_done_callback(self.result_callback)
+    
+    def result_callback(self, future):
+        try:
+            self.response = future.result()
+            # self.get_logger().info(f'Service response: {self.response}')
+        except Exception as e:
+            self.get_logger().error(f'Service call failed: {e}')
+
     def goal_response_callback(self, future):
         # callback to see if goal was accpeted
         self.goal_handle_: ClientGoalHandle = future.result()
@@ -126,37 +149,18 @@ class DumanGoalClient(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = DumanGoalClient()
-    # node.send_goal(arm=True, goal_type=True, target=[0.1, -0.28, 0.36, 0.0, -1.57, 0.0]) # call the send goal function
-    # node.send_goal(arm=False, goal_type=True, target=[-0.3, -0.28, 0.26, 0.0, 3.17, 0.0]) # call the send goal function
 
-    # arm-True = LEFT # arm-False = RIGHT # goal_type-True = POSE GOAL goal_type-False = JOINT GOAL
-    # node.send_goal(arm=True, goal_type=False, target=node.ready_left) # call the send goal function
-    # node.send_goal(arm=False, goal_type=False, target=node.ready_right) # call the send goal function
-
-    # time.sleep(4)
-
-    node.get_logger().warn("SENDING ANOTHER GOAL")
-
-    # zero_left = [0.0, 0.0, 0.0,0.0, 0.0,0.0]
-    # zero_left2 = [0.0, 0.0, 0.0, 0.8, -0.8, 0.8]
-    # zero_left3 = [0.0, 0.0, 0.0, 1.52, -1.5, -1.5]
-    # zero_left4 = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    node.send_goal(arm=False, goal_type=False, target=node.ready_right) # call the send goal function
+    time.sleep(4)
+    node.send_goal(arm=False, goal_type=False, target=node.pick) # call the send goal function
+    time.sleep(4)
+    node.send_grip_cmd(arm=False, grip_state=True) # close gripper
+    time.sleep(4)
+    node.send_goal(arm=False, goal_type=False, target=node.pass_) # call the send goal function
+    time.sleep(4)
 
 
-    # node.send_goal(arm=True, goal_type=False, target=zero_left) 
-    # time.sleep(4)
-    # node.send_goal(arm=True, goal_type=False, target=zero_left2) 
-    # time.sleep(4)
-
-    # node.send_goal(arm=True, goal_type=False, target=zero_left3) 
-    # time.sleep(6)
-
-    # node.send_goal(arm=True, goal_type=False, target=zero_left4) 
-
-
-    # node.send_goal(arm=False, goal_type=False, target=node.zero_right) # call the send goal function
-
-    # node.send_goal(arm=False, goal_type=False, target=[-0.6, 0.9, 0.0, 0.0, 0.0, 0.0]) # call the send goal function
+    # node.get_logger().warn("SENDING ANOTHER GOAL")
 
     rclpy.spin(node) # then spin the node to wait for result
     rclpy.shutdown()
@@ -164,3 +168,18 @@ def main(args=None):
 if __name__=="__main__":
     main()
 
+
+
+
+
+
+
+
+
+
+
+
+    # node.send_goal(arm=True, goal_type=True, target=[0.1, -0.28, 0.36, 0.0, -1.57, 0.0]) # call the send goal function
+    # node.send_goal(arm=False, goal_type=True, target=[-0.3, -0.28, 0.26, 0.0, 3.17, 0.0]) # call the send goal function
+
+    # arm-True = LEFT # arm-False = RIGHT # goal_type-True = POSE GOAL goal_type-False = JOINT GOAL

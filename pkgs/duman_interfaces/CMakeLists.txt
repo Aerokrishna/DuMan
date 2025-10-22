@@ -13,6 +13,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "action/DumanGoal.action"
   "msg/DumanJoints.msg"
   "msg/DumanPose.msg"
+  "srv/GripState.srv"
 
 )
 

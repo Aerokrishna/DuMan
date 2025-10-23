@@ -17,5 +17,7 @@
 #define wrist2_pin 15
 #define wrist3_pin 16
 
+#define gripper_pin 17
+
 // for servos its 14 15 16
 // wrist 1 servo opposite

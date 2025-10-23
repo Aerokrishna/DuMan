@@ -36,11 +36,6 @@ struct MotorJoint {
         int pwm = constrain(control, -255, 255);
         // if (abs(pwm) < 10){pwm = 0;}
         
-        // when the arm is slightly moved it should not correct eratically
-        // must have a limit on the max velocity
-        // tune it better
-        // move the arm when it is at the pose to check if there are some problems when moved slightly
-
         if (control <= 0.0f) {
             if (abs(control) > 30.0f){
                 control = -30.0;

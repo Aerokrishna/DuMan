@@ -58,7 +58,7 @@ class DumanGoalClient(Node):
         self.ready_right = [-0.3, 0.5, -1.57, 0.0, 0.0, 1.57]
         self.ready_left = [0.3, -0.5, 1.57, 0.5, 0.7, 1.57]
 
-        self.zero_right = [0.0, 0.0, 0.0, 0.8, -0.8, 0.8]
+        self.zero_right = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.zero_left = [0.0, 0.0, 0.0, 0.8, -0.8, 0.8]
 
         self.pick = [-0.7, 0.35, -0.63, 1.57, -1.0, 1.57]
@@ -101,7 +101,7 @@ class DumanGoalClient(Node):
 
     def send_grip_cmd(self, arm, grip_state):
         # Create a request for the ArucoSW service, to get the pick and drop coordinates.
-        self.get_logger().info("REQESTING PAYLOAD DROP POSE !")
+        self.get_logger().info("REQESTING GRIPPER CONTROL!")
 
         req = GripState.Request()
         req.grip_state = grip_state
@@ -155,12 +155,14 @@ def main(args=None):
     node.send_goal(arm=False, goal_type=False, target=node.pick) # call the send goal function
     time.sleep(4)
     node.send_grip_cmd(arm=False, grip_state=True) # close gripper
-    time.sleep(4)
+    time.sleep(2)
     node.send_goal(arm=False, goal_type=False, target=node.pass_) # call the send goal function
     time.sleep(4)
+    node.send_goal(arm=False, goal_type=False, target=node.ready_right) # call the send goal function
+    time.sleep(4)
+    node.send_goal(arm=False, goal_type=False, target=node.zero_right) # call the send goal function
 
-
-    # node.get_logger().warn("SENDING ANOTHER GOAL")
+    node.get_logger().warn("MISSION COMPLETE")
 
     rclpy.spin(node) # then spin the node to wait for result
     rclpy.shutdown()

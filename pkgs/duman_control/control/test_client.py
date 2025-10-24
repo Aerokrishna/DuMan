@@ -108,9 +108,9 @@ class DumanGoalClient(Node):
         req.arm = arm
         # Call the service asynchronously
         future = self.duman_right_grip_client.call_async(req)
-        future.add_done_callback(self.result_callback)
+        future.add_done_callback(self.grip_result_callback)
     
-    def result_callback(self, future):
+    def grip_result_callback(self, future):
         try:
             self.response = future.result()
             # self.get_logger().info(f'Service response: {self.response}')
@@ -125,11 +125,13 @@ class DumanGoalClient(Node):
             self.get_logger().info("GOAL ACCEPTED!")
 
             # add a callback which runs when a result is received
-            self.goal_handle_.get_result_async().add_done_callback(self.goal_result_callback) # call the future callback
+            self.goal_handle_.get_result_async().add_done_callback(self.motion_result_callback) # call the future callback
         else:
             self.get_logger().warn("GOAL REJECTED")
 
-    def goal_result_callback(self,future):
+    # a callback to signify completion of an arm motion task
+    # the motion result will include which arm has completed the motion task
+    def motion_result_callback(self,future):
         status = future.result().status
         result = future.result().result # is the reached number interface made in actions
 

@@ -1,106 +1,180 @@
 #!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
+from rclpy.action import ActionClient
+from rclpy.action.client import ClientGoalHandle, GoalStatus
+from duman_interfaces.action import DumanGoal
+import time
+from duman_interfaces.srv import GripState
 
-class Blackboard:
-    """Shared memory for inter-state communication."""
-    def __init__(self):
-        self.data = {}
+'''
+passing operation
+right arm goes to a pick up position 
+left arm comes to the pass position
 
-    def set(self, key, value):
-        self.data[key] = value
+right arm closes the gripper after 5 seconds
+left arm opens the gripper
 
-    def get(self, key, default=None):
-        return self.data.get(key, default)
+right arm comes to a position parallel to the pass position
+right arm moves closer to the pass position
 
+left arm closes the gripper
+right arm opens the gripper
+
+left arm moves to a drop posion
+left arm opens the gripper
+'''
+
+
+class State:
+    """Represents a single FSM state."""
+    def __init__(self, name, action_fn, condition_fn):
+        self.name = name
+        self.action = action_fn
+        self.condition = condition_fn
+        self.data = {}  # local memory per state
 
 class FSMNode(Node):
-    """Finite State Machine integrated as a ROS 2 node."""
-
     def __init__(self):
         super().__init__('fsm_node')
 
-        # Shared blackboard for inter-state flags
-        self.bb = Blackboard()
+        # Define states in sequential order
+        self.states = [
+            State("SCAN", self.scan, lambda s: s.data.get("done", False)),
+            State("MOVE", self.move, lambda s: s.data.get("done", False)),
+            State("PICK", self.pick, lambda s: s.data.get("done", False)),
+        ]
 
-        # Define FSM structure { state_name: (function, completion_condition, next_state) }
-        self.states = {
-            "SCAN": (self.state_scan, lambda bb: bb.get("scan_done", False), "MOVE"),
-            "MOVE": (self.state_move, lambda bb: bb.get("move_done", False), "PICK"),
-            "PICK": (self.state_pick, lambda bb: bb.get("pick_done", False), None),
-        }
+        self.index = 0
+        self.current = self.states[self.index]
 
-        # Start FSM
-        self.current_state = None
-        self.timer = None
-        self.change_state("SCAN")
+        self.get_logger().info(f"[FSM] Starting at state: {self.current.name}")
+        self.timer = self.create_timer(0.5, self.step)
 
-    # ---------------------------
-    # Core FSM Logic
-    # ---------------------------
-    def change_state(self, next_state_name):
-        """Transition to the given state and start its execution timer."""
-        if self.timer:
-            self.timer.cancel()  # stop the previous timer
 
-        if next_state_name is None:
-            self.get_logger().info("[FSM] Final state reached. Stopping node.")
-            return
+        # action server clients for left and right arms
+        self.duman_left_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_left")
+        self.duman_right_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_right")
 
-        self.current_state = next_state_name
-        self.get_logger().info(f"[FSM] Entering state: {self.current_state}")
+        self.duman_right_grip_client = self.create_client(GripState, "/duman/grip_state_right")
 
-        # Retrieve the state function, condition, and next state
-        state_fn, condition_fn, next_state = self.states[self.current_state]
+        self.get_logger().info("waiting for server....")
+        self.duman_right_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
+        self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
+        self.get_logger().info("server found!")
 
-        # Run the state function periodically
-        self.timer = self.create_timer(0.5, lambda: self.state_step(state_fn, condition_fn, next_state))
 
-    def state_step(self, fn, cond, next_state):
-        """Execute state and check for completion condition."""
-        fn(self.bb)  # run the state function
+    def step(self):
+        """Run the current state's behavior and transition if done."""
+        self.current.action(self.current)
 
-        if cond(self.bb):  # check condition
-            self.get_logger().info(f"[FSM] Transition: {self.current_state} → {next_state}")
-            self.change_state(next_state)
+        if self.current.condition(self.current):
+            if self.index + 1 >= len(self.states):
+                self.get_logger().info("[FSM] Final state reached. Stopping node.")
+                self.timer.cancel()
+                return
 
-    # ---------------------------
-    # State Functions
-    # ---------------------------
-    def state_scan(self, bb: Blackboard):
-        self.get_logger().info("Scanning environment...")
-        bb.set("scan_done", True)
+            self.index += 1
+            self.current = self.states[self.index]
+            self.previous = None
+            self.get_logger().info(f"[FSM] Transition → {self.current.name}")
+    
+    def send_goal(self, arm, goal_type, target):
 
-    def state_move(self, bb: Blackboard):
-        moved = bb.get("moved", 0)
-        self.get_logger().info(f"Moving to target... step {moved+1}")
-        if moved >= 3:
-            bb.set("move_done", True)
+        # Define your goal as your custom action
+        goal = DumanGoal.Goal()
+
+        goal.arm = arm #right arm
+
+        if goal_type == 0:
+            goal.goal_type = goal_type #joint goal
+            goal.hip = target[0]
+            goal.shoulder = target[1]
+            goal.elbow = target[2]
+            goal.wrist1 = target[3]
+            goal.wrist2 = target[4]
+            goal.wrist3 = target[5]
+
+            self.get_logger().info("JOINT Goal sending")
+        
         else:
-            bb.set("moved", moved + 1)
+            goal.goal_type = goal_type #joint goal
+            goal.x = target[0]
+            goal.y = target[1]
+            goal.z = target[2]
+            goal.orx = target[3]
+            goal.ory = target[4]
+            goal.orz = target[5]
 
-    def state_pick(self, bb: Blackboard):
-        self.get_logger().info("Picking object...")
-        bb.set("pick_done", True)
+            self.get_logger().info("POSE Goal sending")
 
+        if arm==1:
+            self.duman_left_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
+        
+        else:
+            self.duman_right_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
 
-# ---------------------------
-# Main Entry Point
-# ---------------------------
+    def send_grip_cmd(self, arm, grip_state):
+        # Create a request for the ArucoSW service, to get the pick and drop coordinates.
+        self.get_logger().info("REQESTING GRIPPER CONTROL!")
+
+        req = GripState.Request()
+        req.grip_state = grip_state
+        req.arm = arm
+        # Call the service asynchronously
+        future = self.duman_right_grip_client.call_async(req)
+        future.add_done_callback(self.grip_result_callback)
+    
+    def grip_result_callback(self, future):
+        try:
+            self.response = future.result()
+            # self.get_logger().info(f'Service response: {self.response}')
+        except Exception as e:
+            self.get_logger().error(f'Service call failed: {e}')
+
+    def goal_response_callback(self, future):
+        # callback to see if goal was accpeted
+        self.goal_handle_: ClientGoalHandle = future.result()
+
+        if self.goal_handle_.accepted:
+            self.get_logger().info("GOAL ACCEPTED!")
+
+            # add a callback which runs when a result is received
+            self.goal_handle_.get_result_async().add_done_callback(self.motion_result_callback) # call the future callback
+        else:
+            self.get_logger().warn("GOAL REJECTED")
+
+    # a callback to signify completion of an arm motion task
+    # the motion result will include which arm has completed the motion task
+    def motion_result_callback(self,future):
+        status = future.result().status
+        result = future.result().result # is the reached number interface made in actions
+
+        if status == GoalStatus.STATUS_SUCCEEDED:
+            self.get_logger().info("SUCCESS")
+        elif status == GoalStatus.STATUS_ABORTED:
+            self.get_logger().error("ABORTED")
+        elif status == GoalStatus.STATUS_CANCELED:
+            self.get_logger().error("CANCELLED")
+
+        self.get_logger().info(f"Result : {result.message} {result.success}")  #+ str(result.reached_number)
+    
+    def cancel_goal(self):
+        self.get_logger().info("Sending cancel request")
+        self.goal_handle_.cancel_goal_async()
+        
+
 def main(args=None):
     rclpy.init(args=args)
     node = FSMNode()
-
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down FSM node.")
     finally:
-        if node.timer:
-            node.timer.cancel()
+        node.timer.cancel()
         node.destroy_node()
         rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()

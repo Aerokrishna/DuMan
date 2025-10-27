@@ -35,9 +35,9 @@ def main():
         __twist_msg = TwistStamped()
         __twist_msg.header.stamp = node.get_clock().now().to_msg()
         __twist_msg.header.frame_id = duman.base_link_name()
-        __twist_msg.twist.linear.x = 0.0
-        __twist_msg.twist.linear.y = 0.01
-        __twist_msg.twist.linear.z = 0.0
+        __twist_msg.twist.linear.x = 0.1
+        __twist_msg.twist.linear.y = 0.0
+        __twist_msg.twist.linear.z = 0.1
         __twist_msg.twist.angular.x = 0.0
         __twist_msg.twist.angular.y = 0.0
         __twist_msg.twist.angular.z = 0.0

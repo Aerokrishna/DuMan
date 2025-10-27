@@ -354,6 +354,7 @@ class MoveIt2:
         weight_joint_position: float = 1.0,
         start_joint_state: Optional[Union[JointState, List[float]]] = None,
         cartesian: bool = False,
+        waypoints: Optional[List[Pose]] = None,
     ) -> Optional[JointTrajectory]:
         """
         Plan motion based on previously set goals. Optional arguments can be passed in to
@@ -407,7 +408,7 @@ class MoveIt2:
 
         # Plan trajectory by sending a goal (blocking)
         if cartesian:
-            joint_trajectory = self._plan_cartesian_path()
+            joint_trajectory = self._plan_cartesian_path(waypoints=waypoints)
         else:
             if self.__execute_via_moveit:
                 # Use action client
@@ -984,6 +985,7 @@ class MoveIt2:
 
     def _plan_cartesian_path(
         self,
+        waypoints: Optional[List[Pose]] = None,
         max_step: float = 0.0025,
         wait_for_server_timeout_sec: Optional[float] = 1.0,
         frame_id: Optional[str] = None,
@@ -1031,7 +1033,9 @@ class MoveIt2:
             .orientation
         )
 
-        self.__cartesian_path_request.waypoints = [target_pose]
+        # self.__cartesian_path_request.waypoints = [target_pose]
+        self.__cartesian_path_request.waypoints = waypoints
+
 
         if not self._plan_cartesian_path_service.wait_for_service(
             timeout_sec=wait_for_server_timeout_sec

@@ -36,12 +36,12 @@ smoothing_filter_plugin_name: "online_signal_smoothing::ButterworthFilterPlugin"
 low_pass_filter_coeff: 10.0  # Larger --> trust the filtered data more, trust the measurements less.
 
 ## MoveIt properties
-move_group_name:  duman_left  # Often 'manipulator' or 'arm'
+move_group_name:  duman_right  # Often 'manipulator' or 'arm'
 planning_frame: base  # The MoveIt planning frame. Often 'base_link' or 'world'
 
 ## Other frames
-ee_frame_name: ee_left  # The name of the end effector link, used to return the EE pose
-robot_link_command_frame: ee_left # tool0  # commands must be given in the frame of a robot link. Usually either the base or end effector
+ee_frame_name: ee_right  # The name of the end effector link, used to return the EE pose
+robot_link_command_frame: base # tool0  # commands must be given in the frame of a robot link. Usually either the base or end effector
 
 ## Stopping behaviour
 incoming_command_timeout:  0.1  # Stop servoing if X seconds elapse without a new command
@@ -52,7 +52,7 @@ num_outgoing_halt_msgs_to_publish: 4
 ## Configure handling of singularities and joint limits
 lower_singularity_threshold:  100.0  # Start decelerating when the condition number hits this (close to singularity)
 hard_stop_singularity_threshold: 2000.0 # Stop when the condition number hits this
-joint_limit_margin: 0.1 # added as a buffer to joint limits [radians]. If moving quickly, make this larger.
+joint_limit_margin: 0.01 # added as a buffer to joint limits [radians]. If moving quickly, make this larger.
 
 ## Topic names
 cartesian_command_in_topic: ~/delta_twist_cmds  # Topic for incoming Cartesian twist commands
@@ -74,3 +74,4 @@ scene_collision_proximity_threshold: 0.02 # Start decelerating when a scene coll
 # Parameters for "stop_distance"-type collision checking
 collision_distance_safety_factor: 1000.0 # Must be >= 1. A large safety factor is recommended to account for latency
 min_allowable_collision_distance: 0.01 # Stop if a collision is closer than this [m]
+

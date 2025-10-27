@@ -156,9 +156,9 @@ def generate_launch_description():
             rviz_node,
             static_tf,
             robot_state_publisher,
-            move_group_node,
+            # move_group_node,
             ros2_control_node,
-            # servo_node
+            servo_node
             # motion_planner
         ]
         + load_controllers

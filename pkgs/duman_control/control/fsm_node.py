@@ -28,21 +28,34 @@ left arm opens the gripper
 
 class State:
     """Represents a single FSM state."""
-    def __init__(self, name, action_fn, condition_fn):
+    def __init__(self, name, action_fn):
         self.name = name
-        self.action = action_fn
-        self.condition = condition_fn
-        self.data = {}  # local memory per state
+        self.actions = action_fn 
+        # action_fn is the array of functions which are tasks to be executed in that state
+        self.num_actions = len(self.actions)
+        self.request_sent = 0
+        self.done = 0
 
 class FSMNode(Node):
     def __init__(self):
         super().__init__('fsm_node')
 
+        self.ready_right = [-0.3, 0.5, -1.57, 0.0, 0.0, 1.57]
+        self.ready_left = [0.3, -0.5, 1.57, 0.5, 0.7, 1.56]
+
+        self.zero_right = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        self.zero_left = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+        ready_left_pose = [0.1, -0.23, 0.26, 0.0, 3.14, 1.57]
+        ready_right_pose = [-0.1, -0.23, 0.26, 0.0, 3.14, 1.57]
+
+
         # Define states in sequential order
         self.states = [
-            State("SCAN", self.scan, lambda s: s.data.get("done", False)),
-            State("MOVE", self.move, lambda s: s.data.get("done", False)),
-            State("PICK", self.pick, lambda s: s.data.get("done", False)),
+            State("LEFT N RIGHT POSE", [lambda: self.send_goal(arm=True, goal_type=True, target=ready_left_pose),
+                                lambda: self.send_goal(arm=False, goal_type=True, target=ready_right_pose)]),
+            State("RIGHT", [lambda: self.send_goal(arm=False, goal_type=False, target=self.ready_right)]),
+            State("LEFT", [lambda: self.send_goal(arm=True, goal_type=False, target=self.zero_left)]),
         ]
 
         self.index = 0
@@ -50,7 +63,6 @@ class FSMNode(Node):
 
         self.get_logger().info(f"[FSM] Starting at state: {self.current.name}")
         self.timer = self.create_timer(0.5, self.step)
-
 
         # action server clients for left and right arms
         self.duman_left_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_left")
@@ -63,12 +75,17 @@ class FSMNode(Node):
         self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
         self.get_logger().info("server found!")
 
-
     def step(self):
-        """Run the current state's behavior and transition if done."""
-        self.current.action(self.current)
+        # send the request (call the send client funciton here)
+        if not self.current.request_sent:
+            for task in self.current.actions:
+                self.current.request_sent += 1
 
-        if self.current.condition(self.current):
+                task()
+
+        self.get_logger().info(f"{self.current.name}")
+        # if result is received
+        if self.current.done + self.current.request_sent == 2 * self.current.num_actions:
             if self.index + 1 >= len(self.states):
                 self.get_logger().info("[FSM] Final state reached. Stopping node.")
                 self.timer.cancel()
@@ -76,7 +93,7 @@ class FSMNode(Node):
 
             self.index += 1
             self.current = self.states[self.index]
-            self.previous = None
+            self.previous = self.states[self.index-1]
             self.get_logger().info(f"[FSM] Transition → {self.current.name}")
     
     def send_goal(self, arm, goal_type, target):
@@ -127,7 +144,9 @@ class FSMNode(Node):
     
     def grip_result_callback(self, future):
         try:
-            self.response = future.result()
+            if future.result().success:
+                self.current.done += 1
+            
             # self.get_logger().info(f'Service response: {self.response}')
         except Exception as e:
             self.get_logger().error(f'Service call failed: {e}')
@@ -138,7 +157,6 @@ class FSMNode(Node):
 
         if self.goal_handle_.accepted:
             self.get_logger().info("GOAL ACCEPTED!")
-
             # add a callback which runs when a result is received
             self.goal_handle_.get_result_async().add_done_callback(self.motion_result_callback) # call the future callback
         else:
@@ -151,7 +169,9 @@ class FSMNode(Node):
         result = future.result().result # is the reached number interface made in actions
 
         if status == GoalStatus.STATUS_SUCCEEDED:
+            self.current.done += 1
             self.get_logger().info("SUCCESS")
+
         elif status == GoalStatus.STATUS_ABORTED:
             self.get_logger().error("ABORTED")
         elif status == GoalStatus.STATUS_CANCELED:
@@ -162,7 +182,6 @@ class FSMNode(Node):
     def cancel_goal(self):
         self.get_logger().info("Sending cancel request")
         self.goal_handle_.cancel_goal_async()
-        
 
 def main(args=None):
     rclpy.init(args=args)

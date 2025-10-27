@@ -30,6 +30,8 @@ install(PROGRAMS
 
     ${HARDWARE}/duman_hardware.py
     ${CONTROL}/duman_teleop.py
+    ${CONTROL}/fsm_node.py
+
 
 
     DESTINATION lib/${PROJECT_NAME}

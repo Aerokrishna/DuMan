@@ -2,23 +2,39 @@ from google import genai
 import os
 import json
 
-# export GOOGLE_API_KEY="YOUR_KEY"
-client = genai.Client(api_key="APIKEY")
+client = genai.Client(api_key="API")
 
-user_command = "Pick up that banana and keep it in the box."
+user_command = "keep the apple in the tray and banana in the cup"
 
+# from the camera
+left_side_objects = ["tray", "banana"]
+right_side_objects = ["apple", "orange", "cup"]
+
+# Prompt for Gemini
 prompt = f"""
 You are a dual-arm robot task planner.
 
-You will receive a natural language instruction about manipulating objects using a dual-arm robot.
-Your job is to convert the instruction into a structured Python list of lists of tuples, where:
+You will receive:
+1. A natural language command.
+2. Lists of objects on the left and right side of the robot.
+
+You must convert the command into a Python list of lists of tuples, where:
 - Each tuple has the format ("action_type", "arm_side", "object_name")
 - "action_type" ∈ ["move", "grip", "transfer"]
 - "arm_side" ∈ ["left", "right"]
-- "object_name" is the target (like "apple", "tray", etc.)
-- Each *outer list* represents a sequential step
-- Each *inner list* can have one or more tuples that can be executed simultaneously (parallel actions)
-- Do NOT include any extra text, explanation, JSON, or Markdown. Output ONLY the Python structure.
+- "object_name" is one of the known objects.
+- Each outer list is a step in sequence.
+- Each inner list can contain multiple tuples for simultaneous actions.
+- The robot should choose which arm to use based on object location:
+  • If object is in left_side_objects → "left" arm.
+  • If object is in right_side_objects → "right" arm.
+  • If the object needs to be passed or transferred, use "transfer" appropriately.
+- The output must be a valid Python literal (list of lists of tuples).
+- Do NOT include any explanation, Markdown, or comments. Output ONLY the structure.
+
+Here are the known objects:
+Left side: {left_side_objects}
+Right side: {right_side_objects}
 
 Example 1:
 Input: "Pick up that apple and keep it in the tray."
@@ -38,7 +54,7 @@ Output:
  [("move", "right", "blue_bowl")],
  [("grip", "right", "blue_bowl")]]
 
-Now, process the following instruction and output only the structure:
+Now process the following input and output only the Python structure:
 Input: "{user_command}"
 """
 
@@ -50,6 +66,7 @@ response = client.models.generate_content(
 print("\n--- LLM Output ---")
 print(response.text)
 
+# Safely evaluate the structured output if valid
 try:
     plan = eval(response.text)
     print("\n--- Parsed Plan ---")
@@ -57,4 +74,3 @@ try:
 except Exception as e:
     print("\nCould not parse output, raw text:")
     print(response.text)
-

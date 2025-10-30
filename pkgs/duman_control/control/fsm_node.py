@@ -6,6 +6,9 @@ from rclpy.action.client import ClientGoalHandle, GoalStatus
 from duman_interfaces.action import DumanGoal
 import time
 from duman_interfaces.srv import GripState, DumanPass
+from rclpy.callback_groups import ReentrantCallbackGroup
+from google import genai
+from prompt import prompt_
 
 '''
 passing operation
@@ -40,15 +43,7 @@ class FSMNode(Node):
     def __init__(self):
         super().__init__('fsm_node')
 
-        self.ready_right = [-0.3, 0.5, -1.57, 0.0, 0.0, 1.57]
-        self.ready_left = [0.3, -0.5, 1.57, 0.5, 0.7, 1.56]
-
-        self.zero_right = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        self.zero_left = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-
-        ready_left_pose = [0.1, -0.23, 0.26, 0.0, 3.14, 1.57]
-        ready_right_pose = [-0.1, -0.23, 0.26, 0.0, 3.14, 1.57]
-
+        self.states = []
 
         # Define states in sequential order
         # self.states = [
@@ -58,24 +53,25 @@ class FSMNode(Node):
         #     State("LEFT", [lambda: self.send_goal(arm=True, goal_type=False, target=self.zero_left)]),
         # ]
 
-        self.states = [
-            State("PASSING", [lambda: self.send_pass_cmd(to_arm=False)]) # right arm
-        ]
-
+        # self.states = [
+        #     State("LEFT", [lambda: self.send_pass_cmd(to_arm=True)]),
+        # ]
+        self.states = []
         self.index = 0
-        self.current = self.states[self.index]
+        self.current = None
 
-        self.get_logger().info(f"[FSM] Starting at state: {self.current.name}")
+        # self.get_logger().info(f"[FSM] Starting at state: {self.current.name}")
         self.timer = self.create_timer(0.5, self.step)
 
         # action server clients for left and right arms
         self.duman_left_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_left")
         self.duman_right_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_right")
 
-        self.duman_right_grip_client = self.create_client(GripState, "/duman/grip_state_right")
-        self.duman_left_grip_client = self.create_client(GripState, "/duman/grip_state_right")
+        self.duman_grip_client = self.create_client(GripState, "/duman/grip_state")
 
         self.duman_pass_client = self.create_client(DumanPass, "/duman/pass")
+
+        self.llm_response = None
 
         self.get_logger().info("waiting for server....")
         self.duman_right_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
@@ -103,12 +99,12 @@ class FSMNode(Node):
             self.previous = self.states[self.index-1]
             self.get_logger().info(f"[FSM] Transition → {self.current.name}")
     
-    def send_goal(self, arm, goal_type, target):
-
+    def send_goal(self, arm:bool, goal_type, target):
+        print("AAAAAAAA : ", arm)
         # Define your goal as your custom action
         goal = DumanGoal.Goal()
 
-        goal.arm = arm #right arm
+        goal.arm = arm 
 
         if goal_type == 0:
             goal.goal_type = goal_type #joint goal
@@ -132,10 +128,12 @@ class FSMNode(Node):
 
             self.get_logger().info("POSE Goal sending")
 
-        if arm==1:
+        if arm == True:
+            self.get_logger().info("POSE Goal sending LEFT")
             self.duman_left_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
         
         else:
+            self.get_logger().info("POSE Goal sending RIGHT")
             self.duman_right_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
 
     def send_pass_cmd(self, to_arm):
@@ -147,14 +145,25 @@ class FSMNode(Node):
 
     def send_grip_cmd(self, arm, grip_state):
         # Create a request for the ArucoSW service, to get the pick and drop coordinates.
-        self.get_logger().info("REQESTING GRIPPER CONTROL!")
 
         req = GripState.Request()
         req.grip_state = grip_state
         req.arm = arm
-        # Call the service asynchronously
-        future = self.duman_right_grip_client.call_async(req)
-        future.add_done_callback(self.result_callback)
+
+        if not arm:
+            self.get_logger().info("REQESTING GRIPPER CONTROL RIGHT!")
+
+            # Call the service asynchronously
+            future = self.duman_grip_client.call_async(req)
+            future.add_done_callback(self.result_callback)
+        
+        else :
+            # Call the service asynchronously
+            self.get_logger().info("REQESTING GRIPPER CONTROL LEFT!")
+
+            future = self.duman_grip_client.call_async(req)
+            future.add_done_callback(self.result_callback)
+    
     
     def result_callback(self, future):
         try:
@@ -200,8 +209,90 @@ class FSMNode(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = FSMNode()
+
     try:
-        rclpy.spin(node)
+        user_command = input("Hi I am Duman how can I help you?  ")
+        client = genai.Client(api_key="AIzaSyB8qsmtPG5W5-zIkiHuPFl7AZSNd9UTusM")
+
+        # from the camera
+        left_side_objects = ["basket", "banana"]
+        right_side_objects = ["apple", "orange", "cup"]
+
+        response = client.models.generate_content(
+            model="gemini-2.5-pro",
+            contents=[prompt_(left_side_objects, right_side_objects, user_command)],
+        )
+
+        # try:
+        node.llm_response = eval(response.text)
+        print("\n--- Parsed Plan ---")
+
+        # except Exception as e:
+        #     print("\nCould not parse output, raw text:")
+        #     print(response.text)
+        ref_fun = []
+
+        for actions in node.llm_response:
+            functions = []
+            for action in actions:
+                intent = action[0]
+
+                if action[1] == 'left':
+                    node.get_logger().info("LEFT ARM")
+                    arm = True
+                elif action[1] == 'right':
+                    node.get_logger().info("RIGHT ARM")
+                    arm = False
+
+                if intent == "move":
+                    if arm :
+                        functions.append(lambda : node.send_goal(arm=True, goal_type=True, target=[-0.1, -0.2, 0.25, 1.57, 0.0, 0.0]))
+                    else:
+                        functions.append(lambda : node.send_goal(arm=False, goal_type=True, target=[-0.1, -0.2, 0.25, 1.57, 0.0, 0.0]))   
+                    state_name = "MOVE"+str(arm)
+                    ref_fun.append(state_name)
+
+                elif intent == "transfer":
+
+                    state_name = "TRANSFER"
+                    ref_fun.append(state_name)
+
+                    if arm:
+                        functions.append(lambda : node.send_pass_cmd(to_arm=True))
+                    else:
+                        functions.append(lambda : node.send_pass_cmd(to_arm=False))
+
+                elif intent == "grip":
+                    state_name = "GRIP"
+                    ref_fun.append(state_name)
+
+                    if arm :    
+                        functions.append(lambda : node.send_grip_cmd(grip_state=True, arm=True))
+                    else:
+                        functions.append(lambda : node.send_grip_cmd(grip_state=True, arm=False))
+
+                elif intent == "ungrip":
+                    state_name = "UNGRIP"
+                    ref_fun.append(state_name)
+
+                    if arm :    
+                        functions.append(lambda : node.send_grip_cmd(grip_state=False, arm=True))
+                    else:
+                        functions.append(lambda : node.send_grip_cmd(grip_state=False, arm=False))
+
+            node.states.append(State(state_name, functions))
+
+        node.current = node.states[0]
+
+        node.get_logger().info(f'{node.llm_response}')
+        node.get_logger().info(f'{ref_fun}')
+
+        if node.llm_response is not None:
+            rclpy.spin(node)
+
+        else:
+            node.get_logger().info("LLM MESSED AAAA")
+
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down FSM node.")
     finally:

@@ -34,8 +34,7 @@ class MoveDumanLeft(Node):
         self.duman_left_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_left", callback_group=ReentrantCallbackGroup())
         self.duman_right_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_right", callback_group=ReentrantCallbackGroup())
 
-        self.duman_right_grip_client = self.create_client(GripState, "/duman/grip_state_right", callback_group=ReentrantCallbackGroup())
-        self.duman_left_grip_client = self.create_client(GripState, "/duman/grip_state_left", callback_group=ReentrantCallbackGroup())
+        self.duman_grip_client = self.create_client(GripState, "/duman/grip_state", callback_group=ReentrantCallbackGroup())
 
         self.arm_done = False
         self.state = 0
@@ -56,21 +55,21 @@ class MoveDumanLeft(Node):
         self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
         self.get_logger().info("server found!")
 
-    def delay_timer(self, duration_sec: float):
+    # def delay_timer(self, duration_sec: float):
 
-        self.wait_done = False
+    #     self.wait_done = False
 
-        def timer_callback():
-            self.wait_done = True
-            self.wait_timer.cancel()
-            self.get_logger().info(f"Waited {duration_sec} seconds (non-blocking complete)")
+    #     def timer_callback():
+    #         self.wait_done = True
+    #         self.wait_timer.cancel()
+    #         self.get_logger().info(f"Waited {duration_sec} seconds (non-blocking complete)")
 
-        # Create a one-shot timer that sets wait_done = True after duration_sec
-        self.wait_timer = self.create_timer(duration_sec, timer_callback, callback_group=ReentrantCallbackGroup())
+    #     # Create a one-shot timer that sets wait_done = True after duration_sec
+    #     self.wait_timer = self.create_timer(duration_sec, timer_callback, callback_group=ReentrantCallbackGroup())
 
-        # Busy-yield loop — allows other ROS callbacks to execute
-        while not self.wait_done:
-            pass
+    #     # Busy-yield loop — allows other ROS callbacks to execute
+    #     while not self.wait_done:
+    #         pass
 
 
     def pass_callback(self, request : DumanPass.Request, response : DumanPass.Response):
@@ -93,7 +92,7 @@ class MoveDumanLeft(Node):
                     self.get_logger().info(f"Opening grip")
 
                     self.send_grip_cmd(arm=request.to_arm, grip_state=False)
-                    self.delay_timer(2.0)
+                    # self.delay_timer(2.0)
                     self.goal_sent = True
 
             
@@ -103,7 +102,7 @@ class MoveDumanLeft(Node):
 
                     self.send_goal(arm=False, goal_type=True, target=self.right_grasp_position)
                     self.send_goal(arm=True, goal_type=True, target=self.left_grasp_position)
-                    self.delay_timer(2.0)
+                    # self.delay_timer(2.0)
 
                     self.goal_sent = True
 
@@ -112,8 +111,8 @@ class MoveDumanLeft(Node):
                     self.get_logger().info(f"grip the arm")
 
                     self.send_grip_cmd(arm=request.to_arm, grip_state=True)
-                    self.delay_timer(2.0)
-
+                    # self.delay_timer(2.0)
+# 
                     self.goal_sent = True
 
             
@@ -122,7 +121,7 @@ class MoveDumanLeft(Node):
                     self.get_logger().info(f"ungrip the arm")
 
                     self.send_grip_cmd(arm=request.to_arm, grip_state=True)
-                    self.delay_timer(2.0)
+                    # self.delay_timer(2.0)
 
                     self.goal_sent = True
 
@@ -131,7 +130,7 @@ class MoveDumanLeft(Node):
                 if not self.goal_sent:
                     self.send_goal(arm=False, goal_type=True, target=self.right_transfer_position)
                     self.send_goal(arm=True, goal_type=True, target=self.left_transfer_position)
-                    self.delay_timer(2.0)
+                    # self.delay_timer(2.0)
 
                     self.goal_sent = True
 
@@ -182,20 +181,23 @@ class MoveDumanLeft(Node):
 
     def send_grip_cmd(self, arm, grip_state):
         # Create a request for the ArucoSW service, to get the pick and drop coordinates.
-        self.get_logger().info("REQESTING GRIPPER CONTROL!")
 
         req = GripState.Request()
         req.grip_state = grip_state
         req.arm = arm
 
         if not arm:
+            self.get_logger().info("REQESTING GRIPPER CONTROL RIGHT!")
+
             # Call the service asynchronously
-            future = self.duman_right_grip_client.call_async(req)
+            future = self.duman_grip_client.call_async(req)
             future.add_done_callback(self.grip_result_callback)
         
         else :
             # Call the service asynchronously
-            future = self.duman_left_grip_client.call_async(req)
+            self.get_logger().info("REQESTING GRIPPER CONTROL LEFT!")
+
+            future = self.duman_grip_client.call_async(req)
             future.add_done_callback(self.grip_result_callback)
     
     def grip_result_callback(self, future):

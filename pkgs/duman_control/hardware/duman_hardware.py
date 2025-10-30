@@ -18,7 +18,7 @@ class DumanHardwareNode(Node):
         self.create_subscription(JointState, "/joint_states", self.joint_state_callback, 10)
         self.create_subscription(DumanJoints, "/joint_vel", self.joint_vel_callback, 10)
 
-        self.create_service(GripState, "/duman/grip_state_right", self.grip_control)
+        self.create_service(GripState, "/duman/grip_state", self.grip_control)
         # Initialize joint data
         self.joint_angles = np.zeros(12)
         self.joint_velocity = np.zeros(12)
@@ -32,9 +32,10 @@ class DumanHardwareNode(Node):
         self.create_timer(0.005, self.joint_state_feedback)
 
     def grip_control(self, request : GripState.Request, response : GripState.Response):
-  
 
-        if request.arm:
+        print('REQUEST AYA HAI ', request.arm)
+
+        if request.arm==True:
             self.left_grip_state = request.grip_state
             self.get_logger().info(f"GRIPER LEFT ARM REQUESTED")
 

@@ -5,7 +5,7 @@ from rclpy.action import ActionClient
 from rclpy.action.client import ClientGoalHandle, GoalStatus
 from duman_interfaces.action import DumanGoal
 import time
-from duman_interfaces.srv import GripState
+from duman_interfaces.srv import GripState, DumanPass
 
 '''
 passing operation
@@ -51,11 +51,15 @@ class FSMNode(Node):
 
 
         # Define states in sequential order
+        # self.states = [
+        #     State("LEFT N RIGHT POSE", [lambda: self.send_goal(arm=True, goal_type=True, target=ready_left_pose),
+        #                         lambda: self.send_goal(arm=False, goal_type=True, target=ready_right_pose)]),
+        #     State("RIGHT", [lambda: self.send_goal(arm=False, goal_type=False, target=self.ready_right)]),
+        #     State("LEFT", [lambda: self.send_goal(arm=True, goal_type=False, target=self.zero_left)]),
+        # ]
+
         self.states = [
-            State("LEFT N RIGHT POSE", [lambda: self.send_goal(arm=True, goal_type=True, target=ready_left_pose),
-                                lambda: self.send_goal(arm=False, goal_type=True, target=ready_right_pose)]),
-            State("RIGHT", [lambda: self.send_goal(arm=False, goal_type=False, target=self.ready_right)]),
-            State("LEFT", [lambda: self.send_goal(arm=True, goal_type=False, target=self.zero_left)]),
+            State("PASSING", [lambda: self.send_pass_cmd(to_arm=False)]) # right arm
         ]
 
         self.index = 0
@@ -69,6 +73,9 @@ class FSMNode(Node):
         self.duman_right_goal_client_ = ActionClient(self, DumanGoal, "/duman/goal_right")
 
         self.duman_right_grip_client = self.create_client(GripState, "/duman/grip_state_right")
+        self.duman_left_grip_client = self.create_client(GripState, "/duman/grip_state_right")
+
+        self.duman_pass_client = self.create_client(DumanPass, "/duman/pass")
 
         self.get_logger().info("waiting for server....")
         self.duman_right_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
@@ -131,6 +138,13 @@ class FSMNode(Node):
         else:
             self.duman_right_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
 
+    def send_pass_cmd(self, to_arm):
+        req = DumanPass.Request()
+
+        req.to_arm = to_arm
+        future = self.duman_pass_client.call_async(req)
+        future.add_done_callback(self.result_callback)
+
     def send_grip_cmd(self, arm, grip_state):
         # Create a request for the ArucoSW service, to get the pick and drop coordinates.
         self.get_logger().info("REQESTING GRIPPER CONTROL!")
@@ -140,9 +154,9 @@ class FSMNode(Node):
         req.arm = arm
         # Call the service asynchronously
         future = self.duman_right_grip_client.call_async(req)
-        future.add_done_callback(self.grip_result_callback)
+        future.add_done_callback(self.result_callback)
     
-    def grip_result_callback(self, future):
+    def result_callback(self, future):
         try:
             if future.result().success:
                 self.current.done += 1

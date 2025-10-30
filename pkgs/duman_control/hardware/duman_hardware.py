@@ -97,7 +97,7 @@ class DumanHardwareNode(Node):
         # self.get_logger().info(f"CURRENT LEFT JOINTs : {joint_fb}")
 
         joint_fb = blitz_interfaces["joint_angles_right_feedback"].data
-        self.get_logger().info(f"CURRENT RIGHT JOINTs : {joint_fb}")
+        # self.get_logger().info(f"CURRENT RIGHT JOINTs : {joint_fb}")
 
 def main(args=None):
     rclpy.init(args=args)

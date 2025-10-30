@@ -7,38 +7,6 @@ from duman_interfaces.action import DumanGoal
 import time
 from duman_interfaces.srv import GripState
 
-'''
-each state has its own function
-and a timer object is created with a new timer callback function
-
-passing operation
-right arm goes to a pick up position 
-left arm comes to the pass position
-
-right arm closes the gripper after 5 seconds
-left arm opens the gripper
-
-right arm comes to a position parallel to the pass position
-right arm moves closer to the pass position
-
-left arm closes the gripper
-right arm opens the gripper
-
-left arm moves to a drop posion
-left arm opens the gripper
-'''
-
-'''
-a state machine architecture
-
-with different states
-with respect to a particular state it will be spinning a function
-and when that function is over we just move to the next state = we know when the function is over based on a condition
-so a state + function + complete_condition
-delay function for time based state changes
-a blackboard which just contains flags which are referred to change the states
-
-'''
 
 class DumanGoalClient(Node):
     def __init__(self):
@@ -151,18 +119,21 @@ class DumanGoalClient(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = DumanGoalClient()
+    right_transfer_position = [-0.1, -0.2, 0.25, -1.57, 1.57, 0.0]
 
-    node.send_goal(arm=False, goal_type=False, target=node.ready_right) # call the send goal function
-    time.sleep(4)
-    node.send_goal(arm=False, goal_type=False, target=node.pick) # call the send goal function
-    time.sleep(4)
-    node.send_grip_cmd(arm=False, grip_state=True) # close gripper
-    time.sleep(2)
-    node.send_goal(arm=False, goal_type=False, target=node.pass_) # call the send goal function
-    time.sleep(4)
-    node.send_goal(arm=False, goal_type=False, target=node.ready_right) # call the send goal function
-    time.sleep(4)
-    node.send_goal(arm=False, goal_type=False, target=node.zero_right) # call the send goal function
+    # node.send_goal(arm=False, goal_type=False, target=node.ready_right) # call the send goal function
+    # time.sleep(4)
+    # node.send_goal(arm=False, goal_type=False, target=node.pick) # call the send goal function
+    # time.sleep(4)
+    # node.send_grip_cmd(arm=False, grip_state=True) # close gripper
+    # time.sleep(2)
+    # node.send_goal(arm=False, goal_type=False, target=node.pass_) # call the send goal function
+    # time.sleep(4)
+    # node.send_goal(arm=False, goal_type=False, target=node.ready_right) # call the send goal function
+    # time.sleep(4)
+    # node.send_goal(arm=False, goal_type=False, target=node.zero_right) # call the send goal function
+
+    node.send_goal(arm=False, goal_type=True, target=right_transfer_position) # call the send goal function
 
     node.get_logger().warn("MISSION COMPLETE")
 

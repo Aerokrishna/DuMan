@@ -82,7 +82,7 @@ class MoveDumanLeft(Node):
         elif goal_request.goal_type == 1:
             # pose goal
             position = [goal_request.x, goal_request.y, goal_request.z]
-            quat = list(quaternion_from_euler(goal_request.orx, goal_request.ory, goal_request.orz))
+            quat = list(quaternion_from_euler(goal_request.orx, goal_request.ory, goal_request.orz, "rxyz"))
             ik = self.left_arm_moveit.compute_ik(position=position, quat_xyzw=quat)
 
             if ik is None:

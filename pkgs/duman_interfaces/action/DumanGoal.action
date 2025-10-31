@@ -2,6 +2,8 @@
 bool arm # 0 right, 1 left, 2 both
 bool goal_type # 0-joint 1-pose
 
+string object_id # if object id is none take the coordinates
+
 float32 x
 float32 y
 float32 z

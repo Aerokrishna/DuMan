@@ -148,6 +148,7 @@ class MoveDumanLeft(Node):
         goal = DumanGoal.Goal()
 
         goal.arm = arm #right arm
+        goal.object_id = "default"
 
         if goal_type == 0:
             goal.goal_type = goal_type #joint goal

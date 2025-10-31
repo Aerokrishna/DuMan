@@ -10,27 +10,7 @@ from rclpy.callback_groups import ReentrantCallbackGroup
 from google import genai
 from prompt import prompt_
 
-'''
-passing operation
-right arm goes to a pick up position 
-left arm comes to the pass position
-
-right arm closes the gripper after 5 seconds
-left arm opens the gripper
-
-right arm comes to a position parallel to the pass position
-right arm moves closer to the pass position
-
-left arm closes the gripper
-right arm opens the gripper
-
-left arm moves to a drop posion
-left arm opens the gripper
-'''
-
-
 class State:
-    """Represents a single FSM state."""
     def __init__(self, name, action_fn):
         self.name = name
         self.actions = action_fn 
@@ -102,34 +82,36 @@ class FSMNode(Node):
             self.previous = self.states[self.index-1]
             self.get_logger().info(f"[FSM] Transition → {self.current.name}")
     
-    def send_goal(self, arm:bool, goal_type, target):
+    def send_goal(self, arm:bool, goal_type, target = [0.0 ,0.0, 0.0, 0.0, 0.0, 0.0], object_id = "default"):
         print("AAAAAAAA : ", arm)
         # Define your goal as your custom action
         goal = DumanGoal.Goal()
 
         goal.arm = arm 
+        goal.goal_type = goal_type #joint goal
+        goal.object_id = object_id
 
-        if goal_type == 0:
-            goal.goal_type = goal_type #joint goal
-            goal.hip = target[0]
-            goal.shoulder = target[1]
-            goal.elbow = target[2]
-            goal.wrist1 = target[3]
-            goal.wrist2 = target[4]
-            goal.wrist3 = target[5]
-
-            self.get_logger().info("JOINT Goal sending")
+        if object_id == "default":
         
-        else:
-            goal.goal_type = goal_type #joint goal
-            goal.x = target[0]
-            goal.y = target[1]
-            goal.z = target[2]
-            goal.orx = target[3]
-            goal.ory = target[4]
-            goal.orz = target[5]
+            if goal_type == 0:
+                goal.hip = target[0]
+                goal.shoulder = target[1]
+                goal.elbow = target[2]
+                goal.wrist1 = target[3]
+                goal.wrist2 = target[4]
+                goal.wrist3 = target[5]
 
-            self.get_logger().info("POSE Goal sending")
+                self.get_logger().info("JOINT Goal sending")
+            
+            else:
+                goal.x = target[0]
+                goal.y = target[1]
+                goal.z = target[2]
+                goal.orx = target[3]
+                goal.ory = target[4]
+                goal.orz = target[5]
+
+                self.get_logger().info("POSE Goal sending")
 
         if arm == True:
             self.get_logger().info("POSE Goal sending LEFT")
@@ -166,7 +148,6 @@ class FSMNode(Node):
 
             future = self.duman_grip_client.call_async(req)
             future.add_done_callback(self.result_callback)
-    
     
     def result_callback(self, future):
         try:
@@ -249,9 +230,9 @@ def main(args=None):
 
                 if intent == "move":
                     if arm :
-                        functions.append(lambda : node.send_goal(arm=True, goal_type=True, target=[-0.1, -0.2, 0.25, 1.57, 0.0, 0.0]))
+                        functions.append(lambda : node.send_goal(arm=True, goal_type=True, object_id=action[2]))
                     else:
-                        functions.append(lambda : node.send_goal(arm=False, goal_type=True, target=[-0.1, -0.2, 0.25, 1.57, 0.0, 0.0]))   
+                        functions.append(lambda : node.send_goal(arm=False, goal_type=True, object_id=action[2]))   
                     state_name = "MOVE"+str(arm)
                     ref_fun.append(state_name)
 

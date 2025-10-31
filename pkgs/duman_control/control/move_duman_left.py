@@ -55,6 +55,9 @@ class MoveDumanLeft(Node):
         self.ik_pose_goal = np.zeros(6)
         self.plan_pose_goal = None
 
+        self.objects_left = {"basket" : [0.05, -0.25, 0.25, 3.14, 0.0, 1.57],
+                             "banana" : []}
+            
         self.get_logger().info("move duman server started")
 
     def goal_callback(self, goal_request: DumanGoal.Goal):
@@ -81,8 +84,17 @@ class MoveDumanLeft(Node):
 
         elif goal_request.goal_type == 1:
             # pose goal
-            position = [goal_request.x, goal_request.y, goal_request.z]
-            quat = list(quaternion_from_euler(goal_request.orx, goal_request.ory, goal_request.orz, "rxyz"))
+            obj = goal_request.object_id
+
+            if obj == "default":
+
+                position = [goal_request.x, goal_request.y, goal_request.z]
+                quat = list(quaternion_from_euler(goal_request.orx, goal_request.ory, goal_request.orz, "rxyz"))
+            
+            else:
+                position = [self.objects_left[obj][0], self.objects_left[obj][1], self.objects_left[obj][2]]
+                quat = list(quaternion_from_euler(self.objects_left[obj][3], self.objects_left[obj][4], self.objects_left[obj][5], "rxyz"))
+
             ik = self.left_arm_moveit.compute_ik(position=position, quat_xyzw=quat)
 
             if ik is None:

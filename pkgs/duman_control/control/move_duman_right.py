@@ -63,6 +63,10 @@ class MoveDumanRight(Node):
         self.ik_pose_goal = np.zeros(6)
         self.plan_pose_goal = None
 
+        self.objects_right = {"apple" : [-0.35, -0.3, 0.15, 3.14, 0.0, 1.54],
+                             "orange" : [],
+                             "cup" : [],}
+
         self.get_logger().info("move duman server started")
 
     def goal_callback(self, goal_request: DumanGoal.Goal):
@@ -89,8 +93,17 @@ class MoveDumanRight(Node):
 
         elif goal_request.goal_type == 1:
             # pose goal
-            position = [goal_request.x, goal_request.y, goal_request.z]
-            quat = list(quaternion_from_euler(goal_request.orx, goal_request.ory, goal_request.orz, axes="rxyz"))
+            obj = goal_request.object_id
+
+            if obj == "default":
+
+                position = [goal_request.x, goal_request.y, goal_request.z]
+                quat = list(quaternion_from_euler(goal_request.orx, goal_request.ory, goal_request.orz, "rxyz"))
+            
+            else:
+                position = [self.objects_right[obj][0], self.objects_right[obj][1], self.objects_right[obj][2]]
+                quat = list(quaternion_from_euler(self.objects_right[obj][3], self.objects_right[obj][4], self.objects_right[obj][5], "rxyz"))
+
             ik = self.right_arm_moveit.compute_ik(position=position, quat_xyzw=quat)
 
             if ik is None:
@@ -159,7 +172,7 @@ class MoveDumanRight(Node):
         self.current_joint_angles = np.array([msg.position[9], msg.position[2],msg.position[7],
                                                 msg.position[4], msg.position[0],msg.position[1]])
 
-    def goal_checker(self, target : np.ndarray, thresh=0.05):
+    def goal_checker(self, target : np.ndarray, thresh=0.08):
 
         diff = np.abs(self.current_joint_angles - target)  
         return np.all(diff < thresh)

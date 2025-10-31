@@ -16,7 +16,7 @@ from sensor_msgs.msg import JointState
 from tf_transformations import quaternion_from_euler
 from rclpy.action.client import ClientGoalHandle, GoalStatus
 from rclpy.callback_groups import ReentrantCallbackGroup
-
+import time
 
 class MoveDumanLeft(Node):
     def __init__(self):
@@ -50,95 +50,93 @@ class MoveDumanLeft(Node):
 
         self.create_service(DumanPass, "/duman/pass", self.pass_callback)
 
+        self.last_time = time.monotonic()
+        self.cnt = 0
+
         self.get_logger().info("waiting for server....")
         self.duman_right_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
         self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
         self.get_logger().info("server found!")
 
-    # def delay_timer(self, duration_sec: float):
-
-    #     self.wait_done = False
-
-    #     def timer_callback():
-    #         self.wait_done = True
-    #         self.wait_timer.cancel()
-    #         self.get_logger().info(f"Waited {duration_sec} seconds (non-blocking complete)")
-
-    #     # Create a one-shot timer that sets wait_done = True after duration_sec
-    #     self.wait_timer = self.create_timer(duration_sec, timer_callback, callback_group=ReentrantCallbackGroup())
-
-    #     # Busy-yield loop — allows other ROS callbacks to execute
-    #     while not self.wait_done:
-    #         pass
-
-
+    def delay_(self, period):
+        current_time = time.monotonic()
+        if current_time - self.last_time >= period:
+            self.last_time = current_time
+            return True
+        return False
+    
     def pass_callback(self, request : DumanPass.Request, response : DumanPass.Response):
         self.state = 1
-        self.get_logger().info("PASSING REQUEST RECEIVED")
+        # self.get_logger().info("PASSING REQUEST RECEIVED")
 
         while True:
-            
-            # self.get_logger().info(f"{self.state}")
+            time.sleep(0.1)
+            # if self.delay_(0.1):
+            self.get_logger().info(f"{self.state}")
             if self.state == 1:
+                self.get_logger().info(f"Moving to pass")
+
                 if not self.goal_sent:
-                    self.get_logger().info(f"Moving to pass")
+                    self.arm_done = False
 
                     self.send_goal(arm=False, goal_type=True, target=self.right_transfer_position)
                     self.send_goal(arm=True, goal_type=True, target=self.left_transfer_position)
                     self.goal_sent = True
 
-            elif self.state == 2:
-                if not self.goal_sent:
-                    self.get_logger().info(f"Opening grip")
+            elif self.state == 2 and self.delay_(2.0):
+                self.get_logger().info(f"Opening grip")
 
+                if not self.goal_sent:
                     self.send_grip_cmd(arm=request.to_arm, grip_state=False)
-                    # self.delay_timer(2.0)
                     self.goal_sent = True
 
-            
-            elif self.state == 3:
-                if not self.goal_sent:
-                    self.get_logger().info(f"moving close")
+            elif self.state == 3 and self.delay_(2.0):
+                self.get_logger().info(f"moving close")
 
+                if not self.goal_sent:
+                    self.arm_done = False
+                    
                     self.send_goal(arm=False, goal_type=True, target=self.right_grasp_position)
                     self.send_goal(arm=True, goal_type=True, target=self.left_grasp_position)
-                    # self.delay_timer(2.0)
 
                     self.goal_sent = True
 
-            elif self.state == 4:
+            elif self.state == 4 and self.delay_(1.0):
+                self.get_logger().info(f"grip the arm")
+
                 if not self.goal_sent:
-                    self.get_logger().info(f"grip the arm")
 
                     self.send_grip_cmd(arm=request.to_arm, grip_state=True)
-                    # self.delay_timer(2.0)
-# 
                     self.goal_sent = True
-
             
-            elif self.state == 5:
-                if not self.goal_sent:
-                    self.get_logger().info(f"ungrip the arm")
+            elif self.state == 5 and self.delay_(2.0):
+                self.get_logger().info(f"ungrip the arm")
 
-                    self.send_grip_cmd(arm=request.to_arm, grip_state=True)
-                    # self.delay_timer(2.0)
+                if not self.goal_sent:
+
+                    self.send_grip_cmd(arm=(not request.to_arm), grip_state=True)
 
                     self.goal_sent = True
 
             
-            elif self.state == 6:
+            elif self.state == 6 and self.delay_(2.0):
+                self.get_logger().info(f"moving away")
+
                 if not self.goal_sent:
+                    self.arm_done = False
+                    
                     self.send_goal(arm=False, goal_type=True, target=self.right_transfer_position)
                     self.send_goal(arm=True, goal_type=True, target=self.left_transfer_position)
-                    # self.delay_timer(2.0)
 
                     self.goal_sent = True
 
 
             if self.state == 7:
+                self.get_logger().info(f"IDLING")
+
                 self.state = 0
                 break
-
+      
         response.message = "successfully controlled gripper"
         response.success = True
 
@@ -160,7 +158,7 @@ class MoveDumanLeft(Node):
             goal.wrist2 = target[4]
             goal.wrist3 = target[5]
 
-            self.get_logger().info("JOINT Goal sending")
+            # self.get_logger().info("JOINT Goal sending")
         
         else:
             goal.goal_type = goal_type #joint goal
@@ -171,7 +169,7 @@ class MoveDumanLeft(Node):
             goal.ory = target[4]
             goal.orz = target[5]
 
-            self.get_logger().info("POSE Goal sending")
+            # self.get_logger().info("POSE Goal sending")
 
         if arm==1:
             self.duman_left_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
@@ -186,8 +184,8 @@ class MoveDumanLeft(Node):
         req.grip_state = grip_state
         req.arm = arm
 
-        if not arm:
-            self.get_logger().info("REQESTING GRIPPER CONTROL RIGHT!")
+        if arm==False:
+            self.get_logger().info("GRIPPER RIGHT!")
 
             # Call the service asynchronously
             future = self.duman_grip_client.call_async(req)
@@ -195,7 +193,7 @@ class MoveDumanLeft(Node):
         
         else :
             # Call the service asynchronously
-            self.get_logger().info("REQESTING GRIPPER CONTROL LEFT!")
+            self.get_logger().info("GRIPPER LEFT!")
 
             future = self.duman_grip_client.call_async(req)
             future.add_done_callback(self.grip_result_callback)
@@ -215,7 +213,7 @@ class MoveDumanLeft(Node):
         self.goal_handle_: ClientGoalHandle = future.result()
 
         if self.goal_handle_.accepted:
-            self.get_logger().info("GOAL ACCEPTED!")
+            # self.get_logger().info("GOAL ACCEPTED!")
 
             # add a callback which runs when a result is received
             self.goal_handle_.get_result_async().add_done_callback(self.motion_result_callback) # call the future callback
@@ -229,10 +227,8 @@ class MoveDumanLeft(Node):
         result = future.result().result # is the reached number interface made in actions
 
         if status == GoalStatus.STATUS_SUCCEEDED:
-            self.get_logger().info(f"SUCCESS {self.arm_done}")
             if self.arm_done:
                 self.state+=1
-                self.arm_done = False
                 self.goal_sent = False
 
             self.arm_done = True
@@ -242,7 +238,7 @@ class MoveDumanLeft(Node):
         elif status == GoalStatus.STATUS_CANCELED:
             self.get_logger().error("CANCELLED")
 
-        self.get_logger().info(f"Result : {result.message} {result.success}")  #+ str(result.reached_number)
+        # self.get_logger().info(f"Result : {result.message} {result.success}")  #+ str(result.reached_number)
     
     def cancel_goal(self):
         self.get_logger().info("Sending cancel request")
@@ -251,7 +247,7 @@ class MoveDumanLeft(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = MoveDumanLeft()
-    executor = MultiThreadedExecutor(num_threads=4)
+    executor = MultiThreadedExecutor(num_threads=2)
     executor.add_node(node)
     executor.spin()
     rclpy.shutdown()

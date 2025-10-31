@@ -56,9 +56,12 @@ class FSMNode(Node):
         # self.states = [
         #     State("LEFT", [lambda: self.send_pass_cmd(to_arm=True)]),
         # ]
+        # self.current = self.states[0]
+
         self.states = []
-        self.index = 0
         self.current = None
+
+        self.index = 0
 
         # self.get_logger().info(f"[FSM] Starting at state: {self.current.name}")
         self.timer = self.create_timer(0.5, self.step)
@@ -292,6 +295,9 @@ def main(args=None):
 
         else:
             node.get_logger().info("LLM MESSED AAAA")
+
+    # try :
+    #     rclpy.spin(node)
 
     except KeyboardInterrupt:
         node.get_logger().info("Shutting down FSM node.")

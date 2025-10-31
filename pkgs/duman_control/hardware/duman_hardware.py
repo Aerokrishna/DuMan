@@ -33,8 +33,6 @@ class DumanHardwareNode(Node):
 
     def grip_control(self, request : GripState.Request, response : GripState.Response):
 
-        print('REQUEST AYA HAI ', request.arm)
-
         if request.arm==True:
             self.left_grip_state = request.grip_state
             self.get_logger().info(f"GRIPER LEFT ARM REQUESTED")

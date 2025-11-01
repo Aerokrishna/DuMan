@@ -63,11 +63,12 @@ class MoveDumanRight(Node):
         self.joint_goal = np.zeros(6)
         self.ik_pose_goal = np.zeros(6)
         self.pose_goal = np.zeros(6)
+        self.current_pose = np.zeros(6)
 
         self.plan_pose_goal = None
 
         self.objects_right = {"apple" : [-0.35, -0.3, 0.15, 3.14, 0.0, 1.54],
-                             "orange" : [],
+                             "red_tray" : [-0.3, -0.3, 0.2, 3.14, 0.0, 1.54],
                              "cup" : [],}
 
         self.get_logger().info("move duman server started")
@@ -158,9 +159,9 @@ class MoveDumanRight(Node):
         # POSE GOAL
         else:
             self.right_arm_moveit.execute(self.plan_pose_goal)
-            self.get_logger().info(f"{self.ik_pose_goal}")
+            self.get_logger().info(f"{self.pose_goal}")
 
-            while not self.goal_checker(np.array(self.pose_goal), thresh=0.15, joint=False):
+            while not self.goal_checker(np.array(self.pose_goal), thresh=0.1, joint=False):
                 pass
         
             result = DumanGoal.Result()
@@ -183,12 +184,13 @@ class MoveDumanRight(Node):
         self.current_pose = np.array([msg.right_pos_x, msg.right_pos_y, msg.right_pos_z,
                                       msg.right_or_x, msg.right_or_y, msg.right_or_z])
         
+        
     def goal_checker(self, target : np.ndarray, thresh=0.05, joint = True):
-
+        
         if joint :
             diff = np.abs(self.current_joint_angles - target)  
         else:
-            diff = np.abs(self.current_pose - target)  
+            diff = np.abs(self.current_pose[:3] - target[:3])  
 
         return np.all(diff < thresh)
 

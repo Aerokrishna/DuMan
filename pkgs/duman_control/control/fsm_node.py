@@ -69,7 +69,7 @@ class FSMNode(Node):
 
                 task()
 
-        self.get_logger().info(f"{self.current.name}")
+        # self.get_logger().info(f"{self.current.name}")
         # if result is received
         if self.current.done + self.current.request_sent == 2 * self.current.num_actions:
             if self.index + 1 >= len(self.states):
@@ -196,11 +196,11 @@ def main(args=None):
 
     try:
         user_command = input("Hi I am Duman how can I help you?  ")
-        client = genai.Client(api_key="AIzaSyB8qsmtPG5W5-zIkiHuPFl7AZSNd9UTusM")
+        client = genai.Client(api_key="")
 
         # from the camera
-        left_side_objects = ["basket", "banana"]
-        right_side_objects = ["apple", "orange", "cup"]
+        left_side_objects = ["yellow_tray", "red_tray"]
+        right_side_objects = ["apple", "banana"]
 
         response = client.models.generate_content(
             model="gemini-2.5-pro",
@@ -214,7 +214,7 @@ def main(args=None):
         # except Exception as e:
         #     print("\nCould not parse output, raw text:")
         #     print(response.text)
-        ref_fun = []
+        objs = []
 
         for actions in node.llm_response:
             functions = []
@@ -229,47 +229,28 @@ def main(args=None):
                     arm = False
 
                 if intent == "move":
-                    if arm :
-                        functions.append(lambda : node.send_goal(arm=True, goal_type=True, object_id=action[2]))
-                    else:
-                        functions.append(lambda : node.send_goal(arm=False, goal_type=True, object_id=action[2]))   
-                    state_name = "MOVE"+str(arm)
-                    ref_fun.append(state_name)
+                    state_name = "MOVE" + str(arm)
+                    obj_id = action[2]
+                    functions.append(lambda arm=arm, obj_id=obj_id: node.send_goal(arm=arm, goal_type=True, object_id=obj_id))
 
                 elif intent == "transfer":
-
                     state_name = "TRANSFER"
-                    ref_fun.append(state_name)
-
-                    if arm:
-                        functions.append(lambda : node.send_pass_cmd(to_arm=True))
-                    else:
-                        functions.append(lambda : node.send_pass_cmd(to_arm=False))
+                    functions.append(lambda arm=arm: node.send_pass_cmd(to_arm=arm))
 
                 elif intent == "grip":
                     state_name = "GRIP"
-                    ref_fun.append(state_name)
-
-                    if arm :    
-                        functions.append(lambda : node.send_grip_cmd(grip_state=True, arm=True))
-                    else:
-                        functions.append(lambda : node.send_grip_cmd(grip_state=True, arm=False))
+                    functions.append(lambda arm=arm: node.send_grip_cmd(grip_state=True, arm=arm))
 
                 elif intent == "ungrip":
                     state_name = "UNGRIP"
-                    ref_fun.append(state_name)
-
-                    if arm :    
-                        functions.append(lambda : node.send_grip_cmd(grip_state=False, arm=True))
-                    else:
-                        functions.append(lambda : node.send_grip_cmd(grip_state=False, arm=False))
+                    functions.append(lambda arm=arm: node.send_grip_cmd(grip_state=False, arm=arm))
 
             node.states.append(State(state_name, functions))
+
 
         node.current = node.states[0]
 
         node.get_logger().info(f'{node.llm_response}')
-        node.get_logger().info(f'{ref_fun}')
 
         if node.llm_response is not None:
             rclpy.spin(node)

@@ -56,11 +56,11 @@ class MoveDumanLeft(Node):
         self.joint_goal = np.zeros(6)
         self.ik_pose_goal = np.zeros(6)
         self.pose_goal = np.zeros(6)
-
+        self.current_pose = np.zeros(6)
         self.plan_pose_goal = None
 
-        self.objects_left = {"basket" : [0.05, -0.25, 0.25, 3.14, 0.0, 1.57],
-                             "banana" : []}
+        self.objects_left = {"yellow_tray" : [0.05, -0.25, 0.25, 3.14, 0.0, 1.57],
+                             "banana" : [0.3, -0.3, 0.2, 3.14, 0.0, 1.57]}
             
         self.get_logger().info("move duman server started")
 
@@ -180,7 +180,7 @@ class MoveDumanLeft(Node):
         if joint :
             diff = np.abs(self.current_joint_angles - target)  
         else:
-            diff = np.abs(self.current_pose - target)  
+            diff = np.abs(self.current_pose[:3] - target[:3])  
 
         return np.all(diff < thresh)
 

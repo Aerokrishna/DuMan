@@ -19,7 +19,7 @@ import threading
 from pymoveit2 import MoveIt2
 from pymoveit2.robots import duman_right
 import numpy as np
-from duman_interfaces.msg import DumanJoints
+from duman_interfaces.msg import DumanPose
 from sensor_msgs.msg import JointState
 from tf_transformations import euler_from_quaternion, quaternion_from_euler, quaternion_multiply
 
@@ -59,8 +59,11 @@ class MoveDumanRight(Node):
         
         # self.create_subscription(DumanJoints, "/joint_states", self.feedback_joint_angle, 10)
         self.create_subscription(JointState, "/joint_states", self.feedback_joint_angle, 10)
+        self.create_subscription(DumanPose, "/duman/pose", self.feedback_pose, 10)
         self.joint_goal = np.zeros(6)
         self.ik_pose_goal = np.zeros(6)
+        self.pose_goal = np.zeros(6)
+
         self.plan_pose_goal = None
 
         self.objects_right = {"apple" : [-0.35, -0.3, 0.15, 3.14, 0.0, 1.54],
@@ -99,11 +102,14 @@ class MoveDumanRight(Node):
 
                 position = [goal_request.x, goal_request.y, goal_request.z]
                 quat = list(quaternion_from_euler(goal_request.orx, goal_request.ory, goal_request.orz, "rxyz"))
-            
+                self.pose_goal = [goal_request.x, goal_request.y, goal_request.z, goal_request.orx, goal_request.ory, goal_request.orz]
+
             else:
                 position = [self.objects_right[obj][0], self.objects_right[obj][1], self.objects_right[obj][2]]
                 quat = list(quaternion_from_euler(self.objects_right[obj][3], self.objects_right[obj][4], self.objects_right[obj][5], "rxyz"))
-
+                self.pose_goal = [self.objects_right[obj][0], self.objects_right[obj][1], self.objects_right[obj][2],
+                                  self.objects_right[obj][3], self.objects_right[obj][4], self.objects_right[obj][5]]
+                
             ik = self.right_arm_moveit.compute_ik(position=position, quat_xyzw=quat)
 
             if ik is None:
@@ -154,7 +160,7 @@ class MoveDumanRight(Node):
             self.right_arm_moveit.execute(self.plan_pose_goal)
             self.get_logger().info(f"{self.ik_pose_goal}")
 
-            while not self.goal_checker(np.array(self.ik_pose_goal), thresh=0.15):
+            while not self.goal_checker(np.array(self.pose_goal), thresh=0.15, joint=False):
                 pass
         
             result = DumanGoal.Result()
@@ -172,9 +178,18 @@ class MoveDumanRight(Node):
         self.current_joint_angles = np.array([msg.position[9], msg.position[2],msg.position[7],
                                                 msg.position[4], msg.position[0],msg.position[1]])
 
-    def goal_checker(self, target : np.ndarray, thresh=0.08):
+    def feedback_pose(self, msg:DumanPose):
 
-        diff = np.abs(self.current_joint_angles - target)  
+        self.current_pose = np.array([msg.right_pos_x, msg.right_pos_y, msg.right_pos_z,
+                                      msg.right_or_x, msg.right_or_y, msg.right_or_z])
+        
+    def goal_checker(self, target : np.ndarray, thresh=0.05, joint = True):
+
+        if joint :
+            diff = np.abs(self.current_joint_angles - target)  
+        else:
+            diff = np.abs(self.current_pose - target)  
+
         return np.all(diff < thresh)
 
 def main(args=None):

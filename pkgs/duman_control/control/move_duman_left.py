@@ -11,7 +11,7 @@ import threading
 from pymoveit2 import MoveIt2
 from pymoveit2.robots import duman_left
 import numpy as np
-from duman_interfaces.msg import DumanJoints
+from duman_interfaces.msg import DumanPose
 from sensor_msgs.msg import JointState
 from tf_transformations import euler_from_quaternion, quaternion_from_euler, quaternion_multiply
 
@@ -51,8 +51,12 @@ class MoveDumanLeft(Node):
         
         # self.create_subscription(DumanJoints, "/joint_states", self.feedback_joint_angle, 10)
         self.create_subscription(JointState, "/joint_states", self.feedback_joint_angle, 10)
+        self.create_subscription(DumanPose, "/duman/pose", self.feedback_pose, 10)
+
         self.joint_goal = np.zeros(6)
         self.ik_pose_goal = np.zeros(6)
+        self.pose_goal = np.zeros(6)
+
         self.plan_pose_goal = None
 
         self.objects_left = {"basket" : [0.05, -0.25, 0.25, 3.14, 0.0, 1.57],
@@ -90,11 +94,14 @@ class MoveDumanLeft(Node):
 
                 position = [goal_request.x, goal_request.y, goal_request.z]
                 quat = list(quaternion_from_euler(goal_request.orx, goal_request.ory, goal_request.orz, "rxyz"))
-            
+
+                self.pose_goal = [goal_request.x, goal_request.y, goal_request.z, goal_request.orx, goal_request.ory, goal_request.orz]
             else:
                 position = [self.objects_left[obj][0], self.objects_left[obj][1], self.objects_left[obj][2]]
                 quat = list(quaternion_from_euler(self.objects_left[obj][3], self.objects_left[obj][4], self.objects_left[obj][5], "rxyz"))
-
+                self.pose_goal = [self.objects_left[obj][0], self.objects_left[obj][1], self.objects_left[obj][2],
+                                  self.objects_left[obj][3], self.objects_left[obj][4], self.objects_left[obj][5]]
+                
             ik = self.left_arm_moveit.compute_ik(position=position, quat_xyzw=quat)
 
             if ik is None:
@@ -145,7 +152,7 @@ class MoveDumanLeft(Node):
             self.left_arm_moveit.execute(self.plan_pose_goal)
             self.get_logger().info(f"{self.ik_pose_goal}")
 
-            while not self.goal_checker(np.array(self.ik_pose_goal), thresh=0.15):
+            while not self.goal_checker(np.array(self.pose_goal), thresh=0.15, joint=False):
                 pass
         
             result = DumanGoal.Result()
@@ -163,9 +170,18 @@ class MoveDumanLeft(Node):
         self.current_joint_angles = np.array([msg.position[3], msg.position[5],msg.position[6],
                                                 msg.position[8], msg.position[10],msg.position[11]])
 
-    def goal_checker(self, target : np.ndarray, thresh=0.05):
+    def feedback_pose(self, msg:DumanPose):
 
-        diff = np.abs(self.current_joint_angles - target)  
+        self.current_pose = np.array([msg.left_pos_x, msg.left_pos_y, msg.left_pos_z,
+                                      msg.left_or_x, msg.left_or_y, msg.left_or_z])
+        
+    def goal_checker(self, target : np.ndarray, thresh=0.05, joint = True):
+
+        if joint :
+            diff = np.abs(self.current_joint_angles - target)  
+        else:
+            diff = np.abs(self.current_pose - target)  
+
         return np.all(diff < thresh)
 
 def main(args=None):

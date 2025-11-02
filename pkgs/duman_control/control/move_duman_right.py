@@ -22,6 +22,7 @@ import numpy as np
 from duman_interfaces.msg import DumanPose
 from sensor_msgs.msg import JointState
 from tf_transformations import euler_from_quaternion, quaternion_from_euler, quaternion_multiply
+from objects import objects_right
 
 class MoveDumanRight(Node):
     def __init__(self):
@@ -35,6 +36,7 @@ class MoveDumanRight(Node):
 
         self.current_joint_angles = np.zeros(6, dtype=np.float32)
 
+        self.objects_right = objects_right  
         # INITIALIZE SERVER
         self.joint_goal_server_ = ActionServer(
             self, 
@@ -67,9 +69,7 @@ class MoveDumanRight(Node):
 
         self.plan_pose_goal = None
 
-        self.objects_right = {"apple" : [-0.35, -0.3, 0.15, 3.14, 0.0, 1.54],
-                             "red_tray" : [-0.3, -0.3, 0.2, 3.14, 0.0, 1.54],
-                             "cup" : [],}
+        
 
         self.get_logger().info("move duman server started")
 

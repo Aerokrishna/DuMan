@@ -12,6 +12,8 @@ ament_python_install_package(pymoveit2)
 set(EXAMPLES_DIR examples)
 set(CONTROL control)
 set(HARDWARE hardware)
+set(LAUNCH launch)
+
 
 
 install(PROGRAMS
@@ -35,15 +37,18 @@ install(PROGRAMS
     ${CONTROL}/fsm_node.py
     ${CONTROL}/passing.py
 
-
-
-
     DESTINATION lib/${PROJECT_NAME}
 )
 
 install(
   DIRECTORY examples/assets
+
   DESTINATION lib/${PROJECT_NAME}
+)
+install(
+  DIRECTORY launch
+
+  DESTINATION share/${PROJECT_NAME}
 )
 
 # Setup the project

@@ -9,6 +9,7 @@ from duman_interfaces.srv import GripState, DumanPass
 from rclpy.callback_groups import ReentrantCallbackGroup
 from google import genai
 from prompt import prompt_
+from objects import objects_right, objects_left
 
 class State:
     def __init__(self, name, action_fn):
@@ -198,9 +199,8 @@ def main(args=None):
         user_command = input("Hi I am Duman how can I help you?  ")
         client = genai.Client(api_key="")
 
-        # from the camera
-        left_side_objects = ["yellow_tray", "red_tray"]
-        right_side_objects = ["apple", "banana"]
+        left_side_objects = [k for k in objects_left.keys()]
+        right_side_objects = [k for k in objects_right.keys()]
 
         response = client.models.generate_content(
             model="gemini-2.5-pro",

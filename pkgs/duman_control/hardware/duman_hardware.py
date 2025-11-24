@@ -23,8 +23,8 @@ class DumanHardwareNode(Node):
         self.joint_angles = np.zeros(12)
         self.joint_velocity = np.zeros(12)
 
-        # self.blitz_left = Blitz()
-        self.blitz_right = Blitz()
+        self.blitz_left = Blitz(port="/dev/ttyACM0")
+        self.blitz_right = Blitz(port="/dev/ttyACM1")
 
         self.right_grip_state = False
         self.left_grip_state = True
@@ -80,8 +80,8 @@ class DumanHardwareNode(Node):
         joint_vel = np.array([msg.right_hip, msg.right_shoulder, msg.right_elbow, msg.right_wrist1, msg.right_wrist2, msg.right_wrist3,
                               msg.left_hip, msg.left_shoulder, msg.left_elbow, msg.left_wrist1, msg.left_wrist2, msg.left_wrist3])
 
-        # blitz_interfaces["joint_vel_left"].data = joint_vel[6:]
-        # self.blitz_left.blitz_write(id=blitz_interfaces["joint_vel_left"].id)
+        blitz_interfaces["joint_vel_left"].data = joint_vel[6:]
+        self.blitz_left.blitz_write(id=blitz_interfaces["joint_vel_left"].id)
 
         blitz_interfaces["joint_vel_right"].data = joint_vel[:6]
         self.blitz_right.blitz_write(id=blitz_interfaces["joint_vel_right"].id)
@@ -90,13 +90,15 @@ class DumanHardwareNode(Node):
 
     def joint_state_feedback(self):
 
-        self.blitz_right.blitz_read()
+        # self.blitz_left.blitz_read()
 
         # joint_fb = blitz_interfaces["joint_angles_left_feedback"].data
         # self.get_logger().info(f"CURRENT LEFT JOINTs : {joint_fb}")
 
+        self.blitz_right.blitz_read()
+
         joint_fb = blitz_interfaces["joint_angles_right_feedback"].data
-        # self.get_logger().info(f"CURRENT RIGHT JOINTs : {joint_fb}")
+        self.get_logger().info(f"CURRENT RIGHT JOINTs : {joint_fb}")
 
 def main(args=None):
     rclpy.init(args=args)

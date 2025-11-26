@@ -57,9 +57,9 @@ class DumanHardwareNode(Node):
     def joint_state_callback(self, msg: JointState):
         joint_angles = np.array([
             msg.position[9], msg.position[2], msg.position[7],
-            (np.pi/2)-msg.position[4], msg.position[0]+(np.pi/2), msg.position[1]+(np.pi/2),
+            (np.pi/2)-msg.position[4], (np.pi/2) - msg.position[0], msg.position[1]+(np.pi/2),
             msg.position[3], msg.position[5], msg.position[6],
-            msg.position[8]+(np.pi/2), msg.position[10]+(np.pi/2), msg.position[11]+(np.pi/2)
+            (np.pi/2) - msg.position[8], (np.pi/2) - msg.position[10], msg.position[11]+(np.pi/2)
         ])
 
         # Convert to degrees (integers)

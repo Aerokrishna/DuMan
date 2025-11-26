@@ -197,7 +197,7 @@ def main(args=None):
 
     try:
         user_command = input("Hi I am Duman how can I help you?  ")
-        client = genai.Client(api_key="AIzaSyB8qsmtPG5W5-zIkiHuPFl7AZSNd9UTusM")
+        client = genai.Client(api_key="")
 
         left_side_objects = [k for k in objects_left.keys()]
         right_side_objects = [k for k in objects_right.keys()]

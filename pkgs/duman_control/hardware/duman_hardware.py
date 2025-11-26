@@ -66,10 +66,10 @@ class DumanHardwareNode(Node):
         self.joint_angles = np.rad2deg(joint_angles)
         
         # right the left joints
-        # blitz_interfaces["joint_angles_left"].data = self.joint_angles[6:]
-        # self.blitz_left.blitz_write(id=blitz_interfaces["joint_angles_left"].id)
+        blitz_interfaces["joint_angles_left"].data = self.joint_angles[6:]
+        self.blitz_left.blitz_write(id=blitz_interfaces["joint_angles_left"].id)
 
-        # # write the right joints
+        # write the right joints
         blitz_interfaces["joint_angles_right"].data = self.joint_angles[:6]
         self.blitz_right.blitz_write(id=blitz_interfaces["joint_angles_right"].id)
 
@@ -90,10 +90,10 @@ class DumanHardwareNode(Node):
 
     def joint_state_feedback(self):
 
-        # self.blitz_left.blitz_read()
+        self.blitz_left.blitz_read()
 
-        # joint_fb = blitz_interfaces["joint_angles_left_feedback"].data
-        # self.get_logger().info(f"CURRENT LEFT JOINTs : {joint_fb}")
+        joint_fb = blitz_interfaces["joint_angles_left_feedback"].data
+        self.get_logger().info(f"CURRENT LEFT JOINTs : {joint_fb}")
 
         self.blitz_right.blitz_read()
 

@@ -793,13 +793,13 @@
   <joint name="wrist_to_ee_right" type="fixed">
     <parent link="wrap1_1"/>
     <child link="ee_right"/>
-    <origin xyz="0 0 0.03" rpy="0 0 0"/>
+    <origin xyz="0 0 0.06" rpy="0 0 0"/>
   </joint>
   
   <joint name="wrist_to_ee_left" type="fixed">
     <parent link="wrap1_1_2"/>
     <child link="ee_left"/>
-    <origin xyz="0 0 0.03" rpy="0 0 0"/>
+    <origin xyz="0 0 0.06" rpy="0 0 0"/>
   </joint>
 
   <joint name="right_wrist3" type="revolute">

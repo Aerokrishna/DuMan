@@ -14,9 +14,11 @@ You must convert the command into a Python list of lists of tuples, where:
 - Each outer list is a step in sequence.
 - Each inner list can contain multiple tuples for simultaneous actions.
 - The robot should choose which arm to use based on object location:
-  • If object is in left_side_objects → "left" arm.
-  • If object is in right_side_objects → "right" arm.
-  • If the object needs to be passed or transferred, use "transfer" appropriately.
+If object is in left_side_objects use the "left" arm.
+If object is in right_side_objects use the "right" arm.
+If the object's pick and place location are at the same side do not transfer the object.
+If the object needs to be passed or transferred, use "transfer" appropriately.
+
 - the robot cannot transfer transfer two objects from both the arms at once
 
 - Output must be a single valid Python expression.

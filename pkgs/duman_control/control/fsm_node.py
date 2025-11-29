@@ -204,6 +204,13 @@ def main(args=None):
 
         response = client.models.generate_content(
             model="gemini-2.5-pro",
+        # print(ur5.base_link_name())
+        moveit2.add_collision_mesh(
+            filepath=filepath, id=mesh_id, position=position, quat_xyzw=quat_xyzw, frame_id=ur5.base_link_name()
+        )
+    else:
+        # Remove collision mesh
+        node.get_logger().info(f"Remov
             contents=[prompt_(left_side_objects, right_side_objects, user_command)],
         )
 

@@ -62,9 +62,9 @@ void loop() {
     motors[1].controlMotor(current_time);
     motors[2].controlMotor(current_time);
 
-    // servos[0].setAngle();
-    // servos[1].setAngle();
-    // servos[2].setAngle();
+    servos[0].setAngle();
+    servos[1].setAngle();
+    servos[2].setAngle();
 
 //    set_gripper(grip_state.grip_state);
 

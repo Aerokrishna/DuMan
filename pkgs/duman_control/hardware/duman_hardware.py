@@ -24,7 +24,7 @@ class DumanHardwareNode(Node):
         self.joint_velocity = np.zeros(12)
 
         self.right = True
-        self.left = False
+        self.left = True
 
         if self.right and self.left:
             self.blitz_left = Blitz(port="/dev/ttyACM0")
@@ -37,27 +37,27 @@ class DumanHardwareNode(Node):
             self.blitz_left = Blitz(port="/dev/ttyACM0")
 
         self.right_grip_state = False
-        self.left_grip_state = True
+        self.left_grip_state = False
         
         self.create_timer(0.005, self.joint_state_feedback)
 
     def grip_control(self, request : GripState.Request, response : GripState.Response):
 
-        if request.arm==True:
-            self.left_grip_state = request.grip_state
-            self.get_logger().info(f"GRIPER LEFT ARM REQUESTED")
+        if request.arm==False:
+            self.right_grip_state = request.grip_state
+            self.get_logger().info(f"GRIPER RIGHT ARM REQUESTED")
 
             for i in range(5):
-                blitz_interfaces["grip_state_left"].data = [int(self.left_grip_state)]
-                self.blitz_right.blitz_write(id=blitz_interfaces["grip_state_left"].id)
+                blitz_interfaces["grip_state_right"].data = [int(self.right_grip_state)]
+                self.blitz_right.blitz_write(id=blitz_interfaces["grip_state_right"].id)
 
         else:
             self.left_grip_state = request.grip_state
-            self.get_logger().info(f"GRIPER RIGHT ARM REQUESTED")
+            self.get_logger().info(f"GRIPER LEFT ARM REQUESTED")
             
             for i in range(5):
-                blitz_interfaces["grip_state_right"].data = [int(self.left_grip_state)]
-                self.blitz_right.blitz_write(id=blitz_interfaces["grip_state_right"].id)
+                blitz_interfaces["grip_state_left"].data = [int(self.left_grip_state)]
+                self.blitz_left.blitz_write(id=blitz_interfaces["grip_state_left"].id)
         
         response.message = "successfully controlled gripper"
         response.success = True

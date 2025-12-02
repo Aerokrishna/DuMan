@@ -32,5 +32,11 @@ def generate_launch_description():
             executable='duman_hardware.py',
             name='duman_hardware',
             output='screen'
+        ),
+        Node(
+            package='duman_control',
+            executable='ex_collision_object.py',
+            name='ex_collision_object',
+            output='screen'
         )
     ])

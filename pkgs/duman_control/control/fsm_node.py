@@ -40,6 +40,8 @@ class FSMNode(Node):
         # self.current = self.states[0]
 
         self.states = []
+        self.states.append(State("ready_right", [lambda : self.send_goal(arm=False, goal_type=False, target=[-0.35, 0.4, -1.57, 0.0, 0.0, 0.0])]))
+        self.states.append(State("ready_left", [lambda : self.send_goal(arm=True, goal_type=False, target=[0.35, -0.4, 1.57, 0.0, 0.0, 0.0])]))
         self.current = None
 
         self.index = 0
@@ -94,7 +96,7 @@ class FSMNode(Node):
 
         if object_id == "default":
         
-            if goal_type == 0:
+            if goal_type == False:
                 goal.hip = target[0]
                 goal.shoulder = target[1]
                 goal.elbow = target[2]
@@ -103,6 +105,7 @@ class FSMNode(Node):
                 goal.wrist3 = target[5]
 
                 self.get_logger().info("JOINT Goal sending")
+                
             
             else:
                 goal.x = target[0]
@@ -204,13 +207,6 @@ def main(args=None):
 
         response = client.models.generate_content(
             model="gemini-2.5-pro",
-        # print(ur5.base_link_name())
-        moveit2.add_collision_mesh(
-            filepath=filepath, id=mesh_id, position=position, quat_xyzw=quat_xyzw, frame_id=ur5.base_link_name()
-        )
-    else:
-        # Remove collision mesh
-        node.get_logger().info(f"Remov
             contents=[prompt_(left_side_objects, right_side_objects, user_command)],
         )
 

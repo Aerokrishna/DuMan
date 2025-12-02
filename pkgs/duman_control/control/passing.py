@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionServer, ActionClient
 from rclpy.action.server import ServerGoalHandle, GoalResponse, CancelResponse
 from duman_interfaces.action import DumanGoal
 from duman_interfaces.srv import DumanPass, GripState
-
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 import threading
@@ -40,11 +38,11 @@ class MoveDumanLeft(Node):
         self.state = 0
         self.goal_sent = False
 
-        self.right_transfer_position = [-0.1, -0.2, 0.25, -1.57, 1.57, 0.0]
-        self.left_transfer_position = [0.1, -0.2, 0.25, 1.57, -1.57, 0.0]
+        self.right_transfer_position = [-0.03, -0.2, 0.25, -1.57, 1.57, 0.0]
+        self.left_transfer_position = [0.03, -0.2, 0.28, 1.57, -1.57, 0.0]
 
-        self.right_grasp_position = [-0.03, -0.2, 0.25, -1.57, 1.57, 0.0]
-        self.left_grasp_position = [0.03, -0.2, 0.25, 1.57, -1.57, 0.0]
+        self.right_grasp_position = [0.01, -0.2, 0.25, -1.57, 1.57, 0.0]
+        self.left_grasp_position = [-0.01, -0.2, 0.28, 1.57, -1.57, 0.0]
 
         self.get_logger().info("duman passing server started")
 
@@ -114,7 +112,7 @@ class MoveDumanLeft(Node):
 
                 if not self.goal_sent:
 
-                    self.send_grip_cmd(arm=(not request.to_arm), grip_state=True)
+                    self.send_grip_cmd(arm=(not request.to_arm), grip_state=False)
 
                     self.goal_sent = True
 

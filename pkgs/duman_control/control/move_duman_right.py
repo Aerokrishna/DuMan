@@ -23,6 +23,7 @@ from duman_interfaces.msg import DumanPose
 from sensor_msgs.msg import JointState
 from tf_transformations import euler_from_quaternion, quaternion_from_euler, quaternion_multiply
 from objects import objects_right
+import time
 
 class MoveDumanRight(Node):
     def __init__(self):
@@ -62,6 +63,11 @@ class MoveDumanRight(Node):
         # self.create_subscription(DumanJoints, "/joint_states", self.feedback_joint_angle, 10)
         self.create_subscription(JointState, "/joint_states", self.feedback_joint_angle, 10)
         self.create_subscription(DumanPose, "/duman/pose", self.feedback_pose, 10)
+        self.in_zone = False
+        self.zone_time = 0.0
+
+        self.timer = self.create_timer(0.1, self.timer_callback)
+
         self.joint_goal = np.zeros(6)
         self.ik_pose_goal = np.zeros(6)
         self.pose_goal = np.zeros(6)
@@ -69,7 +75,7 @@ class MoveDumanRight(Node):
 
         self.plan_pose_goal = None
 
-        
+        self.last_time = time.monotonic()
 
         self.get_logger().info("move duman server started")
 
@@ -185,14 +191,31 @@ class MoveDumanRight(Node):
                                       msg.right_or_x, msg.right_or_y, msg.right_or_z])
         
         
-    def goal_checker(self, target : np.ndarray, thresh=0.05, joint = True):
-        
-        if joint :
-            diff = np.abs(self.current_joint_angles - target)  
-        else:
-            diff = np.abs(self.current_pose[:3] - target[:3])  
+    def goal_checker(self, target: np.ndarray, thresh=0.05, joint=True):
 
-        return np.all(diff < thresh)
+        if joint:
+            diff = np.abs(self.current_joint_angles - target)
+        else:
+            diff = np.abs(self.current_pose[:3] - target[:3])
+
+        inside = np.all(diff < thresh)
+
+        if inside:
+            self.in_zone = True
+            # Trigger after 3 seconds inside zone
+            if self.zone_time >= 1.5:
+                return True
+            else:
+                return False
+        else:
+            self.in_zone = False
+            return False
+        
+    def timer_callback(self):
+        if self.in_zone:
+            self.zone_time += 0.1
+        else:
+            self.zone_time = 0.0  # reset when outside
 
 def main(args=None):
     rclpy.init(args=args)

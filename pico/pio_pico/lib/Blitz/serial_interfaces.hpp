@@ -1,11 +1,11 @@
 enum PacketID : uint8_t {
-
+    
     JOINT_ANGLES = 4,
     JOINT_ANGLES_FEEDBACK = 5,
     JOINT_VEL = 6,
     GRIP_STATE = 8
 
-    // // left
+    // left
     // JOINT_ANGLES = 1,
     // JOINT_ANGLES_FEEDBACK = 2,
     // JOINT_VEL = 3,

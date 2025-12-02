@@ -41,7 +41,7 @@ class FSMNode(Node):
 
         self.states = []
         self.states.append(State("ready_right", [lambda : self.send_goal(arm=False, goal_type=False, target=[-0.35, 0.4, -1.57, 0.0, 0.0, 0.0])]))
-        self.states.append(State("ready_left", [lambda : self.send_goal(arm=True, goal_type=False, target=[0.35, -0.4, 1.57, 0.0, 0.0, 0.0])]))
+        # self.states.append(State("ready_left", [lambda : self.send_goal(arm=True, goal_type=False, target=[0.35, -0.4, 1.57, 0.0, 0.0, 0.0])]))
         self.current = None
 
         self.index = 0

@@ -66,7 +66,7 @@ void loop() {
     servos[1].setAngle();
     servos[2].setAngle();
 
-//    set_gripper(grip_state.grip_state);
+   set_gripper(grip_state.grip_state);
 
     if (vel_cmd == true && float(current_time - new_vel_data) > 1000.0f){
         vel_cmd = false;

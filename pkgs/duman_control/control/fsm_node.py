@@ -10,6 +10,7 @@ from rclpy.callback_groups import ReentrantCallbackGroup
 from google import genai
 from prompt import prompt_
 from objects import objects_right, objects_left
+from essentials import SYSTEM_INSTRUCTION, Step, Plan, parallelize, plan_task
 
 class State:
     def __init__(self, name, action_fn):
@@ -20,7 +21,51 @@ class State:
         self.request_sent = 0
         self.done = 0
 
-class FSMNode(Node):
+
+class HumanCommandParser(Node):
+
+    def __init__(self):
+        super().__init__("dual_arm_planner_node")
+        self.get_logger().info("Dual Arm Planner Node started.")
+        self.get_logger().info("Waiting for user commands...")
+
+        # Timer that checks for user input
+        self.timer = self.create_timer(0.1, self.check_user_input)
+
+        self.input_buffer = ""
+
+        self.llm_output = None
+
+    def check_user_input(self):
+        try:
+            import sys, select
+            if select.select([sys.stdin], [], [], 0.0)[0]:
+                command = sys.stdin.readline().strip()
+                if command:
+                    self.process_command(command)
+        except Exception as e:
+            self.get_logger().error(f"Input error: {e}")
+
+    def process_command(self, command: str):
+        self.get_logger().info(f"Received command: {command}")
+
+        # For now hardcode reachable objects
+        right_objs = ["orange", "apple"]
+        left_objs = ["basket", "cup"]
+
+        # --- CALL LLM ---
+        try:
+            plan = plan_task(command, right_objs, left_objs)
+        except Exception as e:
+            self.get_logger().error(f"LLM Error: {e}")
+            return
+
+        self.llm_output = parallelize(plan)
+
+        self.get_logger().info(f"\nGenerated Parallel Plan:\n{self.llm_output}\n")
+        self.get_logger().info("Waiting for next command...")
+
+class TaskManager(Node):
     def __init__(self):
         super().__init__('fsm_node')
 
@@ -77,7 +122,6 @@ class FSMNode(Node):
         if self.current.done + self.current.request_sent == 2 * self.current.num_actions:
             if self.index + 1 >= len(self.states):
                 self.get_logger().info("[FSM] Final state reached. Stopping node.")
-                self.timer.cancel()
                 return
 
             self.index += 1
@@ -196,7 +240,7 @@ class FSMNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = FSMNode()
+    node = TaskManager()
 
     try:
         user_command = input("Hi I am Duman how can I help you?  ")

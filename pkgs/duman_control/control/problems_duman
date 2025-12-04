@@ -1,0 +1,10 @@
+PROBLEMS
+
+To pick or place an object the robot needs to go to a point above the object and then go down to the object position, this also depends on the height of the object. how to accomodate move arm server and fsm node with this. should fsm send goal to the duman server, or should we just have a pick server which handles the going to an object picking it up. in this we can also have retries and eliminate the whole clutter of when to grip n all. but again for left ad right u will have to do it no. pick and place server should be there which individually manages goint to a point picking p
+
+separate pick n place servers
+
+
+pausing and resuming how will we do it
+
+right and left decoupled state machine with separate increament for right and left arm, but will combine when a coordinated task is requested

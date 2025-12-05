@@ -1,0 +1,11 @@
+# Goal
+bool pick # true if pick
+string object_id # if object id is none take the coordinates
+
+---
+# Result
+bool success # true if task completed
+string message
+---
+# Feedback
+bool executing # if execution started

@@ -27,6 +27,8 @@ install(PROGRAMS
 
     ${CONTROL}/move_duman_left.py
     ${CONTROL}/move_duman_right.py
+    ${CONTROL}/picknplace_right.py
+    ${CONTROL}/picknplace_left.py
     ${CONTROL}/ee_pose.py
 
 

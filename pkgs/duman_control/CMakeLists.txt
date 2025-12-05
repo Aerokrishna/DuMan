@@ -30,13 +30,12 @@ install(PROGRAMS
     ${CONTROL}/picknplace_right.py
     ${CONTROL}/picknplace_left.py
     ${CONTROL}/ee_pose.py
-
+    ${CONTROL}/duman_manager.py
 
     ${CONTROL}/test_client.py
 
     ${HARDWARE}/duman_hardware.py
     ${CONTROL}/duman_teleop.py
-    ${CONTROL}/fsm_node.py
     ${CONTROL}/passing.py
 
     DESTINATION lib/${PROJECT_NAME}

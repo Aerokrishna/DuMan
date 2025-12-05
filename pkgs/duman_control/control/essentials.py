@@ -69,6 +69,22 @@ def parallelize(plan: Plan):
 
     return final_array
 
+def splitTasks(plan: Plan):
+    left_seq = []
+    right_seq = []
+
+    for step in plan.steps:
+        if step.action == "pass":
+            left_seq.append((step.arm, step.action, step.obj))
+            right_seq.append((step.arm, step.action, step.obj))
+            continue
+            
+        if step.arm=="left":
+            left_seq.append((step.arm, step.action, step.obj))
+        else:
+            right_seq.append((step.arm, step.action, step.obj))        
+    return left_seq, right_seq
+
 def plan_task(command: str, right_objs, left_objs) -> Plan:
 
     client = genai.Client()   # GOOGLE_API_KEY must be exported in environment

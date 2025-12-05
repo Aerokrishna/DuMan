@@ -23,7 +23,7 @@ import copy
 
 class PicknPlace(Node):
     def __init__(self):
-        super().__init__("move_duman_left")
+        super().__init__("pnp_right")
         self.goal_handle_ : ServerGoalHandle = None
 
         self.goal_lock_ = threading.Lock()

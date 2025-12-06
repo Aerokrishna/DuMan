@@ -23,7 +23,7 @@ class DumanHardwareNode(Node):
         self.joint_angles = np.zeros(12)
         self.joint_velocity = np.zeros(12)
 
-        self.right = True
+        self.right = False
         self.left = True
 
         if self.right and self.left:

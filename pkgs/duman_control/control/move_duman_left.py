@@ -160,7 +160,7 @@ class MoveDumanLeft(Node):
             self.left_arm_moveit.execute(self.plan_pose_goal)
             self.get_logger().info(f"{self.ik_pose_goal}")
 
-            while not self.goal_checker(np.array(self.pose_goal), thresh=0.15, joint=False):
+            while not self.goal_checker(np.array(self.pose_goal), thresh=0.03, joint=False):
                 pass
         
             result = DumanGoal.Result()

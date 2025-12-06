@@ -125,7 +125,7 @@ class PicknPlace(Node):
                     self.send_grip_cmd(arm=True, grip_state=goal_handle.request.pick)
                     self.goal_sent = True
 
-            elif self.state == 4 and self.delay_(2.0):
+            elif self.state == 4 and self.delay_(1.0):
                 # self.get_logger().info(f"left Arm Aligning to object ")
 
                 if not self.goal_sent:

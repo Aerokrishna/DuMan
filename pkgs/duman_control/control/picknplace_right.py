@@ -83,6 +83,19 @@ class PicknPlace(Node):
         align_pose[2] += (self.object_height + self.approach_ht)
 
         while True:
+            if goal_handle.is_cancel_requested:
+                self.get_logger().warn("CANCEL RECEIVED — Stopping arm safely")
+
+                goal_handle.canceled()
+
+                result = PickNPlace.Result()
+                result.success = False
+                self.state = 0
+                self.goal_sent = False
+                self.goal_handle_ = None
+                result.message = "canceled"
+                return result
+
             time.sleep(0.1)
             # if self.delay_(0.1):
             if self.state == 1:
@@ -195,9 +208,8 @@ class PicknPlace(Node):
     
     def grip_result_callback(self, future):
         try:
-            if future.result().success:
-                self.state += 1
-                self.goal_sent = False
+            self.state += 1
+            self.goal_sent = False
 
             # self.get_logger().info(f'Service response: {self.response}')
         except Exception as e:

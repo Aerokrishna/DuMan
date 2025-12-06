@@ -84,6 +84,22 @@ class PicknPlace(Node):
 
         while True:
             time.sleep(0.1)
+            if goal_handle.is_cancel_requested:
+                self.get_logger().warn("CANCEL RECEIVED — Stopping arm safely")
+
+                # # Stop motion immediately
+                # self.stop_arm_motion()
+
+                goal_handle.canceled()
+
+                result = PickNPlace.Result()
+                result.success = False
+                self.state = 0
+                self.goal_sent = False
+                self.goal_handle_ = None
+                result.message = "canceled"
+                return result
+            
             # if self.delay_(0.1):
             if self.state == 1:
                 self.get_logger().info(f"left Arm Aligning to object ")

@@ -137,6 +137,7 @@ class MoveDumanLeft(Node):
       
         response.message = "successfully controlled gripper"
         response.success = True
+        response.to_arm = request.to_arm
 
         return response
     

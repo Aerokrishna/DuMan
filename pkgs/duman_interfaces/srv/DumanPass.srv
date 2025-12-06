@@ -4,3 +4,4 @@ bool to_arm # the arm you will be passing to
 # Result
 bool success # true if task completed
 string message
+bool to_arm

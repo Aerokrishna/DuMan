@@ -29,46 +29,10 @@ Rules:
 - Actions: pick, place, pass
 - Arms: right or left
 - Object must be from the provided context
+- In the context the object that the arm is holding is given. If it is not empty, place the object in the parking first then continue with the new command
 - When the action is place, the object will be the place object not the object it is holding
 - Always return valid JSON only
 """
-
-def parallelize(plan: Plan):
-    parallel_plan = []
-    current_group = []
-
-    for step in plan.steps:
-        can_parallel = True
-
-        for g in current_group:
-            if g.arm == step.arm:
-                can_parallel = False
-                break
-            if g.action == "pass":
-                can_parallel = False
-                break
-            if g.obj == step.obj:
-                can_parallel = False
-                break
-
-        if can_parallel:
-            current_group.append(step)
-        else:
-            parallel_plan.append(current_group)
-            current_group = [step]
-
-    if current_group:
-        parallel_plan.append(current_group)
-
-    # Convert to arrays/tuples
-    final_array = []
-    for group in parallel_plan:
-        arr = []
-        for s in group:
-            arr.append((s.action, s.arm, s.obj))
-        final_array.append(arr)
-
-    return final_array
 
 def splitTasks(plan: Plan):
     left_seq = []
@@ -86,7 +50,7 @@ def splitTasks(plan: Plan):
             right_seq.append((step.arm, step.action, step.obj))        
     return left_seq, right_seq
 
-def plan_task(command: str, right_objs, left_objs) -> Plan:
+def plan_task(command: str, right_objs, left_objs, right_holding, left_holding) -> Plan:
 
     client = genai.Client()   # GOOGLE_API_KEY must be exported in environment
 
@@ -94,6 +58,8 @@ def plan_task(command: str, right_objs, left_objs) -> Plan:
         f"Human Command: {command}\n"
         f"Right arm can reach: {', '.join(right_objs)}\n"
         f"Left arm can reach: {', '.join(left_objs)}\n"
+        f"Left arm is holding: {left_holding}\n"
+        f"Right arm is holding: {right_holding}\n"
         f"Generate the robot plan in JSON ONLY."
     )
 

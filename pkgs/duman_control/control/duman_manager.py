@@ -18,8 +18,8 @@ class State:
         self.action = action_fn 
         self.coordinated = coord
         # action_fn is the array of functions which are tasks to be executed in that state
-        self.request_sent = 0
-        self.done = 0
+        self.request_sent = False
+        self.done = False
 
 class HumanCommandParser(Node):
     def __init__(self, task_manager):
@@ -94,50 +94,47 @@ class TaskManager(Node):
         self.get_logger().info("server found!")
 
     def step(self):
-        if self.current_left is None or self.current_right is None:
-            return
-        # if right 
-        if self.current_left.coordinated and self.current_right.coordinated:
 
-            # Only ONE arm should send the pass request
-            if not self.current_left.request_sent and not self.current_right.request_sent:
-                self.get_logger().info("BOTH ARMS READY → SENDING PASS")
-                self.current_left.action()   # or right, both call same service
-                self.current_left.request_sent = True
-                self.current_right.request_sent = True
+        if self.current_left is not None and self.current_right is not None:
+            if self.current_left.coordinated and self.current_right.coordinated:
 
-            # Wait for completion
-            return
-        
-        if not self.current_right.coordinated:
-            if not self.current_right.request_sent:
-                self.current_right.action()
-                self.current_right.request_sent = True
+                if not self.current_left.request_sent and not self.current_right.request_sent:
+                    self.get_logger().info("BOTH ARMS READY → SENDING PASS")
+                    self.current_left.action()   # or right, both call same service
+                    self.current_left.request_sent = True
+                    self.current_right.request_sent = True
 
-        if not self.current_left.coordinated:
-            if not self.current_left.request_sent:
-                self.current_left.action()
-                self.current_left.request_sent = True
+        # SEND ONLY RIGHT ARM COMMANDS AND SWITCH STATES IN THE SEQ
+        if self.current_right is not None:
+            if not self.current_right.coordinated:
+                if not self.current_right.request_sent:
+                    self.get_logger().info('RIGHT ARM PICK IDEALL')
+                    self.current_right.action()
+                    self.current_right.request_sent = True
 
-        # self.get_logger().info(f"{self.current.name}")
         # if result is received
-        if self.current_right.done and self.current_right.request_sent:
-            if self.right_index + 1 >= len(self.states):
-                self.get_logger().info("RIGHT ARM TASKS DONE")
-                return
+            if self.current_right.done and self.current_right.request_sent:
+                if self.right_index + 1 >= len(self.right_states):
+                    self.get_logger().info("RIGHT ARM TASKS DONE")
 
-            self.right_index += 1
-            self.current_right = self.right_states[self.right_index]
-            self.get_logger().info(f"RIGHT ARM Transition → {self.current_right.name}")
+                self.right_index += 1
+                self.current_right = self.right_states[self.right_index]
+                self.get_logger().info(f"RIGHT ARM Transition → {self.current_right.name}")
 
-        if self.current_left.done and self.current_left.request_sent:
-            if self.left_index + 1 >= len(self.states):
-                self.get_logger().info("LEFT ARM TASKS DONE")
-                return
+        # SEND ONLY LEFT ARM COMMANDS AND SWITCH STATES IN THE SEQ
+        if self.current_left is not None:
+            if not self.current_left.coordinated:
+                if not self.current_left.request_sent:
+                    self.current_left.action()
+                    self.current_left.request_sent = True
 
-            self.left_index += 1
-            self.current_left = self.left_states[self.left_index]
-            self.get_logger().info(f"LEFT ARM Transition → {self.current_left.name}")
+            if self.current_left.done and self.current_left.request_sent:
+                if self.left_index + 1 >= len(self.left_states):
+                    self.get_logger().info("LEFT ARM TASKS DONE")
+
+                self.left_index += 1
+                self.current_left = self.left_states[self.left_index]
+                self.get_logger().info(f"LEFT ARM Transition → {self.current_left.name}")
 
     def send_pnp_cmd(self, pick, arm, obj):
 
@@ -160,9 +157,8 @@ class TaskManager(Node):
 
     def pass_result_callback(self, future):
         try:
-            if future.result().success:
-                self.current_right.done = True
-                self.current_left.done = True
+            self.current_right.done = True
+            self.current_left.done = True
             
             # self.get_logger().info(f'Service response: {self.response}')
         except Exception as e:
@@ -240,6 +236,8 @@ class TaskManager(Node):
         self.right_states = []
         self.left_index = 0
         self.right_index = 0
+
+        # need to cancel the current request for both right and left arms
 
         # Generate new states
         self.generate_plan(left_seq, right_seq)

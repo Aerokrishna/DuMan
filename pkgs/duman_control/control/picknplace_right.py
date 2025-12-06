@@ -133,7 +133,7 @@ class PicknPlace(Node):
         
         result = PickNPlace.Result()
         result.success = True
-        result.message = "Pose Goal Succeeded"
+        result.message = "right"
 
         goal_handle.succeed()
         self.get_logger().info("GOAL FINISH RETURNING SUCCESS!")

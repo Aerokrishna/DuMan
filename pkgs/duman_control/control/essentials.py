@@ -29,6 +29,7 @@ Rules:
 - Actions: pick, place, pass
 - Arms: right or left
 - Object must be from the provided context
+- When the action is place, the object will be the place object not the object it is holding
 - Always return valid JSON only
 """
 

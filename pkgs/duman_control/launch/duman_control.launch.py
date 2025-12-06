@@ -17,6 +17,18 @@ def generate_launch_description():
         ),
         Node(
             package='duman_control',
+            executable='picknplace_left.py',
+            name='picknplace_left',
+            output='screen'
+        ),
+        Node(
+            package='duman_control',
+            executable='picknplace_right.py',
+            name='picknplace_right',
+            output='screen'
+        ),
+        Node(
+            package='duman_control',
             executable='passing.py',
             name='passing',
             output='screen'

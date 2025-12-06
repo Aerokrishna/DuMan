@@ -83,12 +83,8 @@ class PicknPlace(Node):
         align_pose[2] += (self.object_height + self.approach_ht)
 
         while True:
-            time.sleep(0.1)
             if goal_handle.is_cancel_requested:
                 self.get_logger().warn("CANCEL RECEIVED — Stopping arm safely")
-
-                # # Stop motion immediately
-                # self.stop_arm_motion()
 
                 goal_handle.canceled()
 
@@ -99,48 +95,47 @@ class PicknPlace(Node):
                 self.goal_handle_ = None
                 result.message = "canceled"
                 return result
-            
+
+            time.sleep(0.1)
             # if self.delay_(0.1):
             if self.state == 1:
-                self.get_logger().info(f"left Arm Aligning to object ")
+                # self.get_logger().info(f"left Arm Aligning to object ")
 
                 if not self.goal_sent:
                     self.arm_done = False
                     
-                    self.send_goal(arm=False, goal_type=True, target=align_pose)
+                    self.send_goal(arm=True, goal_type=True, target=align_pose)
                     self.goal_sent = True
             
-            elif self.state == 2:
-                self.get_logger().info(f"Moving towards object")
+            elif self.state == 2 and self.delay_(1.0):
+                # self.get_logger().info(f"Moving towards object")
 
                 if not self.goal_sent:
                     self.arm_done = False
-                    """
-                    OBJECT POSE
-                    """
-                    self.send_goal(arm=False, goal_type=True, target=obj_pose)
+
+                    self.send_goal(arm=True, goal_type=True, target=obj_pose)
                     self.goal_sent = True
 
             elif self.state == 3 and self.delay_(1.0):
 
                 if not self.goal_sent:
-                    self.get_logger().info(f"Grip Command")
+                    # self.get_logger().info(f"Grip Command")
 
                     # if pick is true grip state is true means close the gripper else false then open
-                    self.send_grip_cmd(arm=False, grip_state=goal_handle.request.pick)
+                    self.send_grip_cmd(arm=True, grip_state=goal_handle.request.pick)
                     self.goal_sent = True
 
             elif self.state == 4 and self.delay_(2.0):
-                self.get_logger().info(f"left Arm Aligning to object ")
+                # self.get_logger().info(f"left Arm Aligning to object ")
 
                 if not self.goal_sent:
                     self.arm_done = False
 
-                    self.send_goal(arm=False, goal_type=True, target=align_pose)
+                    self.send_goal(arm=True, goal_type=True, target=align_pose)
                     self.goal_sent = True
                     
             if self.state == 5:
-                self.get_logger().info(f"IDLING")
+                # self.get_logger().info(f"IDLING")
                 self.state = 0
                 self.goal_sent = False
                 self.goal_handle_ = None
@@ -195,8 +190,8 @@ class PicknPlace(Node):
         req.grip_state = grip_state
         req.arm = arm
 
-        if arm==False:
-            self.get_logger().info("GRIPPER left!")
+        if arm==True:
+            self.get_logger().info("GRIPPER LEFT!")
 
             # Call the service asynchronously
             future = self.duman_grip_client.call_async(req)
@@ -204,16 +199,15 @@ class PicknPlace(Node):
         
         else :
             # Call the service asynchronously
-            self.get_logger().info("GRIPPER LEFT!")
+            self.get_logger().info("GRIPPER RIGHT!")
 
             future = self.duman_grip_client.call_async(req)
             future.add_done_callback(self.grip_result_callback)
     
     def grip_result_callback(self, future):
         try:
-            if future.result().success:
-                self.state += 1
-                self.goal_sent = False
+            self.state += 1
+            self.goal_sent = False
 
             # self.get_logger().info(f'Service response: {self.response}')
         except Exception as e:

@@ -28,7 +28,7 @@ class CollisionPublisher(Node):
         # --- Define box ---
         primitive = SolidPrimitive()
         primitive.type = SolidPrimitive.BOX
-        primitive.dimensions = [1.0, 0.5, 0.10]  # x, y, z
+        primitive.dimensions = [1.0, 0.5, 0.1]  # x, y, z
 
         # --- Pose ---
         pose = Pose()

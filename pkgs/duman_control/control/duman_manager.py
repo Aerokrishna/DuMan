@@ -117,13 +117,13 @@ class TaskManager(Node):
         if self.current_right is not None:
             if not self.current_right.coordinated:
                 if not self.current_right.request_sent:
-                    self.get_logger().info('RIGHT ARM PICK IDEALL')
                     self.current_right.action()
                     self.current_right.request_sent = True
 
             if self.current_right.done and self.current_right.request_sent:
                 if self.right_index + 1 >= len(self.right_states):
-                    self.get_logger().info("RIGHT ARM TASKS DONE")
+                    pass
+                    # self.get_logger().info("RIGHT ARM TASKS DONE")
 
                 else:
                     self.right_index += 1
@@ -138,7 +138,8 @@ class TaskManager(Node):
 
             if self.current_left.done and self.current_left.request_sent:
                 if self.left_index + 1 >= len(self.left_states):
-                    self.get_logger().info("LEFT ARM TASKS DONE")
+                    pass
+                    # self.get_logger().info("LEFT ARM TASKS DONE")
 
                 else:
                     self.left_index += 1
@@ -187,12 +188,12 @@ class TaskManager(Node):
             # both states complete
             self.current_left.done = True
             self.current_right.done = True
+            self.pass_in_progress = False
 
             # handle deferred plans
             if self.pending_new_plan:
                 left_seq, right_seq = self.pending_new_plan
                 self.pending_new_plan = None
-                self.pass_in_progress = False
                 self.receive_new_plan(left_seq, right_seq)
 
         except Exception as e:

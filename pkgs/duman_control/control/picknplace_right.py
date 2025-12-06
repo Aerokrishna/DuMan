@@ -99,7 +99,7 @@ class PicknPlace(Node):
             time.sleep(0.1)
             # if self.delay_(0.1):
             if self.state == 1:
-                self.get_logger().info(f"Right Arm Aligning to object ")
+                # self.get_logger().info(f"Right Arm Aligning to object ")
 
                 if not self.goal_sent:
                     self.arm_done = False
@@ -108,7 +108,7 @@ class PicknPlace(Node):
                     self.goal_sent = True
             
             elif self.state == 2:
-                self.get_logger().info(f"Moving towards object")
+                # self.get_logger().info(f"Moving towards object")
 
                 if not self.goal_sent:
                     self.arm_done = False
@@ -121,14 +121,14 @@ class PicknPlace(Node):
             elif self.state == 3 and self.delay_(1.0):
 
                 if not self.goal_sent:
-                    self.get_logger().info(f"Grip Command")
+                    # self.get_logger().info(f"Grip Command")
 
                     # if pick is true grip state is true means close the gripper else false then open
                     self.send_grip_cmd(arm=False, grip_state=goal_handle.request.pick)
                     self.goal_sent = True
 
             elif self.state == 4 and self.delay_(1.0):
-                self.get_logger().info(f"Right Arm Aligning to object ")
+                # self.get_logger().info(f"Right Arm Aligning to object ")
 
                 if not self.goal_sent:
                     self.arm_done = False
@@ -137,7 +137,7 @@ class PicknPlace(Node):
                     self.goal_sent = True
                     
             if self.state == 5:
-                self.get_logger().info(f"IDLING")
+                # self.get_logger().info(f"IDLING")
                 self.state = 0
                 self.goal_sent = False
                 self.goal_handle_ = None

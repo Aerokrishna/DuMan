@@ -11,6 +11,7 @@ ament_python_install_package(pymoveit2)
 # Install examples
 set(EXAMPLES_DIR examples)
 set(CONTROL control)
+set(PERCEPTION perception)
 set(HARDWARE hardware)
 set(LAUNCH launch)
 
@@ -37,6 +38,9 @@ install(PROGRAMS
     ${HARDWARE}/duman_hardware.py
     ${CONTROL}/duman_teleop.py
     ${CONTROL}/passing.py
+
+    ${PERCEPTION}/duman_camera.py
+
 
     DESTINATION lib/${PROJECT_NAME}
 )

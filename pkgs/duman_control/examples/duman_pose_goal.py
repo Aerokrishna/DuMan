@@ -89,7 +89,7 @@ def main():
     joints = JointState()
 
     joints.name = duman_left.joint_names()
-    joints.position = [0.363, -0.406, 1.93, 0.0, 0.0, -0.342]
+    joints.position = [-0.005, -0.2, 0.28, 1.57, -1.57, 1.57]
 
     print(moveit2.compute_fk(joint_state=joints))
 

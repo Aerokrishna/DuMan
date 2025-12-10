@@ -10,7 +10,7 @@ import rclpy
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.node import Node
 from pymoveit2 import MoveIt2
-from pymoveit2.robots import duman_right
+from pymoveit2.robots import duman_left
 from tf_transformations import euler_from_quaternion, quaternion_from_euler, quaternion_multiply
 
 def main():
@@ -19,8 +19,8 @@ def main():
     node = Node("pose_goal")
 
     # Declare parameters for position and orientation
-    node.declare_parameter("position", [-0.35, -0.3, 0.15])
-    q = quaternion_from_euler(3.14, 0.0, 3.14)
+    node.declare_parameter("position", [0.005, -0.2, 0.28])
+    q = quaternion_from_euler(1.57, -1.57, 0.0)
     quat = list(q)  # Quaternion in xyzw format
     # quat = [0.703, -0.588, 0.398, -0.004]
     node.declare_parameter("quat_xyzw", quat)
@@ -32,12 +32,12 @@ def main():
     # Create MoveIt 2 interface
     moveit2 = MoveIt2(
         node=node,
-        joint_names=duman_right.joint_names(),
-        base_link_name=duman_right.base_link_name(),
-        end_effector_name=duman_right.end_effector_name(),
-        group_name=duman_right.MOVE_GROUP_ARM,
+        joint_names=duman_left.joint_names(),
+        base_link_name=duman_left.base_link_name(),
+        end_effector_name=duman_left.end_effector_name(),
+        group_name=duman_left.MOVE_GROUP_ARM,
         callback_group=callback_group,
-        follow_joint_trajectory_action_name="duman_right_controller/follow_joint_trajectory",
+        follow_joint_trajectory_action_name="duman_left_controller/follow_joint_trajectory",
     )
 
     # Spin the node in background thread(s)
@@ -55,8 +55,8 @@ def main():
     node.get_logger().info(
         f"Moving to {{position: {list(position)}, quat_xyzw: {list(quat_xyzw)}}}"
     )
-    moveit2.set_position_goal(position=position, frame_id=duman_right.base_link_name(), target_link=duman_right.end_effector_name())
-    moveit2.set_orientation_goal(quat_xyzw=quat_xyzw, frame_id=duman_right.base_link_name(), target_link=duman_right.end_effector_name())
+    moveit2.set_position_goal(position=position, frame_id=duman_left.base_link_name(), target_link=duman_left.end_effector_name())
+    moveit2.set_orientation_goal(quat_xyzw=quat_xyzw, frame_id=duman_left.base_link_name(), target_link=duman_left.end_effector_name())
 
     print(moveit2.compute_ik(position=position, quat_xyzw=quat))
     # moveit2.compute_fk(joint_state=[1.0,1.0,2.0,1.0,0.0], fk_link_names=duman.joint_names())

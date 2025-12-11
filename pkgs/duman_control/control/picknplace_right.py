@@ -63,8 +63,8 @@ class PicknPlace(Node):
         self.get_logger().info("server found!")
     
     def object_cb(self, msg : Object):
-        for obj, pose in zip(msg.obj_left, msg.obj_pose_left):
-            self.object_poses[obj] = [pose.x, pose.y, pose.z, 3.14, 0.0, 1.57] 
+        for obj, pose in zip(msg.obj_right, msg.obj_pose_right):
+            self.object_poses[obj] = [pose.x, pose.y, pose.z-0.02, 3.14, 0.0, 1.57] 
 
     def goal_callback(self, goal_request: PickNPlace.Goal):
         
@@ -105,10 +105,12 @@ class PicknPlace(Node):
         obj_pose = copy.deepcopy(self.object_poses[goal_handle.request.object_id])
         align_pose = copy.deepcopy(self.object_poses[goal_handle.request.object_id])
         align_pose[2] += (self.object_height + self.approach_ht)
+        # align_pose[1] = -0.25
 
         while True:
             if goal_handle.is_cancel_requested or self.ik_failed:
                 self.get_logger().warn("CANCEL RECEIVED — Stopping arm safely")
+                goal_handle.abort()
                 result = self.cancel_n_reset()
                 return result 
 
@@ -121,7 +123,6 @@ class PicknPlace(Node):
                     self.arm_done = False
                     
                     self.send_goal(arm=False, goal_type=True, target=align_pose)
-                    goal_handle.abort()
                     self.goal_sent = True
             
             elif self.state == 2:
@@ -165,9 +166,13 @@ class PicknPlace(Node):
         result.success = True
         result.message = "right"
 
-        goal_handle.succeed()
-        self.get_logger().info("GOAL FINISH RETURNING SUCCESS!")
+        if goal_handle.is_active:
+            goal_handle.succeed()
+        else:
+            self.get_logger().warn("Goal already terminated before success call")
+            return result
 
+        self.get_logger().info("GOAL FINISH RETURNING SUCCESS!")
         return result
     
     def send_goal(self, arm, goal_type, target):

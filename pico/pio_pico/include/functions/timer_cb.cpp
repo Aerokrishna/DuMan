@@ -12,6 +12,17 @@ void timer_cb(){
     
     send_data(pack_data<JointAngles>(joint_angles_feedback));
 
+    if (ungrip==true){
+        if (ungrip_cnt < 50){
+            ungrip=false;
+            ungrip_cnt++;
+
+            gripper_servo.write(open_angle);
+        }
+        else{
+            gripper_servo.write(90);
+        }
+    }
 }
 
 BlitzTimer t1(timer_cb, 10);

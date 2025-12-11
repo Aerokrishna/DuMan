@@ -28,13 +28,13 @@ class CollisionPublisher(Node):
         # --- Define box ---
         primitive = SolidPrimitive()
         primitive.type = SolidPrimitive.BOX
-        primitive.dimensions = [1.0, 0.5, 0.1]  # x, y, z
+        primitive.dimensions = [1.0, 0.5, 0.14]  # x, y, z
 
         # --- Pose ---
         pose = Pose()
         pose.position.x = 0.0
-        pose.position.y = -0.48
-        pose.position.z = 0.05
+        pose.position.y = -0.4
+        pose.position.z = 0.07
 
         # Fill message
         msg.primitives.append(primitive)

@@ -42,7 +42,7 @@ class RGBDViewer(Node):
 
         self.rgb_img = None
         self.depth_img = None
-        self.visual = True
+        self.visual = False
 
         # YOLO
         self.yolo_model = YOLO("yolov8n.pt")

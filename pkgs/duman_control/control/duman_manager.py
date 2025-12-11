@@ -52,23 +52,27 @@ class HumanCommandParser(Node):
             self.get_logger().error(f"Input error: {e}")
 
     def process_command(self, command: str):
-        self.get_logger().info(f"Received command: {command}")
+        # self.get_logger().info(f"Received command: {command}")
 
-        right_objs = list(self.object_right.keys())
-        left_objs = list(self.object_left.keys())
+        # right_objs = list(self.object_right.keys())
+        # left_objs = list(self.object_left.keys())
 
-        try:
-            plan = plan_task(command, right_objs, left_objs, self.task_manager.right_holding, self.task_manager.left_holding)
-            self.get_logger().info(f'RIGHT HOLDS : {self.object_right}')
-            self.get_logger().info(f'LEFT HOLDS : {self.object_left}')
+        # try:
+        #     plan = plan_task(command, right_objs, left_objs, self.task_manager.right_holding, self.task_manager.left_holding)
+        #     self.get_logger().info(f'RIGHT HOLDS : {self.object_right}')
+        #     self.get_logger().info(f'LEFT HOLDS : {self.object_left}')
 
-        except Exception as e:
-            self.get_logger().error(f"LLM Error: {e}")
-            return
+        # except Exception as e:
+        #     self.get_logger().error(f"LLM Error: {e}")
+        #     return
 
-        left_seq, right_seq = splitTasks(plan)
-        self.get_logger().info(f"RIGHT ARM : {right_seq}")
-        self.get_logger().info(f"LEFT ARM : {left_seq}")
+        # left_seq, right_seq = splitTasks(plan)
+
+        left_seq = []
+        right_seq = [('right', 'pick', 'apple'), ('right', 'place', 'bowl'), ('right', 'pick', 'orange'), ('right', 'place', 'bowl')]
+
+        # self.get_logger().info(f"RIGHT ARM : {right_seq}")
+        # self.get_logger().info(f"LEFT ARM : {left_seq}")
 
         self.task_manager.receive_new_plan(left_seq, right_seq)
 
@@ -254,7 +258,7 @@ class TaskManager(Node):
 
         else:
             self.get_logger().error("PNP FAILED")
-            
+
     def cancel_goal(self, arm=None):
         self.get_logger().info("Sending cancel request")
 

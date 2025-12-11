@@ -4,14 +4,15 @@ unsigned long new_vel_data;
 bool vel_cmd;
 
 GripState grip_state;
-
+bool ungrip = true;
+int ungrip_cnt = 0;
 //right
-// int open_angle = 60;
-// int grip_angle = 90;
+int open_angle = 80;
+int grip_angle = 110;
 
 //left
 
-int open_angle = 40;
-int grip_angle = 65;
+// int open_angle = 150;
+// int grip_angle = 130;
 
 Servo gripper_servo;

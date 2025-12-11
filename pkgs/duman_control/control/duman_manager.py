@@ -2,13 +2,10 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
-from rclpy.action.client import ClientGoalHandle, GoalStatus
-from duman_interfaces.action import DumanGoal, PickNPlace
-import time
-from duman_interfaces.srv import GripState, DumanPass
-from rclpy.callback_groups import ReentrantCallbackGroup
-from google import genai
-from prompt import prompt_
+from rclpy.action.client import GoalStatus
+from duman_interfaces.action import PickNPlace
+from duman_interfaces.srv import DumanPass
+from duman_interfaces.msg import Object
 from objects import objects_right, objects_left
 from essentials import splitTasks, plan_task
 
@@ -29,9 +26,20 @@ class HumanCommandParser(Node):
         self.get_logger().info("Waiting for user commands...")
 
         self.timer = self.create_timer(0.1, self.check_user_input)
+        self.create_subscription(Object, "/duman/objects", self.object_cb, 10)
 
         self.input_buffer = ""
         self.llm_output = None
+
+        self.object_right = objects_right
+        self.object_left = objects_left
+
+    def object_cb(self, msg : Object):
+        for obj, pose in zip(msg.obj_right, msg.obj_pose_right):
+            self.object_right[obj] = [pose.x, pose.y, pose.z, 3.14, 0.0, 1.54] 
+
+        for obj, pose in zip(msg.obj_left, msg.obj_pose_left):
+            self.object_left[obj] = [pose.x, pose.y, pose.z, 3.14, 0.0, 1.54] 
 
     def check_user_input(self):
         try:
@@ -46,13 +54,13 @@ class HumanCommandParser(Node):
     def process_command(self, command: str):
         self.get_logger().info(f"Received command: {command}")
 
-        right_objs = list(objects_right.keys())
-        left_objs = list(objects_left.keys())
+        right_objs = list(self.object_right.keys())
+        left_objs = list(self.object_left.keys())
 
         try:
             plan = plan_task(command, right_objs, left_objs, self.task_manager.right_holding, self.task_manager.left_holding)
-            self.get_logger().info(f'RIGHT HOLDS : {self.task_manager.right_holding}')
-            self.get_logger().info(f'LEFT HOLDS : {self.task_manager.left_holding}')
+            self.get_logger().info(f'RIGHT HOLDS : {self.object_right}')
+            self.get_logger().info(f'LEFT HOLDS : {self.object_left}')
 
         except Exception as e:
             self.get_logger().error(f"LLM Error: {e}")
@@ -246,11 +254,7 @@ class TaskManager(Node):
 
         else:
             self.get_logger().error("PNP FAILED")
-
-
-    # -------------------------------------------------
-    # FIXED CANCEL → cancel per arm
-    # -------------------------------------------------
+            
     def cancel_goal(self, arm=None):
         self.get_logger().info("Sending cancel request")
 

@@ -15,6 +15,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/DumanPass.srv"
   "msg/DumanJoints.msg"
   "msg/DumanPose.msg"
+  "msg/Point.msg"
+  "msg/Object.msg"
   "srv/GripState.srv"
 
 )

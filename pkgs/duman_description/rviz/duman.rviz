@@ -85,6 +85,10 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         ee_left:
           Alpha: 1
           Show Axes: false
@@ -162,10 +166,12 @@ Visualization Manager:
       Frames:
         All Enabled: false
         actuator:
-          Value: false
+          Value: true
         actuator_2:
-          Value: false
+          Value: true
         base:
+          Value: true
+        camera_link:
           Value: true
         ee_left:
           Value: true
@@ -180,7 +186,7 @@ Visualization Manager:
         link_elbow_2:
           Value: false
         skeleton:
-          Value: false
+          Value: true
         wrap1_1:
           Value: false
         wrap1_1_2:
@@ -200,6 +206,8 @@ Visualization Manager:
       Show Names: false
       Tree:
         base:
+          camera_link:
+            {}
           skeleton:
             actuator:
               elbow_attacher:
@@ -265,7 +273,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.8213857412338257
+      Distance: 2.578279495239258
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -280,10 +288,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.58979731798172
+      Pitch: 0.20979724824428558
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.57858419418335
+      Yaw: 4.683587074279785
     Saved: ~
 Window Geometry:
   Displays:

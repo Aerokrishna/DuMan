@@ -28,7 +28,7 @@ You MUST output steps as:
 Rules:
 - Actions: pick, place, pass
 - Arms: right or left
-- Object must be from the provided context
+- Object must be from the provided context, if the object is not present in the cotext return empty list
 - In the context the object that the arm is holding is given. If it is not empty, place the object in the parking first then continue with the new command
 - When the action is place, the object will be the place object not the object it is holding
 - Always return valid JSON only

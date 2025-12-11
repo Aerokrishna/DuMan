@@ -5,6 +5,7 @@ from rclpy.action import ActionServer, ActionClient
 from rclpy.action.server import ServerGoalHandle, GoalResponse, CancelResponse
 from duman_interfaces.action import PickNPlace, DumanGoal
 from duman_interfaces.srv import GripState
+from duman_interfaces.msg import Object
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 import threading
@@ -40,10 +41,12 @@ class PicknPlace(Node):
             callback_group=ReentrantCallbackGroup()) 
         
         self.duman_grip_client = self.create_client(GripState, "/duman/grip_state", callback_group=ReentrantCallbackGroup())
+        self.create_subscription(Object, "/duman/objects", self.object_cb, 10)
 
         self.arm_done = False
         self.state = 0
         self.goal_sent = False
+        self.ik_failed = False
 
         self.object_poses = objects_left
         self.object_height = 0.05 # 5cm
@@ -58,13 +61,22 @@ class PicknPlace(Node):
         self.duman_left_goal_client_.wait_for_server() # you can provide a timer to wait for the server inside
         self.get_logger().info("server found!")
 
+    
+    def object_cb(self, msg : Object):
+        for obj, pose in zip(msg.obj_right, msg.obj_pose_right):
+            self.object_poses[obj] = [pose.x, pose.y, pose.z, 3.14, 0.0, 1.54] 
+
     def goal_callback(self, goal_request: PickNPlace.Goal):
         
         # reject the goal if a goal is already executing
         with self.goal_lock_:
-            if self.goal_handle_ is not None and self.goal_handle_.is_active:
+            if self.goal_handle_ is not None:
                 self.get_logger().error("GOAL ACTIVE...rejecting new goal")
                 return GoalResponse.REJECT
+
+        if goal_request.object_id not in self.object_poses:
+            self.get_logger().error("Object not found")
+            return GoalResponse.REJECT
 
         return GoalResponse.ACCEPT
 
@@ -72,29 +84,36 @@ class PicknPlace(Node):
         self.get_logger().info("cancel request received...")
         return CancelResponse.ACCEPT
     
+    def cancel_n_reset(self):
+        result = PickNPlace.Result()
+        result.success = False
+        self.state = 0
+        self.goal_sent = False
+        self.goal_handle_ = None
+        self.ik_failed = False
+
+        result.message = "canceled"
+
+        return result
+    
     def pnp_callback(self, goal_handle : ServerGoalHandle):
         self.state = 1
         # self.get_logger().info("PASSING REQUEST RECEIVED")
         with self.goal_lock_:
             self.goal_handle_ = goal_handle
 
+        
         obj_pose = copy.deepcopy(self.object_poses[goal_handle.request.object_id])
         align_pose = copy.deepcopy(self.object_poses[goal_handle.request.object_id])
         align_pose[2] += (self.object_height + self.approach_ht)
 
         while True:
-            if goal_handle.is_cancel_requested:
+            
+            if goal_handle.is_cancel_requested or self.ik_failed:
                 self.get_logger().warn("CANCEL RECEIVED — Stopping arm safely")
 
-                goal_handle.canceled()
-
-                result = PickNPlace.Result()
-                result.success = False
-                self.state = 0
-                self.goal_sent = False
-                self.goal_handle_ = None
-                result.message = "canceled"
-                return result
+                result = self.cancel_n_reset()
+                return result  
 
             time.sleep(0.1)
             # if self.delay_(0.1):
@@ -223,6 +242,7 @@ class PicknPlace(Node):
             # add a callback which runs when a result is received
             self.goal_handle_.get_result_async().add_done_callback(self.motion_result_callback) # call the future callback
         else:
+            self.ik_failed = True
             self.get_logger().warn("GOAL REJECTED")
 
     # a callback to signify completion of an arm motion task

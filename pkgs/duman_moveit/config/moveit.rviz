@@ -11,7 +11,7 @@ Panels:
         - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.5
-    Tree Height: 140
+    Tree Height: 441
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -82,6 +82,10 @@ Visualization Manager:
             Show Trail: false
             Value: true
           base:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+          camera_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -208,6 +212,10 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+          camera_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           ee_left:
             Alpha: 1
             Show Axes: false
@@ -287,6 +295,8 @@ Visualization Manager:
           Value: false
         base:
           Value: true
+        camera_link:
+          Value: true
         ee_left:
           Value: true
         ee_right:
@@ -323,6 +333,8 @@ Visualization Manager:
       Tree:
         world:
           base:
+            camera_link:
+              {}
             skeleton:
               actuator:
                 elbow_attacher:
@@ -360,25 +372,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.055985927581787
+      Distance: 2.540700912475586
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.013259617611765862
-        Y: 0.15675102174282074
-        Z: 0.09785043448209763
+        X: -0.6219114661216736
+        Y: 0.21352756023406982
+        Z: -0.010622197762131691
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4300007224082947
+      Pitch: 0.3900008201599121
       Target Frame: base
       Value: Orbit (rviz_default_plugins)
-      Yaw: 4.5902228355407715
+      Yaw: 4.460221290588379
     Saved: ~
 Window Geometry:
   Displays:
@@ -392,9 +404,9 @@ Window Geometry:
     collapsed: true
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001f300000416fc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb000000100044006900730070006c006100790073000000003d000000c9000000c900fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067000000010c0000025e0000017d00fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000370000000e3000000a400ffffff0000039d0000041600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000001f300000416fc0200000005fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb000000100044006900730070006c006100790073000000003d000000c9000000c900fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067000000010c0000025e0000017d00fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a005600690065007700730000000370000000e3000000a400ffffff0000073a0000041600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: true
-  Width: 925
-  X: 995
+  Width: 1850
+  X: 70
   Y: 27

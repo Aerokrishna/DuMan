@@ -8,7 +8,7 @@ from duman_interfaces.srv import DumanPass
 from duman_interfaces.msg import Object
 from objects import objects_right, objects_left
 from essentials import splitTasks, plan_task
-
+import time #:(
 class State:
     def __init__(self, name, action_fn, coord=False):
         self.name = name
@@ -17,10 +17,19 @@ class State:
         self.request_sent = False
         self.done = False
 
+import threading
+import speech_recognition as sr
+
+
 class HumanCommandParser(Node):
     def __init__(self, task_manager):
         super().__init__("dual_arm_planner_node")
         self.task_manager = task_manager
+
+        self.process_voice = True
+
+        if self.process_voice:
+            self.start_voice_thread()
 
         self.get_logger().info("Dual Arm Planner Node started.")
         self.get_logger().info("Waiting for user commands...")
@@ -34,6 +43,31 @@ class HumanCommandParser(Node):
         self.object_right = objects_right
         self.object_left = objects_left
 
+    def start_voice_thread(self):
+        self.voice_result = None
+        self.recognizer = sr.Recognizer()
+        self.mic = sr.Microphone()
+
+        def listen_loop():
+            with self.mic as source:
+                self.recognizer.adjust_for_ambient_noise(source, duration=1)
+                print("Voice recognition ready...")
+
+                while True:
+                    try:
+                        audio = self.recognizer.listen(source, phrase_time_limit=10)
+
+                        try:
+                            text = self.recognizer.recognize_google(audio)
+
+                            self.voice_result = text
+                        except:
+                            pass
+                    except Exception as e:
+                        print("Mic error:", e)
+
+        threading.Thread(target=listen_loop, daemon=True).start()
+
     def object_cb(self, msg : Object):
         for obj, pose in zip(msg.obj_right, msg.obj_pose_right):
             self.object_right[obj] = [pose.x, pose.y, pose.z, 3.14, 0.0, 1.54] 
@@ -43,36 +77,44 @@ class HumanCommandParser(Node):
 
     def check_user_input(self):
         try:
-            import sys, select
-            if select.select([sys.stdin], [], [], 0.0)[0]:
-                command = sys.stdin.readline().strip()
-                if command:
+            if self.process_voice:
+                if self.voice_result:
+                    command = self.voice_result.lower().strip()
+                    self.voice_result = None
                     self.process_command(command)
+
+            else:
+                import sys, select
+                if select.select([sys.stdin], [], [], 0.0)[0]:
+                    command = sys.stdin.readline().strip()
+                    if command:
+                        self.process_command(command)
+
         except Exception as e:
             self.get_logger().error(f"Input error: {e}")
 
     def process_command(self, command: str):
-        # self.get_logger().info(f"Received command: {command}")
+        self.get_logger().info(f"Received command: {command}")
 
         # right_objs = list(self.object_right.keys())
         # left_objs = list(self.object_left.keys())
 
         # try:
         #     plan = plan_task(command, right_objs, left_objs, self.task_manager.right_holding, self.task_manager.left_holding)
-        #     self.get_logger().info(f'RIGHT HOLDS : {self.object_right}')
-        #     self.get_logger().info(f'LEFT HOLDS : {self.object_left}')
+        #     # self.get_logger().info(f'RIGHT HOLDS : {self.object_right}')
+        #     # self.get_logger().info(f'LEFT HOLDS : {self.object_left}')
 
         # except Exception as e:
         #     self.get_logger().error(f"LLM Error: {e}")
         #     return
 
         # left_seq, right_seq = splitTasks(plan)
+        time.sleep(2.0)
+        left_seq = [('right', 'pass', 'apple'), ('left', 'place', 'bowl_')]
+        right_seq = [('right', 'pick', 'apple'), ('right', 'pass', 'apple')]
 
-        left_seq = []
-        right_seq = [('right', 'pick', 'apple'), ('right', 'place', 'bowl'), ('right', 'pick', 'orange'), ('right', 'place', 'bowl')]
-
-        # self.get_logger().info(f"RIGHT ARM : {right_seq}")
-        # self.get_logger().info(f"LEFT ARM : {left_seq}")
+        self.get_logger().info(f"RIGHT ARM : {right_seq}")
+        self.get_logger().info(f"LEFT ARM : {left_seq}")
 
         self.task_manager.receive_new_plan(left_seq, right_seq)
 

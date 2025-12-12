@@ -2,6 +2,7 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel, Field
 from typing import List
+import speech_recognition as sr
 
 class Step(BaseModel):
     action: str = Field(description="pick | place | pass")
@@ -74,3 +75,31 @@ def plan_task(command: str, right_objs, left_objs, right_holding, left_holding) 
     )
 
     return Plan.model_validate_json(response.text)
+
+def transcribe_microphone_speech():
+ 
+    r = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        r.adjust_for_ambient_noise(source, duration=1) 
+        print("Say something! (Listening for 5 seconds)")
+        
+        try:
+            audio = r.listen(source, timeout=5, phrase_time_limit=5)
+        except sr.WaitTimeoutError:
+            print("No speech detected within the time limit.")
+            return
+    try:
+        print("Recognizing speech...")
+        text = r.recognize_google(audio)
+        
+        print("\nTranscription Result:")
+        print(f"**You said: \"{text}\"**")
+        
+    except sr.UnknownValueError:
+        print("Google Speech Recognition could not understand audio.")
+    except sr.RequestError as e:
+        print(f"Could not request results from Google Speech Recognition service; {e}")
+
+if __name__ == "__main__":
+    transcribe_microphone_speech()

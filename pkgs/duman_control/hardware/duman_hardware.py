@@ -24,7 +24,7 @@ class DumanHardwareNode(Node):
         self.joint_velocity = np.zeros(12)
 
         self.right = True
-        self.left = False
+        self.left = True
 
         if self.right and self.left:
             self.blitz_left = Blitz(port="/dev/ttyACM0")

@@ -42,7 +42,7 @@ class RGBDViewer(Node):
 
         self.rgb_img = None
         self.depth_img = None
-        self.visual = False
+        self.visual = True
 
         # YOLO
         self.yolo_model = YOLO("yolov8n.pt")
@@ -80,9 +80,19 @@ class RGBDViewer(Node):
             depth_norm = depth_norm.astype(np.uint8)
             depth_colormap = cv2.applyColorMap(depth_norm, cv2.COLORMAP_JET)
 
-            cv2.imshow("RGB Image", self.rgb_img)
+            # cv2.imshow("RGB Image", self.rgb_img)
             cv2.imshow("Depth Heatmap", depth_colormap)
             cv2.waitKey(1)
+
+    def draw_boxes(self, frame, xyxy, cls):
+
+        x1, y1, x2, y2 = map(int, xyxy)
+        label = self.names.get(int(cls), f"class_{cls}")
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        (w, h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
+        cv2.rectangle(frame, (x1, y1 - 18), (x1 + w, y1), (0, 255, 0), -1)
+        # cv2.putText(frame, label, (x1, y1 - 4),
+                    # cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
 
     def get_obj_pose(self):
         if self.rgb_img is None or self.depth_img is None:
@@ -90,15 +100,21 @@ class RGBDViewer(Node):
 
         results = self.yolo_model(self.rgb_img, imgsz=640, conf=0.25, verbose=False)
         res = results[0]
-
         boxes, classes = [], []
 
+
         if hasattr(res, "boxes") and res.boxes is not None:
+            frame = self.rgb_img.copy()
+
             for box in res.boxes:
                 xyxy = box.xyxy.cpu().numpy().flatten()
                 cls = int(box.cls.cpu().numpy().item())
                 boxes.append(xyxy)
                 classes.append(cls)
+
+                if self.visual:
+                    self.draw_boxes(frame, xyxy, cls)
+                    cv2.imshow("detections", frame)
 
         count = 0
         if boxes:

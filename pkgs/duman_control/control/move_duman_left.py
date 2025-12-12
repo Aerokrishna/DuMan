@@ -203,6 +203,11 @@ class MoveDumanLeft(Node):
             self.in_zone = False
             return False
     
+    def initialize_arm(self):
+        self.left_arm_moveit.move_to_configuration([0.05, -0.75, 2.0, 0.0,0.0,0.0])
+        # self.left_arm_moveit.wait_until_executed()
+        self.get_logger().info("ARMS INITIALIZED")
+
     def timer_callback(self):
         if self.in_zone:
             self.zone_time += 0.1
@@ -212,6 +217,10 @@ class MoveDumanLeft(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = MoveDumanLeft()
+
+    time.sleep(4.0)
+    node.initialize_arm()
+
     rclpy.spin(node, MultiThreadedExecutor())
     rclpy.shutdown()
 

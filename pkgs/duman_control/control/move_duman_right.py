@@ -121,6 +121,7 @@ class MoveDumanRight(Node):
 
             if ik is None:
                 self.get_logger().error("Inverse Kinematics Failed, Rejecting GOAL")
+                self.get_logger().error(f"{position}")
                 return GoalResponse.REJECT
 
             self.ik_pose_goal = np.array(ik.position[6:])
@@ -210,6 +211,12 @@ class MoveDumanRight(Node):
         else:
             self.in_zone = False
             return False
+    
+    def initialize_arm(self):
+
+        self.right_arm_moveit.move_to_configuration([-0.05, 0.75, -2.0, 0.0, 0.0, 0.0])
+        # self.right_arm_moveit.wait_until_executed()
+        self.get_logger().info("ARMS INITIALIZED")
         
     def timer_callback(self):
         if self.in_zone:
@@ -219,7 +226,10 @@ class MoveDumanRight(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+
     node = MoveDumanRight()
+    time.sleep(4.0)
+    node.initialize_arm()
     rclpy.spin(node, MultiThreadedExecutor())
     rclpy.shutdown()
 
@@ -248,4 +258,3 @@ if __name__=="__main__":
     #         feedback.current_number = counter
     #         goal_handle.publish_feedback(feedback)
     #         time.sleep(period) # simulating the the time taken by robot to execute the action
-        

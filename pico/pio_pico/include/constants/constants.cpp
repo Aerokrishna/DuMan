@@ -12,7 +12,7 @@ int grip_angle = 110;
 
 //left
 
-// int open_angle = 150;
-// int grip_angle = 130;
+// int open_angle = 100;
+// int grip_angle = 70;
 
 Servo gripper_servo;

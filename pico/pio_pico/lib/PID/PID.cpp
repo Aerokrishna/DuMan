@@ -7,56 +7,56 @@ PID::PID(float KP, float KI, float KD, float IMAX) {
     kd = KD;
     imax = IMAX; // to prevent integral windup
 }
-// pass the error, a scalar value to scale the output, and the current time in milliseconds
+
 float PID::get_pid(float error, float scalar, unsigned long current_millis) {
     unsigned long t_now = current_millis;
     unsigned long dt = t_now - last_t;
-    float output = 0.0f;
 
-    // if it is the start of the loop or if the dt is too large, reset the integrator
-    if ((last_t == 0) || (dt > 1000)) {
-        dt = 0.0f;
-        integrator = 0.0f;
-    }
-    last_t = t_now; 
-
-    // cast it as float for calculations
-    float delta_time = static_cast<float>(dt) * 0.001f;
-
-    // P component
-    output += (error * kp);
-
-    // D component
-    if ((ABS(kd) > 0) && (dt > 0)) {
-        float derivative = (error - last_error / delta_time);
-
+    // First run: initialize and return 0
+    if (last_t == 0) {
+        last_t = t_now;
         last_error = error;
-        output += (kd * derivative);
+        integrator = 0;
+        return 0.0f;
     }
 
-    // output += scalar;
+    last_t = t_now;
+    float delta_time = dt * 0.001f;
 
-    // I component
-    if ((ABS(ki) > 0) && (dt > 0)) {
-        if (ABS(output) < imax) {
-            // integrator += (error * ki) * scalar * delta_time;
-            integrator += (error * ki) * delta_time;
-            
-            // if integrator exceeds imax, limit it to imax
-            if (ABS(integrator) > imax && integrator != 0.0f) {
-                integrator = (integrator / ABS(integrator) * imax); // preserve sign
-            }
-            output += integrator;
+    // --- P term ---
+    float output = kp * error;
+
+    // --- D term ---
+    float derivative = 0.0f;
+    if (kd != 0 && dt > 0) {
+        derivative = (error - last_error) / delta_time;
+        output += kd * derivative;
+    }
+
+    // always update last error
+    last_error = error;
+
+    // --- I term ---
+    if (ki != 0 && dt > 0) {
+        integrator += error * ki * delta_time;
+
+        // clamp integrator
+        if (ABS(integrator) > imax) {
+            integrator = (integrator > 0 ? imax : -imax);
         }
+
+        output += integrator;
     }
-    // Serial.println(integrator);
+
     return output;
 }
-void PID :: update_gains(float newKp, float newKi, float newKd) {
+
+void PID::update_gains(float newKp, float newKi, float newKd, float newImax) {
     kp = newKp;
     ki = newKi;
     kd = newKd;
-    imax = 0.0f;
+    imax = newImax;
 }
+
 
 void PID::reset_I() { integrator = 0.0f; }

@@ -66,7 +66,7 @@ class JointStateListener(Node):
             pose_msg.left_or_z = eul_left[2]
 
         except Exception as e:
-            self.get_logger().warn(f"Left arm TF lookup failed: {e}")
+            # self.get_logger().warn(f"Left arm TF lookup failed: {e}")
             return
 
         try:

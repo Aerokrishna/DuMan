@@ -117,7 +117,7 @@ class MoveDumanLeft(Node):
                 return GoalResponse.REJECT
 
             self.ik_pose_goal = np.array(ik.position[:6])
-
+            
             self.left_arm_moveit.set_position_goal(position=position, frame_id=duman_left.base_link_name(), target_link=duman_left.end_effector_name())
             self.left_arm_moveit.set_orientation_goal(quat_xyzw=quat, frame_id=duman_left.base_link_name(), target_link=duman_left.end_effector_name())
 

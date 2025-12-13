@@ -131,7 +131,7 @@ class RGBDViewer(Node):
 
                 if Z == 0 or Z > 1000 or obj_name == f"person" or obj_name == f"dining table":
                     continue
-
+                
                 X = (cx_box - self.cx) * Z / self.fx
                 Y = (cy_box - self.cy) * Z / self.fy
 
@@ -139,6 +139,9 @@ class RGBDViewer(Node):
                 Xm = X / 1000.0
                 Ym = Y / 1000.0
                 Zm = Z / 1000.0
+
+                if obj_name == f"apple" and Xm < 0:
+                    obj_name = "guava"
 
                 # Publish TF transform camera_link -> detected_object
                 t = TransformStamped()

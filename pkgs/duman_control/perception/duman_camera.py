@@ -170,7 +170,7 @@ class RGBDViewer(Node):
                 pose = self.pose_in_base(obj_name)
 
                 if pose is not None:
-                    point_msg.x, point_msg.y, point_msg.z = pose
+                    point_msg.x, point_msg.y, point_msg.z = pose[0], pose[1], pose[2]
                 
                 if point_msg.x <= 0.0: # right side
                     obj_msg.obj_right.append(obj_name)

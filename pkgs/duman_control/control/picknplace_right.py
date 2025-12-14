@@ -107,9 +107,16 @@ class PicknPlace(Node):
         align_pose = copy.deepcopy(self.object_poses[goal_handle.request.object_id])
         align_pose[2] += (self.object_height + self.approach_ht)
 
-        obj_pose[2] = 0.165
-        align_pose[0] += 0.03
+        obj_pose[2] = 0.155
+        align_pose[0] += 0.035
         obj_pose[0] += 0.03
+
+        if goal_handle.request.object_id == "bowl_":
+            align_pose[2] = 0.37
+            align_pose[0] -= 0.05
+            obj_pose[0] = -0.07
+
+            obj_pose[2] = 0.28
 
         # align_pose[2] += (self.object_height)
         # align_pose[1] += (self.object_height)

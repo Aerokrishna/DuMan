@@ -65,7 +65,7 @@ class PicknPlace(Node):
     def object_cb(self, msg : Object):
         for obj, pose in zip(msg.obj_left, msg.obj_pose_left):
             if obj != "bowl":
-                self.object_poses[obj] = [pose.x, pose.y, 0.18, 3.14, 0.0, 1.54] 
+                self.object_poses[obj] = [pose.x, pose.y, 0.18, 3.14, 0.0, 1.0] 
 
     def goal_callback(self, goal_request: PickNPlace.Goal):
         
@@ -109,15 +109,19 @@ class PicknPlace(Node):
         align_pose = copy.deepcopy(self.object_poses[goal_handle.request.object_id])
         align_pose[2] += (self.object_height + self.approach_ht)
 
-        obj_pose[2] = 0.24
+        obj_pose[2] = 0.2
 
-        # obj_pose[0] += 0.0
-
+        obj_pose[0] -= 0.065
+        align_pose[2] = 0.38
+        align_pose[1] = -0.2
+        
         if goal_handle.request.object_id == "bowl_":
             align_pose[2] = 0.37
-            align_pose[1] = -0.2
-            obj_pose[2] = 0.3
+            # align_pose[1] = -0.2
+            obj_pose[0] = 0.08
 
+            obj_pose[2] = 0.28
+            obj_pose[5] = 0.0
 
         while True:
             

@@ -39,10 +39,10 @@ class MoveDumanLeft(Node):
         self.goal_sent = False
 
         self.right_transfer_position = [-0.08, -0.14, 0.29, -1.57, 1.57, 0.0]
-        self.left_transfer_position = [0.08, -0.17, 0.32, 1.57, -1.57, 1.57]
+        self.left_transfer_position = [0.08, -0.18, 0.31, 1.57, -1.57, 1.57]
 
         self.right_grasp_position = [-0.025, -0.14, 0.29, -1.57, 1.57, 0.0]
-        self.left_grasp_position = [0.025, -0.17, 0.32, 1.57, -1.57, 1.57]
+        self.left_grasp_position = [0.025, -0.18, 0.31, 1.57, -1.57, 1.57]
 
         self.get_logger().info("duman passing server started")
 

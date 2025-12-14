@@ -724,7 +724,7 @@
   <joint name="base_to_camera" type="fixed">
     <parent link="base"/>
     <child link="camera_link"/>
-    <origin xyz="0.04 0.05 0.695" rpy="-2.285 0 3.14"/>
+    <origin xyz="0.04 0.05 0.695" rpy="-2.22 0 3.14"/>
   </joint>
 
   <!-- Link wrist_attacher3_assem -->

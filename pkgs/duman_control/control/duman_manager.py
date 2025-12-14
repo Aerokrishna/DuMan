@@ -109,12 +109,11 @@ class HumanCommandParser(Node):
         #     return
 
         # left_seq, right_seq = splitTasks(plan)
-        # time.sleep(2.0)
-        left_seq = [('right', 'pass', 'apple'), ('left', 'place', 'bowl_'), ('right', 'pass', 'orange'), ('left', 'place', 'bowl_'), ('left', 'pick', 'guava'), ('left', 'place', 'bowl_')]
-        right_seq = [('right', 'pick', 'apple'), ('right', 'pass', 'apple'), ('right', 'pick', 'orange'), ('right', 'pass', 'orange')]
-        # left_seq = [('left', 'pick', 'bowl_')]
-        # right_seq = []
-
+        time.sleep(2.0)
+        left_seq = [('left', 'pick', 'sports ball'), ('left', 'place', 'bowl_')]
+        right_seq = [('right', 'pick', 'apple'), ('right', 'place', 'bowl_')]
+        # left_seq = []
+        # right_seq = [('right', 'pick', 'bowl_')]
 
         self.get_logger().info(f"RIGHT ARM : {right_seq}")
         self.get_logger().info(f"LEFT ARM : {left_seq}")

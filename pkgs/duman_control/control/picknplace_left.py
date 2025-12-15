@@ -4,7 +4,7 @@ from rclpy.node import Node
 from rclpy.action import ActionServer, ActionClient
 from rclpy.action.server import ServerGoalHandle, GoalResponse, CancelResponse
 from duman_interfaces.action import PickNPlace, DumanGoal
-from duman_interfaces.srv import GripState
+from duman_interfaces.srv import GripState, Dock
 from duman_interfaces.msg import Object
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
@@ -41,6 +41,8 @@ class PicknPlace(Node):
             callback_group=ReentrantCallbackGroup()) 
         
         self.duman_grip_client = self.create_client(GripState, "/duman/grip_state", callback_group=ReentrantCallbackGroup())
+        self.duman_left_dock = self.create_client(Dock, "/duman_left/dock", callback_group=ReentrantCallbackGroup())
+
         self.create_subscription(Object, "/duman/objects", self.object_cb, 10)
 
         self.arm_done = False
@@ -111,7 +113,7 @@ class PicknPlace(Node):
 
         obj_pose[2] = 0.2
 
-        obj_pose[0] -= 0.065
+        obj_pose[0] -= 0.09
         align_pose[2] = 0.38
         align_pose[1] = -0.2
         
@@ -142,7 +144,20 @@ class PicknPlace(Node):
                     self.send_goal(arm=True, goal_type=True, target=align_pose)
                     self.goal_sent = True
             
-            elif self.state == 2 and self.delay_(1.0):
+            elif self.state == 2:
+                if goal_handle.request.object_id == "bowl_":
+                    self.state = 3
+                    continue
+                
+                self.get_logger().info(f"Left Arm Aligning to object ")
+
+                if not self.goal_sent:
+                    self.arm_done = False
+                    
+                    self.dock_to_object(x=align_pose[0], y=align_pose[1], z=align_pose[2])
+                    self.goal_sent = True
+
+            elif self.state == 3 and self.delay_(1.0):
                 # self.get_logger().info(f"Moving towards object")
 
                 if not self.goal_sent:
@@ -151,7 +166,7 @@ class PicknPlace(Node):
                     self.send_goal(arm=True, goal_type=True, target=obj_pose)
                     self.goal_sent = True
 
-            elif self.state == 3 and self.delay_(1.0):
+            elif self.state == 4 and self.delay_(1.0):
 
                 if not self.goal_sent:
                     # self.get_logger().info(f"Grip Command")
@@ -160,7 +175,7 @@ class PicknPlace(Node):
                     self.send_grip_cmd(arm=True, grip_state=goal_handle.request.pick)
                     self.goal_sent = True
 
-            elif self.state == 4 and self.delay_(1.0):
+            elif self.state == 5 and self.delay_(1.0):
                 # self.get_logger().info(f"left Arm Aligning to object ")
 
                 if not self.goal_sent:
@@ -169,7 +184,7 @@ class PicknPlace(Node):
                     self.send_goal(arm=True, goal_type=True, target=align_pose)
                     self.goal_sent = True
                     
-            if self.state == 5:
+            if self.state == 6:
                 # self.get_logger().info(f"IDLING")
                 self.state = 0
                 self.goal_sent = False
@@ -220,6 +235,30 @@ class PicknPlace(Node):
             # self.get_logger().info("POSE Goal sending")
 
         self.duman_left_goal_client_.send_goal_async(goal).add_done_callback(self.goal_response_callback) 
+
+    def dock_to_object(self, x, y, z):
+        # Create a request for the ArucoSW service, to get the pick and drop coordinates.
+
+        req = Dock.Request()
+        req.curr_x = x
+        req.curr_y = y
+        req.curr_z = z
+
+        # Call the service asynchronously
+        future = self.duman_left_dock.call_async(req)
+        future.add_done_callback(self.dock_result_cb)
+
+    def dock_result_cb(self, future):
+        try:
+            self.state += 1
+            self.goal_sent = False
+            self.grip_x = future.result().grip_x + 0.02 # account for us sensor
+            self.grip_y = future.result().grip_y
+
+            # self.get_logger().info(f'Service response: {self.response}')
+        except Exception as e:
+            self.get_logger().error(f'Service call failed: {e}')
+ 
 
     def send_grip_cmd(self, arm, grip_state):
         # Create a request for the ArucoSW service, to get the pick and drop coordinates.

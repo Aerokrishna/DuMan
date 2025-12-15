@@ -32,6 +32,10 @@ install(PROGRAMS
     ${CONTROL}/picknplace_left.py
     ${CONTROL}/ee_pose.py
     ${CONTROL}/duman_manager.py
+    ${CONTROL}/dock_right.py
+    ${CONTROL}/dock_left.py
+
+
 
     ${CONTROL}/test_client.py
 

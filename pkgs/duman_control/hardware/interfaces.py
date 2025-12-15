@@ -50,4 +50,16 @@ blitz_interfaces = {
         from_mcu=False
     ),
 
+    "gripper_sensor_left": BlitzInterfaces(
+        msg_id=9,
+        struct_fmt="B",
+        from_mcu=True
+    ),
+    
+    "gripper_sensor_right": BlitzInterfaces(
+        msg_id=10,
+        struct_fmt="B",
+        from_mcu=True
+    ),
+
 }

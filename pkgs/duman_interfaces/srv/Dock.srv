@@ -1,0 +1,9 @@
+# Goal
+float32 curr_x
+float32 curr_y
+float32 curr_z
+---
+# Result
+bool success # true if task completed
+float32 grip_x
+float32 grip_y

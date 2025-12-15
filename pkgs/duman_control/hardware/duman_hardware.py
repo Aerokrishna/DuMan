@@ -6,6 +6,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
+from std_msgs.msg import Int16
 from duman_interfaces.msg import DumanJoints
 import numpy as np
 import time
@@ -18,13 +19,16 @@ class DumanHardwareNode(Node):
         self.create_subscription(JointState, "/joint_states", self.joint_state_callback, 10)
         self.create_subscription(DumanJoints, "/joint_vel", self.joint_vel_callback, 10)
 
+        self.left_dis_pub = self.create_publisher(Int16, "/duman_left/dist", 10)
+        self.right_dis_pub = self.create_publisher(Int16, "/duman_right/dist", 10)
+
         self.create_service(GripState, "/duman/grip_state", self.grip_control)
         # Initialize joint data
         self.joint_angles = np.zeros(12)
         self.joint_velocity = np.zeros(12)
 
         self.right = True
-        self.left = True
+        self.left = False
 
         if self.right and self.left:
             self.blitz_left = Blitz(port="/dev/ttyACM0")
@@ -104,18 +108,36 @@ class DumanHardwareNode(Node):
         # self.get_logger().info(f"WRITING Joint Velocities : {joint_vel}")
 
     def joint_state_feedback(self):
-
+        # pass
         if self.left:
             self.blitz_left.blitz_read()
 
             joint_fb = blitz_interfaces["joint_angles_left_feedback"].data
-            # self.get_logger().info(f"CURRENT LEFT JOINTs : {joint_fb}")
+            self.get_logger().info(f"CURRENT LEFT JOINTs : {joint_fb}")
 
         if self.right:
             self.blitz_right.blitz_read()
 
             joint_fb = blitz_interfaces["joint_angles_right_feedback"].data
-            # self.get_logger().info(f"CURRENT RIGHT JOINTs : {joint_fb}")
+            self.get_logger().info(f"CURRENT RIGHT JOINTs : {joint_fb}")
+
+        # if self.left:
+        #     self.blitz_left.blitz_read()
+        #     msg = Int16()
+        #     lef_dis = blitz_interfaces["gripper_sensor_left"].data
+        #     if lef_dis:
+        #         msg.data = lef_dis[0]
+        #         self.left_dis_pub.publish(msg)
+        #     # self.get_logger().info(f"CURRENT LEFT JOINTs : {joint_fb}")
+
+        # if self.right:
+        #     self.blitz_right.blitz_read()
+        #     msg = Int16()
+        #     right_dis = blitz_interfaces["gripper_sensor_right"].data
+        #     if right_dis:
+        #         msg.data = right_dis[0]
+
+        #         self.right_dis_pub.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)

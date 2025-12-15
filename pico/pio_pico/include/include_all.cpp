@@ -5,6 +5,8 @@
 #include "Servo.h"
 #include "serial_parser.hpp"
 #include "blitz_timer.cpp"
+#include "Ultrasonic.h"
+
 #include <PID.h>
 // pinmap
 #include "pinmap/PinMap_base.h"

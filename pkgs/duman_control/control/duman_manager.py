@@ -110,7 +110,7 @@ class HumanCommandParser(Node):
 
         # left_seq, right_seq = splitTasks(plan)
         time.sleep(2.0)
-        left_seq = [('left', 'pick', 'sports ball'), ('left', 'place', 'bowl_')]
+        left_seq = [('left', 'pick', 'guava'), ('left', 'place', 'bowl_')]
         right_seq = [('right', 'pick', 'apple'), ('right', 'place', 'bowl_')]
         # left_seq = []
         # right_seq = [('right', 'pick', 'bowl_')]

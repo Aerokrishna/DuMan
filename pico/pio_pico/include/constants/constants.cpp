@@ -16,3 +16,6 @@ int grip_angle = 110;
 // int grip_angle = 70;
 
 Servo gripper_servo;
+
+Ultrasonic ultrasonic(12);
+USSensor gripper_object;

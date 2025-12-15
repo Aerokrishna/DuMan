@@ -4,7 +4,7 @@ from rclpy.node import Node
 from rclpy.action import ActionServer, ActionClient
 from rclpy.action.server import ServerGoalHandle, GoalResponse, CancelResponse
 from duman_interfaces.action import PickNPlace, DumanGoal
-from duman_interfaces.srv import GripState
+from duman_interfaces.srv import GripState, Dock
 from duman_interfaces.msg import Object
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
@@ -41,6 +41,7 @@ class PicknPlace(Node):
             callback_group=ReentrantCallbackGroup()) 
         
         self.duman_grip_client = self.create_client(GripState, "/duman/grip_state", callback_group=ReentrantCallbackGroup())
+        self.duman_right_dock = self.create_client(Dock, "/duman_right/dock", callback_group=ReentrantCallbackGroup())
 
         self.create_subscription(Object, "/duman/objects", self.object_cb, 10)
 
@@ -112,7 +113,7 @@ class PicknPlace(Node):
         obj_pose[0] += 0.03
 
         if goal_handle.request.object_id == "bowl_":
-            align_pose[2] = 0.37
+            align_pose[2] = 0.38
             align_pose[0] -= 0.05
             obj_pose[0] = -0.07
 
@@ -142,17 +143,28 @@ class PicknPlace(Node):
                     self.goal_sent = True
             
             elif self.state == 2:
+                if goal_handle.request.object_id == "bowl_":
+                    self.state = 3
+                    continue
+                
+                self.get_logger().info(f"Right Arm Aligning to object ")
+
+                if not self.goal_sent:
+                    self.arm_done = False
+                    
+                    self.dock_to_object(x=align_pose[0], y=align_pose[1], z=align_pose[2])
+                    self.goal_sent = True
+            
+            elif self.state == 3:
                 # self.get_logger().info(f"Moving towards object")
 
                 if not self.goal_sent:
                     self.arm_done = False
-                    """
-                    OBJECT POSE
-                    """
+                    obj_pose[0], obj_pose[1] = self.grip_x, self.grip_y
                     self.send_goal(arm=False, goal_type=True, target=obj_pose)
                     self.goal_sent = True
 
-            elif self.state == 3 and self.delay_(1.0):
+            elif self.state == 4 and self.delay_(1.0):
 
                 if not self.goal_sent:
                     # self.get_logger().info(f"Grip Command")
@@ -161,7 +173,7 @@ class PicknPlace(Node):
                     self.send_grip_cmd(arm=False, grip_state=goal_handle.request.pick)
                     self.goal_sent = True
 
-            elif self.state == 4 and self.delay_(1.0):
+            elif self.state == 5 and self.delay_(1.0):
                 # self.get_logger().info(f"Right Arm Aligning to object ")
 
                 if not self.goal_sent:
@@ -170,7 +182,7 @@ class PicknPlace(Node):
                     self.send_goal(arm=False, goal_type=True, target=align_pose)
                     self.goal_sent = True
                     
-            if self.state == 5:
+            if self.state == 6:
                 # self.get_logger().info(f"IDLING")
                 self.state = 0
                 self.goal_sent = False
@@ -244,6 +256,29 @@ class PicknPlace(Node):
             future = self.duman_grip_client.call_async(req)
             future.add_done_callback(self.grip_result_callback)
     
+    def dock_to_object(self, x, y, z):
+        # Create a request for the ArucoSW service, to get the pick and drop coordinates.
+
+        req = Dock.Request()
+        req.curr_x = x
+        req.curr_y = y
+        req.curr_z = z
+
+        # Call the service asynchronously
+        future = self.duman_right_dock.call_async(req)
+        future.add_done_callback(self.dock_result_cb)
+
+    def dock_result_cb(self, future):
+        try:
+            self.state += 1
+            self.goal_sent = False
+            self.grip_x = future.result().grip_x - 0.02 # account for us sensor
+            self.grip_y = future.result().grip_y
+
+            # self.get_logger().info(f'Service response: {self.response}')
+        except Exception as e:
+            self.get_logger().error(f'Service call failed: {e}')
+ 
     def grip_result_callback(self, future):
         try:
             self.state += 1

@@ -18,6 +18,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Point.msg"
   "msg/Object.msg"
   "srv/GripState.srv"
+  "srv/Dock.srv"
 
 )
 

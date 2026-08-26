@@ -14,6 +14,8 @@ set(CONTROL control)
 set(PERCEPTION perception)
 set(HARDWARE hardware)
 set(LAUNCH launch)
+set(SIM simulation)
+
 
 
 
@@ -34,6 +36,8 @@ install(PROGRAMS
     ${CONTROL}/duman_manager.py
     ${CONTROL}/dock_right.py
     ${CONTROL}/dock_left.py
+    ${SIM}/duman_sim_client.py
+
 
 
 

@@ -25,14 +25,14 @@ void timer_cb(){
     }
 }
 
-void us_timer_cb(){
+// void us_timer_cb(){
 
-    gripper_object.distance = 0;
-    gripper_object.id = USSENSOR;
-    send_data(pack_data<USSensor>(gripper_object));
+//     gripper_object.distance = ultrasonic.MeasureInCentimeters(30000); ;
+//     gripper_object.id = USSENSOR;
+//     send_data(pack_data<USSensor>(gripper_object));
 
-}
+// }
 
 BlitzTimer t1(timer_cb, 10);
-BlitzTimer t2(us_timer_cb, 500);
+// BlitzTimer t2(us_timer_cb, 50);
 

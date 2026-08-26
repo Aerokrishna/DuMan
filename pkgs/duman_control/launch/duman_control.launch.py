@@ -14,9 +14,9 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(camera_launch)
-        ),
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(camera_launch)
+        # ),
         Node(
             package='duman_control',
             executable='move_duman_left.py',
@@ -55,8 +55,8 @@ def generate_launch_description():
         ),
         Node(
             package='duman_control',
-            executable='duman_hardware.py',
-            name='duman_hardware',
+            executable='duman_sim_client.py',
+            name='duman_simulation',
             output='screen'
         ),
         Node(
@@ -64,5 +64,17 @@ def generate_launch_description():
             executable='ex_collision_object.py',
             name='ex_collision_object',
             output='screen'
-        )
+        ),
+        # Node(
+        #     package='duman_control',
+        #     executable='dock_right.py',
+        #     name='dock_right',
+        #     output='screen'
+        # ),
+        # Node(
+        #     package='duman_control',
+        #     executable='dock_left.py',
+        #     name='dock_left',
+        #     output='screen'
+        # )
     ])

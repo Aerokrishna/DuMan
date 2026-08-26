@@ -28,7 +28,7 @@ class DumanHardwareNode(Node):
         self.joint_velocity = np.zeros(12)
 
         self.right = True
-        self.left = False
+        self.left = True
 
         if self.right and self.left:
             self.blitz_left = Blitz(port="/dev/ttyACM0")
@@ -113,13 +113,13 @@ class DumanHardwareNode(Node):
             self.blitz_left.blitz_read()
 
             joint_fb = blitz_interfaces["joint_angles_left_feedback"].data
-            self.get_logger().info(f"CURRENT LEFT JOINTs : {joint_fb}")
+            # self.get_logger().info(f"CURRENT LEFT JOINTs : {joint_fb}")
 
         if self.right:
             self.blitz_right.blitz_read()
 
             joint_fb = blitz_interfaces["joint_angles_right_feedback"].data
-            self.get_logger().info(f"CURRENT RIGHT JOINTs : {joint_fb}")
+            # self.get_logger().info(f"CURRENT RIGHT JOINTs : {joint_fb}")
 
         # if self.left:
         #     self.blitz_left.blitz_read()

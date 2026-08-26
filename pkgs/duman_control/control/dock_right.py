@@ -34,100 +34,17 @@ class DumanHardwareNode(Node):
             callback_group=ReentrantCallbackGroup(),
             follow_joint_trajectory_action_name="duman_right_controller/follow_joint_trajectory",
         )
+        self.last_time = time.monotonic()
 
-        self.THRES = 0.05
-        self.dist = 0.1
+        self.THRES = 12
+        self.dist = np.full(10, 100)
 
         self.get_logger().info("DOCK SERVER RIGHT")
-    def dis_cb(self, msg : Int16):
-        self.dist = msg.data
 
-    # def dock_control(self, request: Dock.Request, response: Dock.Response):
+    def dis_cb(self, msg: Int16):
+        self.dist[:-1] = self.dist[1:]   # shift left
+        self.dist[-1] = msg.data         # insert newest
 
-    #     base_x = request.curr_x
-    #     base_y = request.curr_y
-    #     base_z = request.curr_z
-
-    #     step = 0.05          # 2 cm
-    #     max_radius = 0.2    # 6 cm search
-    #     FOUND = False
-
-    #     directions = [(1,0), (0,1), (-1,0), (0,-1)]
-
-    #     x = 0.0
-    #     y = 0.0
-    #     radius = step
-
-    #     while radius <= max_radius and not FOUND:
-    #         for dx, dy in directions:
-    #             steps = int(radius / step)
-
-    #             for _ in range(steps):
-    #                 x += dx * step
-    #                 y += dy * step
-
-    #                 target_pos = [
-    #                     base_x + x,
-    #                     base_y + y,
-    #                     base_z
-    #                 ]
-
-    #                 self.get_logger().info(
-    #                     f"Spiral move: x={target_pos[0]:.3f}, y={target_pos[1]:.3f}"
-    #                 )
-
-    #                 self.right_arm_moveit.set_position_goal(
-    #                     position=target_pos,
-    #                     frame_id=duman_right.base_link_name(),
-    #                     target_link=duman_right.end_effector_name()
-    #                 )
-    #                 quat = list(quaternion_from_euler(3.14, 0.0, 1.57, "rxyz"))
-
-    #                 self.right_arm_moveit.set_orientation_goal(
-    #                     quat_xyzw=quat,
-    #                     frame_id=duman_right.base_link_name(),
-    #                     target_link=duman_right.end_effector_name()
-    #                 )
-    #                 waypoint = Pose()
-
-    #                 # position
-    #                 waypoint.position.x = target_pos[0]
-    #                 waypoint.position.y = target_pos[1]
-    #                 waypoint.position.z = target_pos[2]
-
-    #                 # orientation
-    #                 qx, qy, qz, qw = quaternion_from_euler(3.14, 0.0, 1.57, axes="rxyz")
-    #                 waypoint.orientation.x = qx
-    #                 waypoint.orientation.y = qy
-    #                 waypoint.orientation.z = qz
-    #                 waypoint.orientation.w = qw
-
-    #                 self.right_arm_moveit.execute(self.right_arm_moveit.plan(waypoints=[waypoint],cartesian=True))
-
-    #                 time.sleep(0.05)
-    #                 self.get_logger().info("waypoint done")
-    #                 if hasattr(self, "dist") and self.dist < self.THRES:
-    #                     self.get_logger().info(
-    #                         f"Object detected at x={target_pos[0]:.3f}, y={target_pos[1]:.3f}, dist={self.dist:.3f}"
-    #                     )
-
-    #                     response.grip_x = target_pos[0]
-    #                     response.grip_y = target_pos[1]
-    #                     response.success = True
-    #                     FOUND = True
-    #                     break
-
-    #             if FOUND:
-    #                 break
-
-    #         radius += step
-
-    #     if not FOUND:
-    #         self.get_logger().warn("Docking failed: object not found")
-    #         response.success = False
-
-    #     return response
-    
     def dock_control(self, request: Dock.Request, response: Dock.Response):
 
         base_x = request.curr_x
@@ -135,7 +52,7 @@ class DumanHardwareNode(Node):
         base_z = request.curr_z
 
         step = 0.02        # 5 cm step
-        max_dist = 0.1     # ±6 cm search
+        max_dist = 0.1    # ±6 cm search
         FOUND = False
 
         quat = quaternion_from_euler(3.14, 0.0, 1.57, axes="rxyz")
@@ -181,23 +98,22 @@ class DumanHardwareNode(Node):
                     waypoints=[waypoint],
                     cartesian=True
                 ))
-                self.right_arm_moveit.wait_until_executed()
-
-                time.sleep(0.05)
+                # self.right_arm_moveit.wait_until_executed()
+                self.delay_(1.0)
                 # Check sensor
-                if self.dist < self.THRES:
-                    self.get_logger().info(
-                        f"Object detected at x={target_x:.3f}, dist={self.dist:.3f}"
-                    )
+                self.get_logger().info(f"DISTANCE {self.dist}")
+                if not np.all(self.dist > self.THRES):
+                    # self.get_logger().info(
+                    #     f"Object detected at x={target_x:.3f}, dist={self.dist:.3f}"
+                    # )
 
-                    response.grip_x = target_x
+                    response.grip_x = base_x
                     response.grip_y = base_y
                     response.success = True
                     FOUND = True
                     break
-
-                offset += step
-                self.dist = 0.03
+                if self.delay_(1.0):
+                    offset += step
                 
             if FOUND:
                 break
@@ -208,6 +124,13 @@ class DumanHardwareNode(Node):
 
         return response
 
+    def delay_(self, period):
+        current_time = time.monotonic()
+        if current_time - self.last_time >= period:
+            self.last_time = current_time
+            return True
+        return False
+    
 def main(args=None):
     rclpy.init(args=args)
     node = DumanHardwareNode()

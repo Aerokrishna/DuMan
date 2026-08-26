@@ -71,10 +71,16 @@ class PicknPlace(Node):
     def goal_callback(self, goal_request: PickNPlace.Goal):
         
         # reject the goal if a goal is already executing
-        with self.goal_lock_:
-            if self.goal_handle_ is not None and self.goal_handle_.is_active:
-                self.get_logger().error("GOAL ACTIVE...rejecting new goal")
-                return GoalResponse.REJECT
+        # with self.goal_lock_:
+        #     if self.goal_handle_ is not None and self.goal_handle_.is_active:
+        #         self.get_logger().error("GOAL ACTIVE...rejecting new goal")
+        #         return GoalResponse.REJECT
+
+        # with self.goal_lock_:
+        #     if self.goal_handle_ is not None:
+        #         self.get_logger().warn("New goal received aborting current goal")
+        #         self.goal_handle_.abort()
+        #         return GoalResponse.ACCEPT
 
         if goal_request.object_id not in self.object_poses:
             self.get_logger().error("Object not found")
@@ -108,13 +114,12 @@ class PicknPlace(Node):
         align_pose = copy.deepcopy(self.object_poses[goal_handle.request.object_id])
         align_pose[2] += (self.object_height + self.approach_ht)
 
-        obj_pose[2] = 0.155
-        align_pose[0] += 0.035
+        obj_pose[2] = 0.165
         obj_pose[0] += 0.03
 
         if goal_handle.request.object_id == "bowl_":
             align_pose[2] = 0.38
-            align_pose[0] -= 0.05
+            # align_pose[0] -= 0.05
             obj_pose[0] = -0.07
 
             obj_pose[2] = 0.28
@@ -142,29 +147,32 @@ class PicknPlace(Node):
                     self.send_goal(arm=False, goal_type=True, target=align_pose)
                     self.goal_sent = True
             
-            elif self.state == 2:
-                if goal_handle.request.object_id == "bowl_":
-                    self.state = 3
-                    continue
-                
-                self.get_logger().info(f"Right Arm Aligning to object ")
+            # elif self.state == 2:
+            #     if goal_handle.request.object_id == "bowl_":
+            #         self.state = 3
 
-                if not self.goal_sent:
-                    self.arm_done = False
+            #         continue
+                
+            #     self.get_logger().info(f"Right Arm Aligning to object ")
+
+            #     if not self.goal_sent:
+            #         self.arm_done = False
                     
-                    self.dock_to_object(x=align_pose[0], y=align_pose[1], z=align_pose[2])
+            #         self.dock_to_object(x=align_pose[0], y=align_pose[1], z=align_pose[2])
                     self.goal_sent = True
             
-            elif self.state == 3:
+            elif self.state == 2:
                 # self.get_logger().info(f"Moving towards object")
 
                 if not self.goal_sent:
                     self.arm_done = False
-                    obj_pose[0], obj_pose[1] = self.grip_x, self.grip_y
+                    # if goal_handle.request.object_id != "bowl_":
+                    #     obj_pose[0], obj_pose[1] = self.grip_x, self.grip_y
+                        
                     self.send_goal(arm=False, goal_type=True, target=obj_pose)
                     self.goal_sent = True
 
-            elif self.state == 4 and self.delay_(1.0):
+            elif self.state == 3 and self.delay_(1.0):
 
                 if not self.goal_sent:
                     # self.get_logger().info(f"Grip Command")
@@ -173,7 +181,7 @@ class PicknPlace(Node):
                     self.send_grip_cmd(arm=False, grip_state=goal_handle.request.pick)
                     self.goal_sent = True
 
-            elif self.state == 5 and self.delay_(1.0):
+            elif self.state == 4 and self.delay_(1.0):
                 # self.get_logger().info(f"Right Arm Aligning to object ")
 
                 if not self.goal_sent:
@@ -182,7 +190,7 @@ class PicknPlace(Node):
                     self.send_goal(arm=False, goal_type=True, target=align_pose)
                     self.goal_sent = True
                     
-            if self.state == 6:
+            if self.state == 5:
                 # self.get_logger().info(f"IDLING")
                 self.state = 0
                 self.goal_sent = False

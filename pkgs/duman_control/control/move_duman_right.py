@@ -82,11 +82,15 @@ class MoveDumanRight(Node):
     def goal_callback(self, goal_request: DumanGoal.Goal):
         
         # reject the goal if a goal is already executing
+        # with self.goal_lock_:
+        #     if self.goal_handle_ is not None and self.goal_handle_.is_active:
+        #         self.get_logger().error("GOAL ACTIVE...rejecting new goal")
+        #         return GoalResponse.REJECT
         with self.goal_lock_:
             if self.goal_handle_ is not None and self.goal_handle_.is_active:
-                self.get_logger().error("GOAL ACTIVE...rejecting new goal")
-                return GoalResponse.REJECT
-        
+                self.get_logger().warn("New goal received aborting current goal")
+                self.goal_handle_.abort()
+                
         if goal_request.goal_type == 0:
             self.joint_goal = [goal_request.hip,
                         goal_request.shoulder,

@@ -144,29 +144,31 @@ class PicknPlace(Node):
                     self.send_goal(arm=True, goal_type=True, target=align_pose)
                     self.goal_sent = True
             
-            elif self.state == 2:
-                if goal_handle.request.object_id == "bowl_":
-                    self.state = 3
-                    continue
+            # elif self.state == 2:
+            #     if goal_handle.request.object_id == "bowl_":
+            #         self.state = 3
+            #         continue
                 
-                self.get_logger().info(f"Left Arm Aligning to object ")
+            #     self.get_logger().info(f"Left Arm Aligning to object ")
 
-                if not self.goal_sent:
-                    self.arm_done = False
+            #     if not self.goal_sent:
+            #         self.arm_done = False
                     
-                    self.dock_to_object(x=align_pose[0], y=align_pose[1], z=align_pose[2])
-                    self.goal_sent = True
+            #         self.dock_to_object(x=align_pose[0], y=align_pose[1], z=align_pose[2])
+            #         self.goal_sent = True
 
-            elif self.state == 3 and self.delay_(1.0):
+            elif self.state == 2 and self.delay_(1.0):
                 # self.get_logger().info(f"Moving towards object")
 
                 if not self.goal_sent:
                     self.arm_done = False
-
+                    # if goal_handle.request.object_id != "bowl_":
+                    #     obj_pose[0], obj_pose[1] = self.grip_x, self.grip_y
+                    
                     self.send_goal(arm=True, goal_type=True, target=obj_pose)
                     self.goal_sent = True
 
-            elif self.state == 4 and self.delay_(1.0):
+            elif self.state == 3 and self.delay_(1.0):
 
                 if not self.goal_sent:
                     # self.get_logger().info(f"Grip Command")
@@ -175,7 +177,7 @@ class PicknPlace(Node):
                     self.send_grip_cmd(arm=True, grip_state=goal_handle.request.pick)
                     self.goal_sent = True
 
-            elif self.state == 5 and self.delay_(1.0):
+            elif self.state == 4 and self.delay_(1.0):
                 # self.get_logger().info(f"left Arm Aligning to object ")
 
                 if not self.goal_sent:
@@ -184,7 +186,7 @@ class PicknPlace(Node):
                     self.send_goal(arm=True, goal_type=True, target=align_pose)
                     self.goal_sent = True
                     
-            if self.state == 6:
+            if self.state == 5:
                 # self.get_logger().info(f"IDLING")
                 self.state = 0
                 self.goal_sent = False
